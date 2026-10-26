@@ -182,7 +182,7 @@ function HeroVisual() {
     <div className="relative" aria-hidden="true">
       <div className="relative mx-auto aspect-square w-full max-w-[420px] lg:max-w-[340px] xl:max-w-[420px]">
         {/* Soft rounded backdrop panel behind the illustration */}
-        <div className="absolute inset-[3%] rounded-[2rem] border border-border-subtle bg-gradient-to-br from-blue-50/70 via-white/60 to-white/20 shadow-card-hover dark:border-white/10 dark:from-white/[0.05] dark:via-white/[0.02] dark:to-transparent dark:shadow-none" />
+        <div className="absolute inset-[3%] rounded-[2rem] border border-border-subtle bg-gradient-to-br from-blue-50/70 via-white/10 to-white/20 shadow-card-hover dark:border-white/10 dark:from-white/[0.05] dark:via-white/[0.02] dark:to-transparent dark:shadow-none" />
 
         {/* Orbital illustration (rings, medallion, nodes, connectors) */}
         <OrbitRings />
