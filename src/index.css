@@ -207,6 +207,22 @@
     transform-origin: 50% 50%;
     animation: hv-spin 90s linear infinite;
   }
+
+  /* Theme toggle glyph swap: quick rotate/fade on theme change. */
+  .theme-icon-swap {
+    animation: theme-swap 0.28s ease-out;
+  }
+}
+
+@keyframes theme-swap {
+  from {
+    transform: rotate(-90deg) scale(0.55);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
 }
 
 /* Connector lines only make sense when the floating cards overlay the

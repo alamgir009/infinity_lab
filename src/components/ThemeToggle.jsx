@@ -1,44 +1,34 @@
 import { FiSun, FiMoon, FiMonitor } from "react-icons/fi";
-import useTheme, { THEME_OPTIONS } from "../theme/useTheme";
+import useTheme from "../theme/useTheme";
 
+/* Single-icon cycling theme control (fintech style): one button shows the
+ * current preference and advances system -> light -> dark on click.
+ * The icon swaps with a short rotation/fade (disabled under
+ * prefers-reduced-motion by the global base rule). */
+const ORDER = ["system", "light", "dark"];
 const ICONS = { light: FiSun, dark: FiMoon, system: FiMonitor };
+const LABELS = { light: "Light", dark: "Dark", system: "System" };
 
-/**
- * Segmented Light/Dark/System theme control for the navbar.
- * Fully keyboard operable; changes are announced via aria-label updates and
- * the button text (icons are decorative).
- */
 export default function ThemeToggle() {
   const { pref, setTheme } = useTheme();
+  const next = ORDER[(ORDER.indexOf(pref) + 1) % ORDER.length];
+  const Icon = ICONS[pref] ?? FiMonitor;
 
   return (
-    <div
-      role="group"
-      aria-label="Colour theme"
-      className="inline-flex items-center rounded-btn border border-border-subtle bg-surface-card p-0.5 shadow-xs"
+    <button
+      type="button"
+      onClick={() => setTheme(next)}
+      aria-label={`Colour theme: ${LABELS[pref]}. Change to ${LABELS[next]} theme`}
+      title={`Theme: ${LABELS[pref]}`}
+      className="inline-flex h-9 min-w-[40px] items-center justify-center rounded-btn border border-border-subtle bg-surface-card px-2.5 shadow-xs transition-colors duration-150 hover:border-border-strong hover:bg-surface-sunken"
     >
-      {THEME_OPTIONS.map((o) => {
-        const Icon = ICONS[o.id];
-        const selected = pref === o.id;
-        return (
-          <button
-            key={o.id}
-            type="button"
-            aria-pressed={selected}
-            onClick={() => setTheme(o.id)}
-            className={`group relative inline-flex h-9 min-w-[36px] items-center justify-center rounded-[6px] px-2 transition-colors duration-150 ${
-              selected
-                ? "bg-brand-chip text-brand-chip-text shadow-xs"
-                : "text-text-muted hover:text-text-primary"
-            }`}
-          >
-            <Icon size={15} aria-hidden="true" />
-            <span className="sr-only">
-              {o.label} theme{selected ? " (selected)" : ""}
-            </span>
-          </button>
-        );
-      })}
-    </div>
+      {/* key=pref remounts the glyph so the swap animation replays */}
+      <span key={pref} className="theme-icon-swap inline-flex" aria-hidden="true">
+        <Icon size={15} />
+      </span>
+      <span className="sr-only">
+        Colour theme: {LABELS[pref]}. Change to {LABELS[next]} theme
+      </span>
+    </button>
   );
 }

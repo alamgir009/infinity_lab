@@ -40,6 +40,24 @@ export default function useTheme() {
     () => window.matchMedia("(prefers-color-scheme: dark)").matches
   );
 
+  // Keep every hook instance in sync (the header mounts one toggle per
+  // breakpoint) and pick up changes from other tabs.
+  useEffect(() => {
+    const sync = (e) => {
+      if (e.type === "il-theme-change") {
+        setPref(e.detail);
+      } else if (e.key === THEME_KEY && e.newValue) {
+        setPref(e.newValue);
+      }
+    };
+    window.addEventListener("il-theme-change", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("il-theme-change", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
   // Keep "system" live against OS changes.
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
@@ -65,6 +83,9 @@ export default function useTheme() {
     } catch {
       /* storage unavailable (private mode) — preference applies for session */
     }
+    window.dispatchEvent(
+      new window.CustomEvent("il-theme-change", { detail: next })
+    );
     setPref(next);
   }, []);
 
