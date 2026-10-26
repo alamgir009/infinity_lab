@@ -15,15 +15,15 @@
     --surface: 255 255 255;          /* page background            */
     --surface-sunken: 246 248 251;   /* alternating sections       */
     --surface-card: 255 255 255;     /* card background            */
-    --surface-inverse: 11 18 32;     /* dark brand sections        */
+    --surface-brand: 255 255 255;    /* brand surface (hero/CTA/footer) — light in light theme */
     --surface-inverse-raised: 17 27 46;
 
     /* Text */
     --text-primary: 15 23 42;        /* slate-900                  */
     --text-secondary: 71 85 105;     /* slate-600  — 4.5:1+        */
     --text-muted: 86 100 120;        /* 5.2:1 on white, 5.0:1 on sunken */
-    --text-on-inverse: 230 235 242;
-    --text-on-inverse-muted: 165 178 197;
+    --text-on-brand: 15 23 42;       /* text on brand surface — dark text in light theme */
+    --text-on-brand-muted: 71 85 105;
 
     /* Borders */
     --border-subtle: 226 232 240;
@@ -53,14 +53,14 @@
     --surface: 11 18 32;
     --surface-sunken: 13 21 38;
     --surface-card: 17 27 46;
-    --surface-inverse: 9 14 26;
+    --surface-brand: 9 14 26;
     --surface-inverse-raised: 17 27 46;
 
     --text-primary: 230 235 242;
     --text-secondary: 168 183 202;   /* 8.4:1 on surface           */
     --text-muted: 142 158 181;       /* 6.5:1 on surface           */
-    --text-on-inverse: 230 235 242;
-    --text-on-inverse-muted: 152 168 190;
+    --text-on-brand: 230 235 242;
+    --text-on-brand-muted: 152 168 190;
 
     --border-subtle: 36 49 74;
     --border-strong: 58 76 108;
@@ -137,10 +137,17 @@
     @apply border-border-subtle;
   }
 
-  /* Dark brand surfaces (hero, methodology, footer, CTA) — same in both
-     themes so the brand statement stays anchored. */
+  /* Dark brand surfaces (hero, methodology, footer, CTA) — theme-aware.
+     Light theme: clean white surface with a soft blue radial tint and dark
+     text (Cloudflare/Google style). Dark theme: anchored deep navy. */
   .bg-brand-deep {
-    @apply bg-surface-inverse text-text-on-inverse;
+    @apply bg-surface-brand text-text-on-brand;
+    background-image:
+      radial-gradient(1200px 500px at 80% -10%, rgb(30 64 175 / 0.06), transparent 60%),
+      radial-gradient(900px 420px at 10% 110%, rgb(79 134 247 / 0.05), transparent 55%);
+  }
+
+  .dark .bg-brand-deep {
     background-image:
       radial-gradient(1200px 500px at 80% -10%, rgb(30 64 175 / 0.35), transparent 60%),
       radial-gradient(900px 420px at 10% 110%, rgb(79 134 247 / 0.16), transparent 55%);

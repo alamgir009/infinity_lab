@@ -2,7 +2,7 @@
  * Shared section heading: eyebrow, display title, optional lead paragraph.
  *
  * @param {{ eyebrow?: string, title: string, lead?: string, id?: string,
- *          centered?: boolean, onInverse?: boolean, className?: string }} props
+ *          centered?: boolean, onBrand?: boolean, className?: string }} props
  */
 export default function SectionHeading({
   eyebrow,
@@ -10,7 +10,7 @@ export default function SectionHeading({
   lead,
   id,
   centered = false,
-  onInverse = false,
+  onBrand = false,
   className = "",
 }) {
   return (
@@ -18,7 +18,7 @@ export default function SectionHeading({
       {eyebrow && (
         <p
           className={`text-xs font-semibold uppercase tracking-[0.14em] ${
-            onInverse ? "text-accent-gold" : "text-brand"
+            onBrand ? "text-brand dark:text-accent-gold" : "text-brand"
           }`}
         >
           {eyebrow}
@@ -26,14 +26,14 @@ export default function SectionHeading({
       )}
       <h2
         id={id}
-        className={`type-heading mt-3 font-display ${onInverse ? "text-white" : "text-text-primary"}`}
+        className={`type-heading mt-3 font-display ${onBrand ? "text-text-on-brand" : "text-text-primary"}`}
       >
         {title}
       </h2>
       {lead && (
         <p
           className={`mt-4 text-base leading-7 ${
-            onInverse ? "text-text-on-inverse-muted" : "text-text-secondary"
+            onBrand ? "text-text-on-brand-muted" : "text-text-secondary"
           }`}
         >
           {lead}

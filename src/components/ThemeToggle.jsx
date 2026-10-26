@@ -1,4 +1,4 @@
-import { FiSun, FiMoon, FiMonitor, FiCheck } from "react-icons/fi";
+import { FiSun, FiMoon, FiMonitor } from "react-icons/fi";
 import useTheme, { THEME_OPTIONS } from "../theme/useTheme";
 
 const ICONS = { light: FiSun, dark: FiMoon, system: FiMonitor };
@@ -36,13 +36,6 @@ export default function ThemeToggle() {
             <span className="sr-only">
               {o.label} theme{selected ? " (selected)" : ""}
             </span>
-            {selected && (
-              <FiCheck
-                size={9}
-                aria-hidden="true"
-                className="absolute -bottom-px"
-              />
-            )}
           </button>
         );
       })}

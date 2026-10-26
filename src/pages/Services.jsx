@@ -22,14 +22,14 @@ export default function Services() {
       <section className="bg-brand-deep relative overflow-hidden">
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="container-section relative py-16 md:py-24">
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-white/80">
-            <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-accent-gold" />
+          <p className="inline-flex items-center gap-2.5 rounded-full border border-border-subtle bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary dark:border-white/15 dark:bg-white/5 dark:text-white/80">
+            <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-brand dark:bg-accent-gold" />
             What we do
           </p>
-          <h1 className="type-display mt-6 font-display text-white">
+          <h1 className="type-display mt-6 font-display text-text-on-brand">
             Services
           </h1>
-          <p className="container-text mt-5 text-lg leading-8 text-text-on-inverse-muted">
+          <p className="container-text mt-5 text-lg leading-8 text-text-on-brand-muted">
             Three engineering disciplines, one accountable team. Whether you
             need a storefront, a platform or a system — this is how we can
             help.
@@ -119,13 +119,13 @@ export default function Services() {
       {/* CTA */}
       <section aria-labelledby="svc-cta" className="pb-20 md:pb-28">
         <div className="container-section">
-          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] px-6 py-14 text-center sm:px-12 md:py-16">
+          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] border border-border-subtle px-6 py-14 text-center shadow-card sm:px-12 md:py-16 dark:border-transparent dark:shadow-none">
             <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
             <div className="relative">
-              <h2 id="svc-cta" className="type-heading text-white">
+              <h2 id="svc-cta" className="type-heading text-text-on-brand">
                 Not sure which model fits?
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-lg text-text-on-inverse-muted">
+              <p className="mx-auto mt-4 max-w-xl text-lg text-text-on-brand-muted">
                 Describe your project in a sentence or two. We will recommend
                 the right approach — honestly.
               </p>

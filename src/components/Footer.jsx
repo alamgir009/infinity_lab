@@ -12,20 +12,21 @@ const ROUTES = [
 ];
 
 const headingClass =
-  "font-display text-xs font-semibold uppercase tracking-[0.14em] text-text-on-inverse-muted";
+  "font-display text-xs font-semibold uppercase tracking-[0.14em] text-text-on-brand-muted";
 
 /**
- * Site footer — brand anchor with hairline-separated columns on the dark
- * inverse surface, consistent with the navbar and CTA sections.
+ * Site footer — brand anchor on the theme-aware brand surface (light: white
+ * with hairline top border, Google-style; dark: deep navy), consistent with
+ * the hero, methodology and CTA sections.
  */
 export default function Footer() {
   return (
-    <footer className="border-t border-border-subtle bg-surface-inverse text-text-on-inverse-muted">
+    <footer className="border-t border-border-subtle bg-surface-brand text-text-on-brand-muted dark:border-white/10">
       <div className="container-section grid gap-12 py-16 md:grid-cols-12 md:gap-8">
         {/* Brand */}
         <div className="md:col-span-5">
           <Link to="/" className="inline-flex rounded-btn">
-            <Logo dark />
+            <Logo onBrand />
             <span className="sr-only">Infinity Lab — home</span>
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-6">
@@ -34,7 +35,7 @@ export default function Footer() {
           <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-xs">
             <div className="flex items-center gap-2">
               <dt className="sr-only">Founded</dt>
-              <FiClock aria-hidden="true" className="size-3.5 text-white/50" />
+              <FiClock aria-hidden="true" className="size-3.5 text-text-on-brand-muted" />
               <dd>
                 Est. {SITE.founded} · Software engineering, India
               </dd>
@@ -50,7 +51,7 @@ export default function Footer() {
               <li key={r.to}>
                 <Link
                   to={r.to}
-                  className="inline-flex min-h-[36px] items-center rounded-btn text-white/80 transition-colors hover:text-white"
+                  className="inline-flex min-h-[36px] items-center rounded-btn text-text-on-brand-muted transition-colors hover:text-text-on-brand"
                 >
                   {r.label}
                 </Link>
@@ -64,27 +65,27 @@ export default function Footer() {
           <h2 className={headingClass}>Get in touch</h2>
           <ul className="mt-5 space-y-4 text-sm">
             <li className="flex items-center gap-3">
-              <FiMail aria-hidden="true" className="size-4 shrink-0 text-white/50" />
+              <FiMail aria-hidden="true" className="size-4 shrink-0 text-text-on-brand-muted" />
               <a
                 href={`mailto:${CONTACT.email}`}
-                className="inline-flex min-h-[36px] items-center text-white/80 break-all transition-colors hover:text-white"
+                className="inline-flex min-h-[36px] items-center text-text-on-brand-muted break-all transition-colors hover:text-text-on-brand"
               >
                 {CONTACT.email}
               </a>
             </li>
             <li className="flex items-center gap-3">
-              <FiPhone aria-hidden="true" className="size-4 shrink-0 text-white/50" />
+              <FiPhone aria-hidden="true" className="size-4 shrink-0 text-text-on-brand-muted" />
               <a
                 href={`tel:${CONTACT.phone.replace(/\s+/g, "")}`}
-                className="inline-flex min-h-[36px] items-center text-white/80 transition-colors hover:text-white [font-variant-numeric:tabular-nums]"
+                className="inline-flex min-h-[36px] items-center text-text-on-brand-muted transition-colors hover:text-text-on-brand [font-variant-numeric:tabular-nums]"
               >
                 {CONTACT.phone}
               </a>
             </li>
             {CONTACT.address && (
               <li className="flex items-start gap-3">
-                <FiMapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-white/50" />
-                <span className="pt-0.5 text-white/80">{CONTACT.address}</span>
+                <FiMapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-text-on-brand-muted" />
+                <span className="pt-0.5 text-text-on-brand-muted">{CONTACT.address}</span>
               </li>
             )}
           </ul>
@@ -99,11 +100,11 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="hairline border-t border-white/10">
+      <div className="border-t border-border-subtle dark:border-white/10">
         <div className="container-section flex flex-col items-center justify-between gap-3 py-6 text-xs sm:flex-row">
           <p>© {new Date().getFullYear()} Infinity Lab. All rights reserved.</p>
-          <p className="text-white/50">
-            Built to WCAG 2.2 AA · Accessibility & performance by default
+          <p className="text-text-on-brand-muted">
+            Built to WCAG 2.2 AA · Accessibility &amp; performance by default
           </p>
         </div>
       </div>

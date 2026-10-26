@@ -128,20 +128,23 @@ export default function Home() {
         path="/"
       />
 
-      {/* Hero */}
+      {/* Hero — theme-aware brand surface. Light: clean white Cloudflare/Google
+          style, no rings visual. Dark: navy surface with the engineered emblem.
+          Theme differences are expressed in CSS (dark: variants) so the
+          toggle reacts instantly without duplicated theme state. */}
       <section className="bg-brand-deep relative overflow-hidden">
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="container-section relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="container-section relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-1 dark:lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-white/80">
-              <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-accent-gold" />
+            <p className="inline-flex items-center gap-2.5 rounded-full border border-border-subtle bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary dark:border-white/15 dark:bg-white/5 dark:text-white/80">
+              <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-brand dark:bg-accent-gold" />
               Since {SITE.founded} · India
             </p>
-            <h1 className="type-display mt-6 font-display text-white">
+            <h1 className="type-display mt-6 font-display text-text-on-brand dark:text-white">
               Software engineering,<br />
-              <span className="text-white/60">done properly.</span>
+              <span className="text-brand dark:text-white/60">done properly.</span>
             </h1>
-            <p className="container-text mt-6 text-lg leading-8 text-text-on-inverse-muted">
+            <p className="container-text mt-6 text-lg leading-8 text-text-on-brand-muted">
               Infinity Lab designs, builds and operates web platforms, backend
               and cloud systems, and mobile applications — for newsrooms,
               institutions, retailers and product teams across India.
@@ -154,24 +157,24 @@ export default function Home() {
                 See our work
               </Button>
             </div>
-            <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
+            <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-text-secondary dark:text-white/70">
               {["Accessible by default", "Performance-first builds", "Real operational support"].map(
                 (item) => (
                   <li key={item} className="flex items-center gap-2">
-                    <FiCheckCircle aria-hidden="true" className="text-accent-gold" />
+                    <FiCheckCircle aria-hidden="true" className="text-brand dark:text-accent-gold" />
                     {item}
                   </li>
                 )
               )}
             </ul>
           </div>
-          <div className="animate-fadeUp">
+          <div className="hidden animate-fadeUp dark:block">
             <HeroVisual />
           </div>
         </div>
 
         {/* Trust metrics ribbon */}
-        <div className="relative border-t border-white/10">
+        <div className="relative border-t border-border-subtle dark:border-white/10">
           <div className="container-section py-10">
             <StatStrip stats={TRUST_STATS} />
           </div>
@@ -280,21 +283,21 @@ export default function Home() {
             eyebrow="How we deliver"
             title="A methodology that removes surprises"
             lead="Four deliberate phases — the same discipline on every engagement, regardless of size."
-            onInverse
+            onBrand
           />
           <ol className="relative mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
             {/* Timeline connector */}
             <span
               aria-hidden="true"
-              className="absolute left-0 right-0 top-5 hidden border-t border-dashed border-white/20 md:block"
+              className="absolute left-0 right-0 top-5 hidden border-t border-dashed border-border-subtle md:block dark:border-white/20"
             />
             {METHODOLOGY.map((m) => (
               <li key={m.step} className="relative">
-                <span className="relative z-10 flex size-10 items-center justify-center rounded-full bg-btn-bg font-display text-base font-bold text-white ring-4 ring-surface-inverse">
+                <span className="relative z-10 flex size-10 items-center justify-center rounded-full bg-btn-bg font-display text-base font-bold text-btn-text ring-4 ring-surface-brand">
                   {m.step}
                 </span>
-                <h3 className="mt-5 text-lg font-bold text-white">{m.name}</h3>
-                <p className="mt-2 text-sm leading-6 text-text-on-inverse-muted">
+                <h3 className="mt-5 text-lg font-bold text-text-on-brand">{m.name}</h3>
+                <p className="mt-2 text-sm leading-6 text-text-on-brand-muted">
                   {m.description}
                 </p>
               </li>
@@ -306,24 +309,24 @@ export default function Home() {
       {/* Start Project CTA */}
       <section aria-labelledby="cta-heading" className="py-20 md:py-28">
         <div className="container-section">
-          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] px-6 py-16 text-center sm:px-12 md:py-20">
+          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] border border-border-subtle px-6 py-16 text-center shadow-card sm:px-12 md:py-20 dark:border-transparent dark:shadow-none">
             <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
             <div className="relative mx-auto max-w-2xl">
-              <h2 id="cta-heading" className="type-heading text-white md:text-4xl">
+              <h2 id="cta-heading" className="type-heading text-text-on-brand md:text-4xl">
                 Have a project in mind?
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-lg leading-7 text-text-on-inverse-muted">
+              <p className="mx-auto mt-5 max-w-xl text-lg leading-7 text-text-on-brand-muted">
                 Tell us what you are building. We will reply with an honest
                 scope, timeline and next step.
               </p>
               <Button to="/contact" size="lg" variant="inverse" className="mt-9">
                 Start Your Project
               </Button>
-              <p className="mt-7 text-sm text-white/70">
+              <p className="mt-7 text-sm text-text-on-brand-muted">
                 Prefer to browse first?{" "}
                 <Link
                   to="/projects"
-                  className="font-semibold text-accent-gold underline underline-offset-4 hover:no-underline"
+                  className="font-semibold text-brand dark:text-accent-gold underline underline-offset-4 hover:no-underline"
                 >
                   See all projects
                 </Link>

@@ -11,14 +11,17 @@ const sizes = {
 };
 const variants = {
   primary: "bg-btn-bg text-btn-text hover:bg-btn-bg-hover shadow-card hover:shadow-card-hover",
-  /** Light CTA for use on dark brand surfaces. */
-  inverse: "bg-white text-slate-900 hover:bg-slate-100 shadow-card hover:shadow-card-hover",
+  /** High-contrast CTA on brand surfaces (theme-aware: blue on white / white on navy). */
+  inverse:
+    "bg-btn-bg text-btn-text hover:bg-btn-bg-hover shadow-card hover:shadow-card-hover " +
+    "dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100",
   /** Quiet bordered CTA on light surfaces. */
   secondary:
     "border border-border-strong bg-surface-card text-text-primary hover:border-brand hover:text-brand",
-  /** Quiet bordered CTA on dark brand surfaces. */
+  /** Quiet bordered CTA on brand surfaces (theme-aware). */
   "secondary-inverse":
-    "border border-white/30 bg-transparent text-white hover:border-white/60 hover:bg-white/10",
+    "border border-border-strong bg-transparent text-text-on-brand hover:border-brand hover:text-brand " +
+    "dark:border-white/30 dark:text-white dark:hover:border-white/60 dark:hover:bg-white/10",
   /** Bare text link with arrow affordance. */
   ghost: "text-brand hover:text-brand-hover",
 };
