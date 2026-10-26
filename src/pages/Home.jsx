@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FiCheckCircle } from "react-icons/fi";
+import { FiCheckCircle, FiCode, FiServer, FiSmartphone } from "react-icons/fi";
 import Seo from "../components/Seo";
 import Button from "../components/Button";
 import SectionHeading from "../components/SectionHeading";
@@ -18,102 +18,116 @@ const TRUST_STATS = [
 ];
 
 /**
- * Engineered hero visual: concentric precision rings, a fine coordinate grid
- * and the infinity emblem as the focal anchor — deliberately geometric.
+ * Premium hero visual (theme-aware, shown in BOTH themes):
+ * a glass product panel carrying the brand emblem inside glowing gradient
+ * orbit rings, with floating capability chips for depth. All colors come
+ * from --hv-* CSS tokens so light and dark both render correctly.
  * Decorative; aria-hidden.
  */
-function HeroVisual() {
+const EMBLEM_PATH =
+  "M24 24c1.8-3 3.4-5.6 7-5.6 3.5 0 6.3 2.5 6.3 5.6s-2.8 5.6-6.3 5.6c-3.6 0-5.2-2.6-7-5.6zm0 0c-1.8 3-3.4 5.6-7 5.6-3.5 0-6.3-2.5-6.3-5.6s2.8-5.6 6.3-5.6c3.6 0 5.2 2.6 7 5.6z";
+
+/** Satellite dots on the outer rotating ring (cardinal = gold, diagonal = blue). */
+const SATELLITES = [
+  { x: 330, y: 180, gold: true },
+  { x: 286.1, y: 73.9, gold: false },
+  { x: 180, y: 30, gold: true },
+  { x: 73.9, y: 73.9, gold: false },
+  { x: 30, y: 180, gold: true },
+  { x: 73.9, y: 286.1, gold: false },
+  { x: 180, y: 330, gold: true },
+  { x: 286.1, y: 286.1, gold: false },
+];
+
+function OrbitRings() {
   return (
-    <svg
-      viewBox="0 0 460 400"
-      className="h-auto w-full"
-      aria-hidden="true"
-      focusable="false"
-    >
+    <svg viewBox="0 0 360 360" className="h-full w-full">
       <defs>
-        <linearGradient id="hv-accent" x1="0" y1="0" x2="460" y2="400" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#8AB0FF" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#DDC58F" stopOpacity="0.75" />
+        <linearGradient id="hv-grad" x1="0" y1="0" x2="360" y2="360" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" style={{ stopColor: "var(--hv-orbit-a)" }} />
+          <stop offset="100%" style={{ stopColor: "var(--hv-orbit-b)" }} />
         </linearGradient>
-        <radialGradient id="hv-glow" cx="50%" cy="45%" r="55%">
-          <stop offset="0%" stopColor="#4F86F7" stopOpacity="0.22" />
-          <stop offset="100%" stopColor="#4F86F7" stopOpacity="0" />
+        <radialGradient id="hv-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.18" />
+          <stop offset="60%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.06" />
+          <stop offset="100%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0" />
         </radialGradient>
       </defs>
 
-      <rect width="460" height="400" rx="20" fill="rgb(255 255 255 / 0.03)" />
-      <rect width="460" height="400" rx="20" fill="url(#hv-glow)" />
+      {/* Core glow */}
+      <circle cx="180" cy="180" r="165" fill="url(#hv-glow)" />
 
-      {/* Fine coordinate grid */}
-      {Array.from({ length: 15 }, (_, i) => (
-        <line
-          key={`v${i}`}
-          x1={16 + i * 30.6}
-          y1="12"
-          x2={16 + i * 30.6}
-          y2="388"
-          stroke="rgb(148 163 184 / 0.09)"
-          strokeWidth="1"
-        />
-      ))}
-      {Array.from({ length: 13 }, (_, i) => (
-        <line
-          key={`h${i}`}
-          x1="12"
-          y1={16 + i * 30.6}
-          x2="448"
-          y2={16 + i * 30.6}
-          stroke="rgb(148 163 184 / 0.09)"
-          strokeWidth="1"
-        />
-      ))}
+      {/* Frosted halo lifting the emblem off the rings */}
+      <circle cx="180" cy="180" r="78" fill="var(--hv-halo)" />
 
-      {/* Concentric precision rings */}
-      {[70, 110, 150].map((r) => (
+      {/* Solid gradient orbit */}
+      <circle cx="180" cy="180" r="118" fill="none" stroke="url(#hv-grad)" strokeOpacity="0.8" strokeWidth="2" />
+      {/* Inner hairline orbit */}
+      <circle cx="180" cy="180" r="94" fill="none" stroke="url(#hv-grad)" strokeOpacity="0.25" strokeWidth="1" />
+
+      {/* Slowly rotating dotted outer ring with satellite dots */}
+      <g className="hv-orbit-spin">
         <circle
-          key={r}
-          cx="230"
-          cy="200"
-          r={r}
-          fill="none"
-          stroke="url(#hv-accent)"
-          strokeOpacity={r === 110 ? 0.55 : 0.2}
-          strokeDasharray={r === 70 ? "none" : "2 6"}
-          strokeWidth="1.4"
+          cx="180" cy="180" r="152"
+          fill="none" stroke="url(#hv-grad)" strokeOpacity="0.55"
+          strokeWidth="1.4" strokeDasharray="1 9" strokeLinecap="round"
         />
-      ))}
-
-      {/* Engineering markers on the ring axes */}
-      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => {
-        const rad = (deg * Math.PI) / 180;
-        const x = 230 + 110 * Math.cos(rad);
-        const y = 200 + 110 * Math.sin(rad);
-        return (
+        {SATELLITES.map((s, i) => (
           <circle
-            key={deg}
-            cx={x}
-            cy={y}
-            r="3.2"
-            fill={deg % 90 === 0 ? "#DDC58F" : "#8AB0FF"}
-            fillOpacity={deg % 90 === 0 ? 0.95 : 0.6}
+            key={i} cx={s.x} cy={s.y}
+            r={s.gold ? 4 : 3}
+            style={{ fill: s.gold ? "var(--hv-gold)" : "var(--hv-orbit-a)" }}
+            fillOpacity={s.gold ? 0.95 : 0.8}
           />
-        );
-      })}
+        ))}
+      </g>
 
-      {/* The brand emblem: a single-stroke infinity loop, centered */}
-      <g transform="translate(230 200) scale(2.4) translate(-24 -24)">
+      {/* The brand emblem: single-stroke infinity loop, generous scale */}
+      <g transform="translate(180 180) scale(3.4) translate(-24 -24)">
         <path
-          d="M24 24c1.8-3 3.4-5.6 7-5.6 3.5 0 6.3 2.5 6.3 5.6s-2.8 5.6-6.3 5.6c-3.6 0-5.2-2.6-7-5.6zm0 0c-1.8 3-3.4 5.6-7 5.6-3.5 0-6.3-2.5-6.3-5.6s2.8-5.6 6.3-5.6c3.6 0 5.2 2.6 7 5.6z"
-          stroke="url(#hv-accent)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          fill="none"
+          d={EMBLEM_PATH}
+          stroke="url(#hv-grad)" strokeOpacity="0.3" strokeWidth="7"
+          strokeLinecap="round" fill="none"
+        />
+        <path
+          d={EMBLEM_PATH}
+          stroke="url(#hv-grad)" strokeWidth="2.4" strokeLinecap="round" fill="none"
         />
       </g>
-      {/* Focal point */}
-      <circle cx="230" cy="200" r="4" fill="#DDC58F" />
-      <circle cx="230" cy="200" r="10" fill="none" stroke="#DDC58F" strokeOpacity="0.35" strokeWidth="1" />
+      {/* Focal accent above and below the loop */}
+      <circle cx="127" cy="180" r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
+      <circle cx="233" cy="180" r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
     </svg>
+  );
+}
+
+function HeroVisual() {
+  const chipClass =
+    "absolute inline-flex items-center gap-2 rounded-full border border-border-subtle bg-surface-card px-3.5 py-2 text-xs font-semibold text-text-primary shadow-card dark:border-white/15 dark:text-white";
+
+  return (
+    <div className="relative" aria-hidden="true">
+      {/* Glass product panel */}
+      <div className="relative overflow-hidden rounded-[1.5rem] border border-border-subtle bg-gradient-to-br from-blue-50/80 via-white to-white p-6 shadow-card-hover sm:p-8 dark:border-white/10 dark:from-white/[0.06] dark:via-white/[0.03] dark:to-transparent dark:shadow-none">
+        <div className="relative mx-auto aspect-square max-w-[360px]">
+          <OrbitRings />
+        </div>
+      </div>
+
+      {/* Floating capability chips — honest content, staggered float */}
+      <div className={`${chipClass} hv-float -left-2 top-[16%] sm:-left-5`} style={{ animationDelay: "0s" }}>
+        <FiCode size={13} className="text-brand" />
+        Web platforms
+      </div>
+      <div className={`${chipClass} hv-float -right-2 top-[46%] sm:-right-4`} style={{ animationDelay: "1.2s" }}>
+        <FiServer size={13} className="text-brand" />
+        Cloud &amp; backend
+      </div>
+      <div className={`${chipClass} hv-float -left-2 bottom-[12%] sm:-left-5`} style={{ animationDelay: "2.4s" }}>
+        <FiSmartphone size={13} className="text-brand" />
+        Mobile apps
+      </div>
+    </div>
   );
 }
 
@@ -129,12 +143,11 @@ export default function Home() {
       />
 
       {/* Hero — theme-aware brand surface. Light: clean white Cloudflare/Google
-          style, no rings visual. Dark: navy surface with the engineered emblem.
-          Theme differences are expressed in CSS (dark: variants) so the
-          toggle reacts instantly without duplicated theme state. */}
+          style. Dark: navy surface. The visual renders in BOTH themes with
+          theme differences expressed in CSS only. */}
       <section className="bg-brand-deep relative overflow-hidden">
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="container-section relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-1 dark:lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="container-section relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <p className="inline-flex items-center gap-2.5 rounded-full border border-border-subtle bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary dark:border-white/15 dark:bg-white/5 dark:text-white/80">
               <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-brand dark:bg-accent-gold" />
@@ -168,7 +181,7 @@ export default function Home() {
               )}
             </ul>
           </div>
-          <div className="hidden animate-fadeUp dark:block">
+          <div className="animate-fadeUp">
             <HeroVisual />
           </div>
         </div>

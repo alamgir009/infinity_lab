@@ -42,6 +42,13 @@
     /* Accent (used sparingly on dark brand surfaces, both themes) */
     --accent-gold: 221 197 143;
 
+    /* Hero visual (theme-aware SVG colors) */
+    --hv-orbit-a: #1d4ed8;           /* orbit gradient start (light)  */
+    --hv-orbit-b: #4f86f7;           /* orbit gradient end            */
+    --hv-gold: #9e7e2d;              /* satellite accent, light       */
+    --hv-glow: #4f86f7;              /* radial glow color             */
+    --hv-halo: rgb(255 255 255 / 0.85); /* frosted disc behind emblem  */
+
     /* Elevation */
     --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.05);
     --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.07), 0 1px 2px -1px rgb(15 23 42 / 0.07);
@@ -73,6 +80,13 @@
     --btn-bg-hover: 23 62 189;
     --btn-text: 255 255 255;
     --ring: 138 176 255;
+
+    /* Hero visual (theme-aware SVG colors) */
+    --hv-orbit-a: #8ab0ff;           /* orbit gradient start (dark)   */
+    --hv-orbit-b: #ddc58f;           /* orbit gradient end            */
+    --hv-gold: #ddc58f;
+    --hv-glow: #4f86f7;
+    --hv-halo: rgb(138 176 255 / 0.08);
 
     --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
     --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5);
@@ -175,5 +189,31 @@
     line-height: 1.15;
     letter-spacing: -0.018em;
     font-weight: 700;
+  }
+
+  /* Hero visual motion (disabled under prefers-reduced-motion via the
+     global rule in @layer base). */
+  .hv-orbit-spin {
+    transform-origin: 50% 50%;
+    animation: hv-spin 90s linear infinite;
+  }
+
+  .hv-float {
+    animation: hv-float 7s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes hv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hv-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
   }
 }
