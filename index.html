@@ -15,15 +15,13 @@
     />
     <script>
       /* Theme bootstrap — runs before first paint to prevent a flash of the
-         wrong theme. Mirrors the logic of src/theme/useTheme.js. */
+         wrong theme. Mirrors the logic of src/theme/useTheme.js.
+         Binary light/dark; light is the default. */
       (function () {
         try {
-          var pref = localStorage.getItem("il-theme") || "system";
-          var dark =
-            pref === "dark" ||
-            (pref === "system" &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches);
-          if (dark) document.documentElement.classList.add("dark");
+          if (localStorage.getItem("il-theme") === "dark") {
+            document.documentElement.classList.add("dark");
+          }
         } catch (e) {}
       })();
     </script>

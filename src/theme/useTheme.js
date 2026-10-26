@@ -1,11 +1,10 @@
 /**
- * Central theme preference management (Light / Dark / System).
+ * Theme preference management (Light / Dark only).
  *
- *  - The current preference is persisted under the "il-theme" localStorage key.
- *  - "system" follows prefers-color-scheme and reacts live to OS changes.
- *  - The effective theme is expressed as a "dark" class on <html>, matching
- *    Tailwind's darkMode: "class" strategy and the no-flash bootstrap script
- *    in index.html.
+ *  - The preference is persisted under the "il-theme" localStorage key and
+ *    defaults to light when nothing (or an unknown/legacy value) is stored.
+ *  - The theme is expressed as a "dark" class on <html>, matching Tailwind's
+ *    darkMode: "class" strategy and the no-flash bootstrap script in index.html.
  */
 import { useCallback, useEffect, useState } from "react";
 
@@ -13,41 +12,36 @@ export const THEME_KEY = "il-theme";
 export const THEME_OPTIONS = [
   { id: "light", label: "Light" },
   { id: "dark", label: "Dark" },
-  { id: "system", label: "System" },
 ];
 
 /**
- * Resolve a preference id to an effective "light"/"dark" string.
- * @param {"light"|"dark"|"system"} pref
+ * Normalise a stored/preference value to "light" | "dark". Unknown and
+ * legacy values (including the old "system" mode) fall back to light.
+ * @param {string|null|undefined} value
  */
-export function resolveTheme(pref, prefersDark) {
-  if (pref === "dark" || pref === "light") return pref;
-  return prefersDark ? "dark" : "light";
+export function normalizePref(value) {
+  return value === "dark" ? "dark" : "light";
 }
 
 export default function useTheme() {
   const getInitial = () => {
     try {
-      const stored = window.localStorage.getItem(THEME_KEY);
-      return THEME_OPTIONS.some((o) => o.id === stored) ? stored : "system";
+      return normalizePref(window.localStorage.getItem(THEME_KEY));
     } catch {
-      return "system";
+      return "light";
     }
   };
 
   const [pref, setPref] = useState(getInitial);
-  const [prefersDark, setPrefersDark] = useState(
-    () => window.matchMedia("(prefers-color-scheme: dark)").matches
-  );
 
   // Keep every hook instance in sync (the header mounts one toggle per
-  // breakpoint) and pick up changes from other tabs.
+  // breakpoint) and pick up changes made in other tabs.
   useEffect(() => {
     const sync = (e) => {
       if (e.type === "il-theme-change") {
-        setPref(e.detail);
-      } else if (e.key === THEME_KEY && e.newValue) {
-        setPref(e.newValue);
+        setPref(normalizePref(e.detail));
+      } else if (e.key === THEME_KEY) {
+        setPref(normalizePref(e.newValue));
       }
     };
     window.addEventListener("il-theme-change", sync);
@@ -58,36 +52,30 @@ export default function useTheme() {
     };
   }, []);
 
-  // Keep "system" live against OS changes.
+  // Apply the theme to <html> and keep the browser UI tint in sync.
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = (e) => setPrefersDark(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  // Apply the effective theme to <html>.
-  useEffect(() => {
-    const effective = resolveTheme(pref, prefersDark);
-    document.documentElement.classList.toggle("dark", effective === "dark");
-    document.documentElement.style.colorScheme = effective;
-  }, [pref, prefersDark]);
+    document.documentElement.classList.toggle("dark", pref === "dark");
+    document.documentElement.style.colorScheme = pref;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = pref === "dark" ? "#0B1220" : "#ffffff";
+  }, [pref]);
 
   /**
    * Change the persisted preference.
-   * @param {"light"|"dark"|"system"} next
+   * @param {"light"|"dark"} next
    */
   const setTheme = useCallback((next) => {
+    const normalized = normalizePref(next);
     try {
-      window.localStorage.setItem(THEME_KEY, next);
+      window.localStorage.setItem(THEME_KEY, normalized);
     } catch {
       /* storage unavailable (private mode) — preference applies for session */
     }
     window.dispatchEvent(
-      new window.CustomEvent("il-theme-change", { detail: next })
+      new window.CustomEvent("il-theme-change", { detail: normalized })
     );
-    setPref(next);
+    setPref(normalized);
   }, []);
 
-  return { pref, setTheme, effective: resolveTheme(pref, prefersDark) };
+  return { pref, setTheme, effective: pref };
 }
