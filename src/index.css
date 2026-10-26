@@ -2,16 +2,82 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Font loading is handled in index.html <head> with preconnect + display=swap;
-   system fallback stacks keep text visible immediately. */
-
+/* ==========================================================================
+   Design tokens — single source of truth for the visual system.
+   Values are RGB triplets so Tailwind utilities keep alpha support, e.g.
+   bg-surface/80. Light values live in :root, dark values in `.dark`.
+   Every text/background pair is chosen to meet WCAG 2.2 AA (>=4.5:1 for
+   normal text, >=3:1 for large text and UI graphics) in BOTH themes.
+   ========================================================================== */
 @layer base {
   :root {
-    /* Color tokens (mirrored in tailwind.config.js for utility generation) */
-    --color-surface: #0b1220;
-    --color-surface-raised: #122042;
-    --color-content: #e6ebf2;
-    --color-accent: #ddc58f;
+    /* Surfaces */
+    --surface: 255 255 255;          /* page background            */
+    --surface-sunken: 246 248 251;   /* alternating sections       */
+    --surface-card: 255 255 255;     /* card background            */
+    --surface-inverse: 11 18 32;     /* dark brand sections        */
+    --surface-inverse-raised: 17 27 46;
+
+    /* Text */
+    --text-primary: 15 23 42;        /* slate-900                  */
+    --text-secondary: 71 85 105;     /* slate-600  — 4.5:1+        */
+    --text-muted: 86 100 120;        /* 5.2:1 on white, 5.0:1 on sunken */
+    --text-on-inverse: 230 235 242;
+    --text-on-inverse-muted: 165 178 197;
+
+    /* Borders */
+    --border-subtle: 226 232 240;
+    --border-strong: 203 213 225;
+
+    /* Brand */
+    --brand: 29 78 216;              /* links/accents, light theme */
+    --brand-hover: 30 64 175;
+    --brand-chip: 226 236 253;       /* soft chip background       */
+    --brand-chip-text: 29 78 216;
+    --btn-bg: 29 78 216;             /* primary buttons, both themes */
+    --btn-bg-hover: 30 64 175;
+    --btn-text: 255 255 255;         /* 6.3:1 on --btn-bg           */
+    --ring: 29 78 216;
+
+    /* Accent (used sparingly on dark brand surfaces, both themes) */
+    --accent-gold: 221 197 143;
+
+    /* Elevation */
+    --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+    --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.07), 0 1px 2px -1px rgb(15 23 42 / 0.07);
+    --shadow-card-hover: 0 8px 24px -6px rgb(15 23 42 / 0.16), 0 2px 6px -2px rgb(15 23 42 / 0.08);
+    --shadow-pop: 0 12px 32px -8px rgb(15 23 42 / 0.28);
+  }
+
+  .dark {
+    --surface: 11 18 32;
+    --surface-sunken: 13 21 38;
+    --surface-card: 17 27 46;
+    --surface-inverse: 9 14 26;
+    --surface-inverse-raised: 17 27 46;
+
+    --text-primary: 230 235 242;
+    --text-secondary: 168 183 202;   /* 8.4:1 on surface           */
+    --text-muted: 142 158 181;       /* 6.5:1 on surface           */
+    --text-on-inverse: 230 235 242;
+    --text-on-inverse-muted: 152 168 190;
+
+    --border-subtle: 36 49 74;
+    --border-strong: 58 76 108;
+
+    --brand: 138 176 255;            /* links/accents, dark theme  */
+    --brand-hover: 157 190 255;
+    --brand-chip: 24 40 74;
+    --brand-chip-text: 138 176 255;
+    --btn-bg: 29 78 216;
+    --btn-bg-hover: 23 62 189;
+    --btn-text: 255 255 255;
+    --ring: 138 176 255;
+
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5);
+    --shadow-card-hover: 0 8px 24px -6px rgb(0 0 0 / 0.65), 0 2px 6px -2px rgb(0 0 0 / 0.5);
+    --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.7);
   }
 
   html {
@@ -33,14 +99,16 @@
   }
 
   body {
-    @apply font-body bg-white text-slate-800 antialiased;
+    @apply bg-surface text-text-primary antialiased;
+    font-feature-settings: "cv05" 1; /* refined Inter letterforms */
   }
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    @apply font-display text-slate-900;
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-text-primary;
+  }
+
+  ::selection {
+    @apply bg-brand/20;
   }
 
   /* Visible focus for keyboard users on every interactive element. */
@@ -50,25 +118,55 @@
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-white;
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-surface;
   }
 }
 
 @layer components {
-  /* Reusable section shell: consistent vertical rhythm and max width. */
+  /* Section shell: consistent rhythm + one readable measure, site-wide. */
   .container-section {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 
-  /* Gradient sections carry a solid fallback background-color so
-     color-contrast tooling (and browsers without gradient support) resolve
-     text contrast correctly instead of guessing at the body background. */
-  .bg-hero-gradient {
-    @apply bg-[#0b1220];
-    background-image: linear-gradient(135deg, #0b1220 0%, #122042 60%, #1d4078 100%);
+  .container-text {
+    @apply max-w-3xl;
   }
-  .cta-gradient {
-    @apply bg-[#2160e0];
-    background-image: linear-gradient(135deg, #2160e0 0%, #4f86f7 100%);
+
+  /* Hairline divider used across sections, cards, navbar, footer. */
+  .hairline {
+    @apply border-border-subtle;
+  }
+
+  /* Dark brand surfaces (hero, methodology, footer, CTA) — same in both
+     themes so the brand statement stays anchored. */
+  .bg-brand-deep {
+    @apply bg-surface-inverse text-text-on-inverse;
+    background-image:
+      radial-gradient(1200px 500px at 80% -10%, rgb(30 64 175 / 0.35), transparent 60%),
+      radial-gradient(900px 420px at 10% 110%, rgb(79 134 247 / 0.16), transparent 55%);
+  }
+
+  /* Fine engineering grid overlay for hero / CTA panels. */
+  .bg-grid-fine {
+    background-image:
+      linear-gradient(rgb(148 163 184 / 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(148 163 184 / 0.08) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 40%, transparent 75%);
+  }
+
+  /* Fluid display size for page-level headlines. */
+  .type-display {
+    font-size: clamp(2.25rem, 1.8rem + 2.2vw, 3.75rem);
+    line-height: 1.06;
+    letter-spacing: -0.022em;
+    font-weight: 700;
+  }
+
+  .type-heading {
+    font-size: clamp(1.625rem, 1.35rem + 1.3vw, 2.125rem);
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+    font-weight: 700;
   }
 }

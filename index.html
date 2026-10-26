@@ -13,6 +13,20 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
     />
+    <script>
+      /* Theme bootstrap — runs before first paint to prevent a flash of the
+         wrong theme. Mirrors the logic of src/theme/useTheme.js. */
+      (function () {
+        try {
+          var pref = localStorage.getItem("il-theme") || "system";
+          var dark =
+            pref === "dark" ||
+            (pref === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) document.documentElement.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

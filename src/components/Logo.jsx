@@ -1,17 +1,16 @@
 /**
- * Bespoke brand mark for Infinity Lab: an infinity loop rendered as a single
- * stroke inside a subtle gradient tile. Decorative — aria-hidden for
- * screen-reader users; the adjacent link text carries the meaning.
+ * Bespoke brand mark for Infinity Lab: the infinity loop drawn as one stroke
+ * on a brand-gradient tile, paired with a hard-cased wordmark.
  *
- * @param {{ className?: string, dark?: boolean }} props
- *   Use `dark` on dark backgrounds (footer) to keep text contrast AA.
+ * @param {{ className?: string, dark?: boolean, size?: "md"|"lg" }} props
  */
-export default function Logo({ className = "", dark = false }) {
+export default function Logo({ className = "", dark = false, size = "md" }) {
+  const tile = size === "lg" ? 44 : 36;
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`}>
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <svg
-        width="40"
-        height="40"
+        width={tile}
+        height={tile}
         viewBox="0 0 48 48"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +23,7 @@ export default function Logo({ className = "", dark = false }) {
             <stop offset="100%" stopColor="#4F86F7" />
           </linearGradient>
         </defs>
-        <rect width="48" height="48" rx="10" fill="url(#ilg)" />
+        <rect width="48" height="48" rx="12" fill="url(#ilg)" />
         <path
           d="M24 24c1.8-3 3.4-5.6 7-5.6 3.5 0 6.3 2.5 6.3 5.6s-2.8 5.6-6.3 5.6c-3.6 0-5.2-2.6-7-5.6zm0 0c-1.8 3-3.4 5.6-7 5.6-3.5 0-6.3-2.5-6.3-5.6s2.8-5.6 6.3-5.6c3.6 0 5.2 2.6 7 5.6z"
           stroke="#fff"
@@ -32,9 +31,12 @@ export default function Logo({ className = "", dark = false }) {
           strokeLinecap="round"
         />
       </svg>
-      <span className={`font-display text-lg font-bold tracking-tight ${dark ? "text-white" : "text-slate-900"}`}>
-        <span>Infinity </span>
-        <span className={dark ? "text-primary-200" : "text-primary-800"}>Lab</span>
+      <span
+        className={`font-display font-bold tracking-tight ${
+          size === "lg" ? "text-xl" : "text-lg"
+        } ${dark ? "text-white" : "text-text-primary"}`}
+      >
+        Infinity <span className={dark ? "text-accent-gold" : "text-brand"}>Lab</span>
       </span>
     </span>
   );

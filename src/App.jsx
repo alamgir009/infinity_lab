@@ -18,7 +18,7 @@ function ScrollToTop() {
 }
 
 const Loading = () => (
-  <p className="container-section py-16 text-sm text-slate-500" role="status">
+  <p className="container-section py-16 text-sm text-text-muted" role="status">
     Loading page…
   </p>
 );
@@ -26,8 +26,8 @@ const Loading = () => (
 function NotFound() {
   return (
     <section className="container-section py-24 text-center">
-      <h1 className="text-4xl font-bold text-slate-900">Page not found</h1>
-      <p className="mt-4 text-slate-600">
+      <h1 className="type-heading">Page not found</h1>
+      <p className="mt-4 text-text-secondary">
         The page you are looking for does not exist. Please use the navigation
         above or return to the homepage.
       </p>
@@ -42,7 +42,7 @@ export default function App() {
       {/* Skip link — first focusable element, visible on focus */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-btn focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-white focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-btn focus:bg-btn-bg focus:px-4 focus:py-2 focus:text-btn-text focus:shadow-pop"
       >
         Skip to main content
       </a>

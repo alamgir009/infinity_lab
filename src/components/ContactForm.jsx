@@ -134,10 +134,10 @@ export default function ContactForm() {
 
   const renderField = (f) => (
     <div key={f.id}>
-      <label htmlFor={f.id} className="block text-sm font-medium text-slate-800">
+      <label htmlFor={f.id} className="block text-sm font-medium text-text-primary">
         {f.label}
         {f.required && (
-          <span aria-hidden="true" className="ml-1 text-red-600">
+          <span aria-hidden="true" className="ml-1 text-red-600 dark:text-red-400">
             *
           </span>
         )}
@@ -152,14 +152,14 @@ export default function ContactForm() {
         aria-required={f.required || undefined}
         aria-invalid={errors[f.id] ? "true" : undefined}
         aria-describedby={errors[f.id] ? `${f.id}-error` : undefined}
-        className={`mt-2 block w-full min-h-[44px] rounded-btn border px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 ${
+        className={`mt-2 block w-full min-h-[44px] rounded-btn border px-3 py-2 text-sm text-text-primary placeholder:text-text-muted ${
           errors[f.id]
-            ? "border-red-500 bg-red-50"
-            : "border-slate-300 bg-white"
+            ? "border-red-500 bg-red-50 dark:border-red-400/70 dark:bg-red-950/40"
+            : "border-border-subtle bg-surface-card"
         }`}
       />
       {errors[f.id] && (
-        <p id={`${f.id}-error`} role="alert" className="mt-1.5 text-sm text-red-700">
+        <p id={`${f.id}-error`} role="alert" className="mt-1.5 text-sm text-red-700 dark:text-red-300">
           {errors[f.id]}
         </p>
       )}
@@ -169,7 +169,7 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
       {!hasEndpoint && (
-        <p className="rounded-btn border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
+        <p className="rounded-btn border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-900/25 dark:text-amber-200">
           <FiAlertCircle aria-hidden="true" className="mr-1.5 inline size-4" />
           Form submission endpoint is not configured yet
           (set <code className="font-mono">VITE_FORM_ENDPOINT</code>). You can
@@ -197,7 +197,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="service" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="service" className="block text-sm font-medium text-text-primary">
           What do you need help with?
         </label>
         <select
@@ -205,7 +205,7 @@ export default function ContactForm() {
           name="service"
           value={values.service}
           onChange={handleChange}
-          className="mt-2 block w-full min-h-[44px] rounded-btn border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+          className="mt-2 block w-full min-h-[44px] rounded-btn border border-border-subtle bg-surface-card px-3 py-2 text-sm text-text-primary"
         >
           <option value="">Select a service (optional)</option>
           {SERVICE_OPTIONS.map((s) => (
@@ -217,9 +217,9 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="message" className="block text-sm font-medium text-text-primary">
           About your project
-          <span aria-hidden="true" className="ml-1 text-red-600">*</span>
+          <span aria-hidden="true" className="ml-1 text-red-600 dark:text-red-400">*</span>
         </label>
         <textarea
           id="message"
@@ -231,12 +231,12 @@ export default function ContactForm() {
           aria-invalid={errors.message ? "true" : undefined}
           aria-describedby={errors.message ? "message-error" : undefined}
           placeholder="A few sentences about your goals, timeline and any existing system."
-          className={`mt-2 block w-full rounded-btn border px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 ${
-            errors.message ? "border-red-500 bg-red-50" : "border-slate-300 bg-white"
+          className={`mt-2 block w-full rounded-btn border px-3 py-2 text-sm text-text-primary placeholder:text-text-muted ${
+            errors.message ? "border-red-500 bg-red-50 dark:border-red-400/70 dark:bg-red-950/40" : "border-border-subtle bg-surface-card"
           }`}
         />
         {errors.message && (
-          <p id="message-error" role="alert" className="mt-1.5 text-sm text-red-700">
+          <p id="message-error" role="alert" className="mt-1.5 text-sm text-red-700 dark:text-red-300">
             {errors.message}
           </p>
         )}
@@ -249,9 +249,9 @@ export default function ContactForm() {
         aria-live="polite"
         className={`flex items-start gap-2 text-sm ${
           status === "success"
-            ? "rounded-btn border border-green-300 bg-green-50 p-3 text-green-800"
+            ? "rounded-btn border border-green-300 bg-green-50 p-3 text-green-800 dark:border-green-700/60 dark:bg-green-900/25 dark:text-green-300"
             : status === "error"
-              ? "rounded-btn border border-red-300 bg-red-50 p-3 text-red-800"
+              ? "rounded-btn border border-red-300 bg-red-50 p-3 text-red-800 dark:border-red-700/60 dark:bg-red-900/25 dark:text-red-300"
               : "sr-only"
         }`}
       >
@@ -263,13 +263,13 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting" || !hasEndpoint}
-        className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-btn bg-primary-700 px-7 py-3 font-display text-base font-semibold text-white transition-colors duration-150 hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-btn bg-btn-bg px-7 py-3 font-display text-base font-semibold text-btn-text transition-colors duration-150 hover:bg-btn-bg-hover disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
         <FiSend aria-hidden="true" className={status === "submitting" ? "animate-spin" : ""} />
         {status === "submitting" ? "Sending your inquiry…" : "Send inquiry"}
       </button>
       {!hasEndpoint && (
-        <p className="text-xs text-slate-500" id="submit-disabled-reason">
+        <p className="text-xs text-text-muted" id="submit-disabled-reason">
           The Send button is disabled until a submission endpoint is configured
           (see VITE_FORM_ENDPOINT in .env.example) — form submissions are never
           faked.

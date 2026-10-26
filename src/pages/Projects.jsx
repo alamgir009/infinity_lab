@@ -4,10 +4,7 @@ import Seo from "../components/Seo";
 import SectionHeading from "../components/SectionHeading";
 import Button from "../components/Button";
 import ProjectCard from "../components/ProjectCard";
-import {
-  PROJECTS,
-  PROJECT_CATEGORIES,
-} from "../data/projects";
+import { PROJECTS, PROJECT_CATEGORIES } from "../data/projects";
 import { SITE } from "../data/siteConfig";
 
 const DEFAULT_FILTER = "all";
@@ -21,17 +18,13 @@ export function filterProjects(projects, categoryId) {
 export default function Projects() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeParam = searchParams.get("category") || DEFAULT_FILTER;
-  const active =
-    PROJECT_CATEGORIES.some((c) => c.id === activeParam)
-      ? activeParam
-      : DEFAULT_FILTER;
+  const active = PROJECT_CATEGORIES.some((c) => c.id === activeParam)
+    ? activeParam
+    : DEFAULT_FILTER;
 
   const [announced, setAnnounced] = useState("");
 
-  const visible = useMemo(
-    () => filterProjects(PROJECTS, active),
-    [active]
-  );
+  const visible = useMemo(() => filterProjects(PROJECTS, active), [active]);
 
   const totalCounts = useMemo(() => {
     const counts = { all: PROJECTS.length };
@@ -39,17 +32,18 @@ export default function Projects() {
     return counts;
   }, []);
 
+  const visibleLabel = (id) =>
+    (PROJECT_CATEGORIES.find((c) => c.id === id) || PROJECT_CATEGORIES[0]).label;
+
   const setFilter = (id) => {
     setSearchParams(id === DEFAULT_FILTER ? {} : { category: id }, {
       replace: true,
     });
+    const n = filterProjects(PROJECTS, id).length;
     setAnnounced(
-      `Showing ${visibleLabel(id)}: ${filterProjects(PROJECTS, id).length} project${filterProjects(PROJECTS, id).length === 1 ? "" : "s"}`
+      `Showing ${visibleLabel(id)}: ${n} project${n === 1 ? "" : "s"}`
     );
   };
-
-  const visibleLabel = (id) =>
-    (PROJECT_CATEGORIES.find((c) => c.id === id) || PROJECT_CATEGORIES[0]).label;
 
   const activeLabel = visibleLabel(active);
 
@@ -61,34 +55,38 @@ export default function Projects() {
         path="/projects"
       />
 
-      <section className="bg-hero-gradient text-white">
-        <div className="container-section py-14 md:py-20">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Projects
-            </h1>
-            <p className="mt-4 text-lg leading-8 text-slate-200">
-              Every build listed here is a real delivery — with an honest note
-              where a link is no longer reachable.
-            </p>
-          </div>
+      {/* Page hero */}
+      <section className="bg-brand-deep relative overflow-hidden">
+        <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
+        <div className="container-section relative py-16 md:py-24">
+          <p className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-white/80">
+            <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-accent-gold" />
+            Portfolio
+          </p>
+          <h1 className="type-display mt-6 font-display text-white">
+            Projects
+          </h1>
+          <p className="container-text mt-5 text-lg leading-8 text-text-on-inverse-muted">
+            Every build listed here is a real delivery — with an honest note
+            where a link is no longer reachable.
+          </p>
         </div>
       </section>
 
-      <section aria-labelledby="projects-list-heading" className="py-16 md:py-24">
+      <section aria-labelledby="projects-list-heading" className="py-20 md:py-28">
         <div className="container-section">
           <SectionHeading
             id="projects-list-heading"
-            eyebrow="Portfolio"
-            title="Delivered work, by discipline"
-            lead="Filter by the kind of system you are planning. Use the arrow keys or Tab to move between filters."
+            eyebrow="Delivered work"
+            title="Filter by discipline"
+            lead="Choose the kind of system you are planning. Filters are toggle buttons — keyboard operable, with announced result counts."
           />
 
           {/* Accessible filter group */}
           <div
             role="group"
             aria-label="Filter projects by category"
-            className="mt-10 flex flex-wrap gap-3"
+            className="mt-10 flex flex-wrap gap-2.5"
           >
             {PROJECT_CATEGORIES.map((c) => {
               const selected = active === c.id;
@@ -99,17 +97,19 @@ export default function Projects() {
                   type="button"
                   aria-pressed={selected}
                   onClick={() => setFilter(c.id)}
-                  className={`inline-flex min-h-[44px] items-center gap-2 rounded-btn border px-4 py-2 text-sm font-semibold transition-colors duration-150 ${
+                  className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-btn border px-4 py-2 text-sm font-semibold transition-[background-color,border-color,color] duration-150 ${
                     selected
-                      ? "border-primary-700 bg-primary-700 text-white"
-                      : "border-slate-300 bg-white text-slate-700 hover:border-primary-600 hover:text-primary-800"
-                  } ${count === 0 && !selected ? "opacity-90" : ""}`}
+                      ? "border-btn-bg bg-btn-bg text-btn-text shadow-card"
+                      : "border-border-subtle bg-surface-card text-text-secondary hover:border-brand hover:text-brand"
+                  }`}
                 >
                   {c.label}
                   <span
                     aria-label={`${count} ${count === 1 ? "project" : "projects"}`}
-                    className={`rounded-full px-1.5 text-xs font-bold ${
-                      selected ? "bg-primary-800 text-white" : "bg-slate-100 text-slate-600"
+                    className={`rounded-full px-2 py-0.5 text-xs font-bold [font-variant-numeric:tabular-nums] ${
+                      selected
+                        ? "bg-white/15 text-white"
+                        : "bg-surface-sunken text-text-muted"
                     }`}
                   >
                     {count}
@@ -120,34 +120,33 @@ export default function Projects() {
           </div>
           <p aria-live="polite" className="sr-only">{announced}</p>
 
-          {/* Mobile empty state honesty */}
           {visible.length === 0 ? (
-            <div className="mt-10 rounded-card border border-dashed border-slate-300 bg-slate-50 p-10 text-center">
-              <h3 className="text-lg font-semibold text-slate-900">
+            <div className="mt-12 rounded-card border border-dashed border-border-strong bg-surface-sunken p-10 text-center sm:p-14">
+              <h3 className="text-lg font-bold text-text-primary">
                 No {activeLabel.toLowerCase()} projects published yet
               </h3>
-              <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
+              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-text-secondary">
                 We do not list work we cannot stand behind. If you are planning
                 a {activeLabel.toLowerCase()} product, we would be glad to
                 discuss it — see the Contact page.
               </p>
-              <Button to="/contact" size="md" className="mt-6">
+              <Button to="/contact" size="md" className="mt-8">
                 Start Your Project
               </Button>
             </div>
           ) : (
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {visible.map((p) => (
                 <ProjectCard key={p.id} project={p} detailed />
               ))}
             </div>
           )}
 
-          <p className="mt-8 text-xs leading-5 text-slate-500">
+          <p className="mt-10 max-w-3xl text-xs leading-5 text-text-muted">
             Link availability checked on 2026-10-26. Projects whose domains no
             longer resolve are kept listed with an explicit{" "}
-            <span className="font-semibold">Unverified link</span> badge rather
-            than being silently hidden or claimed as live.
+            <span className="font-semibold text-text-secondary">Unverified link</span>{" "}
+            badge rather than being silently hidden or claimed as live.
           </p>
         </div>
       </section>
