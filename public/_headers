@@ -1,0 +1,13 @@
+# Cloudflare Pages static asset headers.
+# Reference: https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  # Recommended CSP. Replace "https://your-form-endpoint.example" with the
+  # actual host of VITE_FORM_ENDPOINT before publishing.
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://your-form-endpoint.example; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://your-form-endpoint.example
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
