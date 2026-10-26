@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import {
-  FiArrowRight,
   FiCheckCircle,
   FiCheckSquare,
   FiCloud,
@@ -231,43 +230,67 @@ const METHOD_ICONS = {
 };
 
 /**
- * Delivery-phase step card (Cloudflare/Google style): opaque theme-aware card
- * on the brand band, icon chip + quiet step number, title, blurb and a short
- * checklist. `arrow` renders the small connector chevron that sits in the
- * grid gap to the next card (desktop only, decorative).
+ * Circular node marking a connector endpoint: a brand hairline ring on a
+ * card-token disc with a solid brand dot centred inside. Decorative, and
+ * desktop-only (connectors render only on the 3-column grid at lg+).
  */
-function MethodStepCard({ phase, arrow = false }) {
+function MethodNode({ className }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute z-10 hidden size-3.5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-brand/50 bg-surface-card lg:flex ${className}`}
+    >
+      <span className="block size-2 rounded-full bg-brand" />
+    </span>
+  );
+}
+
+/**
+ * Delivery-phase step card (Cloudflare/Google style): compact, opaque,
+ * theme-aware card on the brand band — circular icon chip + quiet step
+ * number on one top line, title, blurb, and a checklist pinned to the card
+ * bottom (`mt-auto`) so every card in a row shares one aligned divider.
+ * Cards fill their grid cell (`h-full`), keeping row heights consistent.
+ *
+ * `connector` (desktop only, purely decorative CSS, aria-hidden):
+ *  - "next":   hairline through the grid gap + end nodes into the next card.
+ *  - "return": the card 3 → card 4 hand-off — a stub leaves the card's
+ *    bottom edge, a hairline runs along the row-gap midline (symmetric about
+ *    the grid: card centre to card centre), then drops into the next row's
+ *    first card. Geometry assumes the 24px (gap-6) grid gap.
+ */
+function MethodStepCard({ phase, connector = "none" }) {
   const Icon = METHOD_ICONS[phase.icon] ?? FiCode;
   return (
     <li className="relative">
-      <Card interactive>
+      <Card interactive className="h-full">
         {/* Brand hairline accent on hover (matches ServiceCard) */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/0 via-brand to-brand/0 opacity-0 transition-opacity duration-200 group-hover/card:opacity-100"
         />
-        <div className="flex h-full flex-col p-6">
-          <div className="flex items-start justify-between gap-4">
-            <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand-chip text-brand-chip-text">
-              <Icon size={20} aria-hidden="true" />
+        <div className="flex h-full flex-col p-5">
+          <div className="flex items-center justify-between gap-3">
+            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand-chip-text ring-1 ring-inset ring-brand/15 dark:bg-white/10 dark:text-accent-gold dark:ring-white/15">
+              <Icon size={16} aria-hidden="true" />
             </span>
             <span
               aria-hidden="true"
-              className="font-display text-sm font-bold tracking-widest text-text-on-brand-muted"
+              className="font-display text-xs font-semibold tracking-[0.2em] text-text-on-brand-muted"
             >
               {String(phase.step).padStart(2, "0")}
             </span>
           </div>
-          <h3 className="mt-5 text-lg font-bold text-text-on-brand">{phase.name}</h3>
-          <p className="mt-2 text-sm leading-6 text-text-on-brand-muted">
+          <h3 className="mt-4 text-base font-bold text-text-on-brand">{phase.name}</h3>
+          <p className="mb-4 mt-2 text-sm leading-6 text-text-on-brand-muted">
             {phase.description}
           </p>
-          <ul className="mt-5 space-y-2.5 border-t border-border-subtle pt-5 text-sm leading-6 dark:border-white/10">
+          <ul className="mt-auto space-y-2 border-t border-border-subtle pt-4 text-[13px] leading-5 dark:border-white/10">
             {phase.points.map((point) => (
               <li key={point} className="flex items-start gap-2.5">
                 <FiCheckCircle
                   aria-hidden="true"
-                  className="mt-1 size-4 shrink-0 text-brand dark:text-accent-gold"
+                  className="mt-[3px] size-3.5 shrink-0 text-brand dark:text-accent-gold"
                 />
                 <span className="text-text-on-brand-muted">{point}</span>
               </li>
@@ -275,13 +298,39 @@ function MethodStepCard({ phase, arrow = false }) {
           </ul>
         </div>
       </Card>
-      {arrow && (
-        <span
-          aria-hidden="true"
-          className="absolute -right-[22px] top-1/2 z-10 hidden size-7 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface-card text-brand shadow-xs lg:inline-flex dark:border-white/15 dark:bg-surface-card dark:text-white"
-        >
-          <FiArrowRight size={13} />
-        </span>
+
+      {/* Hairline + end nodes to the next card in the row (desktop). */}
+      {connector === "next" && (
+        <>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-full top-1/2 hidden h-px w-6 bg-[var(--hv-connector)] lg:block"
+          />
+          <MethodNode className="left-full top-1/2" />
+          <MethodNode className="left-[calc(100%_+_24px)] top-1/2" />
+        </>
+      )}
+
+      {/* Row transition: card 3 hands off to card 4 (desktop). */}
+      {connector === "return" && (
+        <>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute right-1/2 top-full hidden h-3 w-3 rounded-br-[8px] border-b border-r lg:block"
+            style={{ borderColor: "var(--hv-connector)" }}
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-[calc(-150%_-_36px)] right-[calc(50%_+_12px)] top-[calc(100%_+_11px)] hidden h-px bg-[var(--hv-connector)] lg:block"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-[calc(-150%_-_48px)] top-[calc(100%_+_11px)] hidden h-[13px] w-3 rounded-tl-[8px] border-l border-t lg:block"
+            style={{ borderColor: "var(--hv-connector)" }}
+          />
+          <MethodNode className="left-1/2 top-full" />
+          <MethodNode className="left-[calc(-150%_-_48px)] top-[calc(100%_+_24px)]" />
+        </>
       )}
     </li>
   );
@@ -461,13 +510,19 @@ export default function Home() {
             onBrand
           />
           <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {METHODOLOGY.map((phase, i) => (
-              <MethodStepCard
-                key={phase.step}
-                phase={phase}
-                arrow={i % 3 !== 2 && i < METHODOLOGY.length - 1}
-              />
-            ))}
+            {METHODOLOGY.map((phase, i) => {
+              // Desktop 3-col flow: in-row links on 1→2, 2→3, 4→5 and the
+              // dedicated 3→4 row return; the rest are row ends.
+              const connector =
+                i % 3 !== 2 && i < METHODOLOGY.length - 1
+                  ? "next"
+                  : i === 2
+                    ? "return"
+                    : "none";
+              return (
+                <MethodStepCard key={phase.step} phase={phase} connector={connector} />
+              );
+            })}
           </ol>
         </div>
       </section>
