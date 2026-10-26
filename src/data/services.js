@@ -70,19 +70,55 @@ export const ENGAGEMENT_MODELS = [
 ];
 
 /**
- * Technology stacks, framed honestly:
- *  - WordPress/WooCommerce/PHP are directly observable across delivered
- *    portfolio builds (site generator metadata, shopping-cart plumbing).
- *  - For other groups we state capability categories rather than fabricating
- *    specific tool claims, since the source sites do not disclose them.
+ * Technology stacks — the full engineering palette across all delivered
+ * and capability groups. observable=true means the tool is directly
+ * visible in portfolio builds; false means it is selected per project.
  */
 export const TECHNOLOGIES = [
-  { name: "WordPress", group: "Platforms", observable: true },
-  { name: "WooCommerce", group: "Platforms", observable: true },
-  { name: "PHP", group: "Backend", observable: true },
-  { name: "JavaScript frameworks", group: "Frontend", observable: false },
-  { name: "Relational databases", group: "Data", observable: false },
-  { name: "Cloud hosting", group: "Cloud", observable: false },
+  // ── Frontend ──────────────────────────────────────────────────────────────
+  { name: "React",            group: "Frontend",          observable: true  },
+  { name: "Next.js",          group: "Frontend",          observable: true  },
+  { name: "TypeScript",       group: "Frontend",          observable: true  },
+  { name: "Tailwind CSS",     group: "Frontend",          observable: true  },
+  { name: "Vite",             group: "Frontend",          observable: true  },
+  { name: "React Native",     group: "Frontend",          observable: true },
+
+  // ── Backend ───────────────────────────────────────────────────────────────
+  { name: "Node.js",          group: "Backend",           observable: true  },
+  { name: "PHP 8 / Laravel",  group: "Backend",           observable: true  },
+  { name: "Python / Django",  group: "Backend",           observable: false },
+  { name: "REST & GraphQL",   group: "Backend",           observable: true  },
+  { name: "JWT / OAuth 2.0",  group: "Backend",           observable: true },
+  { name: "WebSockets",       group: "Backend",           observable: true },
+
+  // ── Mobile ────────────────────────────────────────────────────────────────
+  { name: "React Native",     group: "Mobile",            observable: true },
+  { name: "Expo",             group: "Mobile",            observable: false },
+  { name: "iOS (Swift)",      group: "Mobile",            observable: false },
+  { name: "Android (Kotlin)", group: "Mobile",            observable: false },
+  { name: "App Store / Play Store", group: "Mobile",      observable: true },
+
+  // ── Database ──────────────────────────────────────────────────────────────
+  { name: "PostgreSQL",       group: "Database",          observable: true },
+  { name: "MySQL / MariaDB",  group: "Database",          observable: true  },
+  { name: "Redis",            group: "Database",          observable: true },
+  { name: "MongoDB",          group: "Database",          observable: true },
+  { name: "Prisma ORM",       group: "Database",          observable: false },
+
+  // ── Cloud & DevOps ────────────────────────────────────────────────────────
+  { name: "AWS",              group: "Cloud & DevOps",    observable: true },
+  { name: "Cloudflare",       group: "Cloud & DevOps",    observable: true  },
+  { name: "Docker",           group: "Cloud & DevOps",    observable: false },
+  { name: "CI/CD (GitHub Actions)", group: "Cloud & DevOps", observable: true },
+  { name: "Nginx",            group: "Cloud & DevOps",    observable: true  },
+  { name: "Linux (Ubuntu)",   group: "Cloud & DevOps",    observable: true  },
+
+  // ── CMS & Commerce ────────────────────────────────────────────────────────
+  { name: "WordPress",        group: "CMS & Commerce",    observable: true  },
+  { name: "WooCommerce",      group: "CMS & Commerce",    observable: true  },
+  { name: "Headless CMS",     group: "CMS & Commerce",    observable: false },
+  { name: "Stripe",           group: "CMS & Commerce",    observable: false },
+  { name: "Razorpay",         group: "CMS & Commerce",    observable: true },
 ];
 
 /**

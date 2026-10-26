@@ -58,7 +58,7 @@ export default function Projects() {
       {/* Page hero */}
       <section className="bg-brand-deep relative overflow-hidden">
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="container-section relative py-16 md:py-24">
+        <div className="container-section relative pt-12 pb-10 md:pt-16 md:pb-12">
           <p className="inline-flex items-center gap-2.5 rounded-full border border-border-subtle bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary dark:border-white/15 dark:bg-white/5 dark:text-white/80">
             <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-brand dark:bg-accent-gold" />
             Portfolio
@@ -73,7 +73,7 @@ export default function Projects() {
         </div>
       </section>
 
-      <section aria-labelledby="projects-list-heading" className="py-20 md:py-28">
+      <section aria-labelledby="projects-list-heading" className="pt-10 pb-16 md:pb-20">
         <div className="container-section">
           <SectionHeading
             id="projects-list-heading"
