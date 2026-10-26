@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
-import { FiCheckCircle, FiCloud, FiCode, FiSmartphone } from "react-icons/fi";
+import {
+  FiArrowRight,
+  FiCheckCircle,
+  FiCheckSquare,
+  FiCloud,
+  FiCode,
+  FiRefreshCw,
+  FiPenTool,
+  FiSearch,
+  FiSmartphone,
+  FiUploadCloud,
+} from "react-icons/fi";
 import Seo from "../components/Seo";
 import Button from "../components/Button";
+import Card from "../components/ui/Card";
 import SectionHeading from "../components/SectionHeading";
 import ServiceCard from "../components/ServiceCard";
 import ProjectCard from "../components/ProjectCard";
@@ -207,6 +219,74 @@ function HeroVisual() {
   );
 }
 
+/* Icon lookup for METHODOLOGY steps (the data stores string keys, matching
+   the SERVICES pattern). */
+const METHOD_ICONS = {
+  search: FiSearch,
+  pen: FiPenTool,
+  code: FiCode,
+  check: FiCheckSquare,
+  upload: FiUploadCloud,
+  life: FiRefreshCw,
+};
+
+/**
+ * Delivery-phase step card (Cloudflare/Google style): opaque theme-aware card
+ * on the brand band, icon chip + quiet step number, title, blurb and a short
+ * checklist. `arrow` renders the small connector chevron that sits in the
+ * grid gap to the next card (desktop only, decorative).
+ */
+function MethodStepCard({ phase, arrow = false }) {
+  const Icon = METHOD_ICONS[phase.icon] ?? FiCode;
+  return (
+    <li className="relative">
+      <Card interactive>
+        {/* Brand hairline accent on hover (matches ServiceCard) */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/0 via-brand to-brand/0 opacity-0 transition-opacity duration-200 group-hover/card:opacity-100"
+        />
+        <div className="flex h-full flex-col p-6">
+          <div className="flex items-start justify-between gap-4">
+            <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand-chip text-brand-chip-text">
+              <Icon size={20} aria-hidden="true" />
+            </span>
+            <span
+              aria-hidden="true"
+              className="font-display text-sm font-bold tracking-widest text-text-on-brand-muted"
+            >
+              {String(phase.step).padStart(2, "0")}
+            </span>
+          </div>
+          <h3 className="mt-5 text-lg font-bold text-text-on-brand">{phase.name}</h3>
+          <p className="mt-2 text-sm leading-6 text-text-on-brand-muted">
+            {phase.description}
+          </p>
+          <ul className="mt-5 space-y-2.5 border-t border-border-subtle pt-5 text-sm leading-6 dark:border-white/10">
+            {phase.points.map((point) => (
+              <li key={point} className="flex items-start gap-2.5">
+                <FiCheckCircle
+                  aria-hidden="true"
+                  className="mt-1 size-4 shrink-0 text-brand dark:text-accent-gold"
+                />
+                <span className="text-text-on-brand-muted">{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Card>
+      {arrow && (
+        <span
+          aria-hidden="true"
+          className="absolute -right-[22px] top-1/2 z-10 hidden size-7 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface-card text-brand shadow-xs lg:inline-flex dark:border-white/15 dark:bg-surface-card dark:text-white"
+        >
+          <FiArrowRight size={13} />
+        </span>
+      )}
+    </li>
+  );
+}
+
 export default function Home() {
   const flagship = PROJECTS.filter((p) => p.verified).slice(0, 3);
 
@@ -271,7 +351,7 @@ export default function Home() {
       </section>
 
       {/* Company story */}
-      <section aria-labelledby="story-heading" className="py-20 md:py-28">
+      <section aria-labelledby="story-heading" className="py-16 md:py-24">
         <div className="container-section">
           <SectionHeading
             id="story-heading"
@@ -279,7 +359,7 @@ export default function Home() {
             title={`An engineering company since ${SITE.founded}`}
             lead="Infinity Lab started with a simple conviction: software that people depend on should be built with care, honesty and attention to detail."
           />
-          <div className="mt-12 grid gap-10 md:grid-cols-2 lg:gap-14">
+          <div className="mt-10 grid gap-8 md:grid-cols-2 lg:gap-12">
             <div className="container-text space-y-5 text-base leading-7 text-text-secondary md:text-lg md:leading-8">
               <p className="text-lg leading-8 text-text-primary">
                 Over the years we have designed and delivered production systems
@@ -292,7 +372,7 @@ export default function Home() {
                 our clients stay with us long after launch.
               </p>
             </div>
-            <div className="rounded-card border border-border-subtle bg-surface-sunken p-6 sm:p-7">
+            <div className="rounded-card border border-border-subtle bg-surface-sunken p-6 sm:p-8">
               <h3 className="text-base font-bold text-text-primary">
                 What that means in practice
               </h3>
@@ -315,7 +395,10 @@ export default function Home() {
       </section>
 
       {/* Services preview */}
-      <section aria-labelledby="services-heading" className="border-y border-border-subtle bg-surface-sunken py-20 md:py-28">
+      <section
+        aria-labelledby="services-heading"
+        className="border-y border-border-subtle bg-surface-sunken py-16 md:py-24"
+      >
         <div className="container-section">
           <SectionHeading
             id="services-heading"
@@ -323,7 +406,7 @@ export default function Home() {
             title="Three disciplines, one accountable team"
             lead="We cover the full delivery surface — interface, server, and device — so you never have to chase three vendors for one product."
           />
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
             {SERVICES.map((s) => (
               <ServiceCard key={s.id} service={s} />
             ))}
@@ -337,7 +420,7 @@ export default function Home() {
       </section>
 
       {/* Flagship projects */}
-      <section aria-labelledby="projects-heading" className="py-20 md:py-28">
+      <section aria-labelledby="projects-heading" className="py-16 md:py-24">
         <div className="container-section">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
@@ -350,7 +433,7 @@ export default function Home() {
               All projects
             </Button>
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
             {flagship.map((p) => (
               <ProjectCard key={p.id} project={p} />
             ))}
@@ -364,41 +447,35 @@ export default function Home() {
       </section>
 
       {/* Methodology */}
-      <section aria-labelledby="method-heading" className="bg-brand-deep relative overflow-hidden py-20 md:py-28">
+      <section
+        aria-labelledby="method-heading"
+        className="bg-brand-deep relative overflow-hidden py-16 md:py-24"
+      >
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="container-section relative">
           <SectionHeading
             id="method-heading"
             eyebrow="How we deliver"
             title="A methodology that removes surprises"
-            lead="Four deliberate phases — the same discipline on every engagement, regardless of size."
+            lead="Six deliberate phases — the same discipline on every engagement, regardless of size."
             onBrand
           />
-          <ol className="relative mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
-            {/* Timeline connector */}
-            <span
-              aria-hidden="true"
-              className="absolute left-0 right-0 top-5 hidden border-t border-dashed border-border-subtle md:block dark:border-white/20"
-            />
-            {METHODOLOGY.map((m) => (
-              <li key={m.step} className="relative">
-                <span className="relative z-10 flex size-10 items-center justify-center rounded-full bg-btn-bg font-display text-base font-bold text-btn-text ring-4 ring-surface-brand">
-                  {m.step}
-                </span>
-                <h3 className="mt-5 text-lg font-bold text-text-on-brand">{m.name}</h3>
-                <p className="mt-2 text-sm leading-6 text-text-on-brand-muted">
-                  {m.description}
-                </p>
-              </li>
+          <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {METHODOLOGY.map((phase, i) => (
+              <MethodStepCard
+                key={phase.step}
+                phase={phase}
+                arrow={i % 3 !== 2 && i < METHODOLOGY.length - 1}
+              />
             ))}
           </ol>
         </div>
       </section>
 
       {/* Start Project CTA */}
-      <section aria-labelledby="cta-heading" className="py-20 md:py-28">
+      <section aria-labelledby="cta-heading" className="py-16 md:py-24">
         <div className="container-section">
-          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] border border-border-subtle px-6 py-16 text-center shadow-card sm:px-12 md:py-20 dark:border-transparent dark:shadow-none">
+          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] border border-border-subtle px-6 py-14 text-center shadow-card sm:px-12 md:py-16 dark:border-transparent dark:shadow-none">
             <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
             <div className="relative mx-auto max-w-2xl">
               <h2 id="cta-heading" className="type-heading text-text-on-brand md:text-4xl">
@@ -408,10 +485,10 @@ export default function Home() {
                 Tell us what you are building. We will reply with an honest
                 scope, timeline and next step.
               </p>
-              <Button to="/contact" size="lg" variant="inverse" className="mt-9">
+              <Button to="/contact" size="lg" variant="inverse" className="mt-8">
                 Start Your Project
               </Button>
-              <p className="mt-7 text-sm text-text-on-brand-muted">
+              <p className="mt-6 text-sm text-text-on-brand-muted">
                 Prefer to browse first?{" "}
                 <Link
                   to="/projects"

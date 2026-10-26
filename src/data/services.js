@@ -87,30 +87,80 @@ export const TECHNOLOGIES = [
 
 /**
  * Methodology steps — used on Home (delivery methodology section).
+ * Icon is a string key resolved to a react-icon in the consuming component
+ * (same pattern as SERVICES above).
  */
 export const METHODOLOGY = [
   {
     step: 1,
     name: "Understand",
+    icon: "search",
     description:
       "We start with your goals, users and constraints before any code is written.",
+    points: [
+      "Goals, users and constraints mapped first",
+      "Success criteria agreed up front",
+      "An honest scope you can hold us to",
+    ],
   },
   {
     step: 2,
     name: "Design",
+    icon: "pen",
     description:
       "Architecture and interface design happen together, so the product is sound inside and out.",
+    points: [
+      "System and data architecture on paper",
+      "Interface design in the same pass",
+      "You review and approve before build",
+    ],
   },
   {
     step: 3,
     name: "Build",
+    icon: "code",
     description:
       "Iterative development with regular demos — you see progress, not surprises.",
+    points: [
+      "Small increments, releasable early",
+      "Regular demos of real software",
+      "Peer-reviewed, documented code",
+    ],
   },
   {
     step: 4,
-    name: "Operate",
+    name: "Test",
+    icon: "check",
     description:
-      "We deploy, monitor and maintain, keeping systems running after launch.",
+      "Quality is verified, not assumed — testing runs through the whole build.",
+    points: [
+      "Automated tests on core flows",
+      "Cross-browser and device checking",
+      "Accessibility and performance audits",
+    ],
+  },
+  {
+    step: 5,
+    name: "Deploy",
+    icon: "upload",
+    description:
+      "Controlled releases to production, with monitoring from day one.",
+    points: [
+      "Staged release, no big-bang risk",
+      "Monitoring and alerting switched on",
+      "A rollback plan before go-live",
+    ],
+  },
+  {
+    step: 6,
+    name: "Operate",
+    icon: "life",
+    description:
+      "We keep systems running and improving long after launch day.",
+    points: [
+      "Ongoing maintenance and updates",
+      "Backups verified, not just taken",
+      "Direct access to the engineers",
+    ],
   },
 ];
