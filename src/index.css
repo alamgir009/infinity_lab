@@ -45,9 +45,14 @@
     /* Hero visual (theme-aware SVG colors) */
     --hv-orbit-a: #1d4ed8;           /* orbit gradient start (light)  */
     --hv-orbit-b: #4f86f7;           /* orbit gradient end            */
-    --hv-gold: #9e7e2d;              /* satellite accent, light       */
+    --hv-gold: #9e7e2d;              /* focal accent, light           */
     --hv-glow: #4f86f7;              /* radial glow color             */
-    --hv-halo: rgb(255 255 255 / 0.85); /* frosted disc behind emblem  */
+    --hv-node-hi: #bcd4ff;           /* spherical node highlight      */
+    --hv-node-lo: #2563eb;           /* spherical node body           */
+    --hv-connector: rgb(37 99 235 / 0.45); /* node -> card lines      */
+    --hv-medallion: #ffffff;         /* central medallion surface     */
+    --hv-medallion-ring: rgb(15 23 42 / 0.08); /* medallion hairline */
+    --hv-medallion-shadow: rgb(30 64 175 / 0.16); /* medallion depth */
 
     /* Elevation */
     --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.05);
@@ -86,7 +91,12 @@
     --hv-orbit-b: #ddc58f;           /* orbit gradient end            */
     --hv-gold: #ddc58f;
     --hv-glow: #4f86f7;
-    --hv-halo: rgb(138 176 255 / 0.08);
+    --hv-node-hi: #dbe7ff;
+    --hv-node-lo: #4f86f7;
+    --hv-connector: rgb(138 176 255 / 0.45);
+    --hv-medallion: rgb(255 255 255 / 0.06);
+    --hv-medallion-ring: rgb(255 255 255 / 0.14);
+    --hv-medallion-shadow: rgb(0 0 0 / 0.45);
 
     --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
     --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5);
@@ -197,23 +207,18 @@
     transform-origin: 50% 50%;
     animation: hv-spin 90s linear infinite;
   }
+}
 
-  .hv-float {
-    animation: hv-float 7s ease-in-out infinite alternate;
+/* Connector lines only make sense when the floating cards overlay the
+   illustration (sm+). Below that, cards stack statically below the SVG. */
+@media (max-width: 639.98px) {
+  .hv-connectors {
+    display: none;
   }
 }
 
 @keyframes hv-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes hv-float {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-8px);
   }
 }

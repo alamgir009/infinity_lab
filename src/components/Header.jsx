@@ -106,7 +106,7 @@ export default function Header() {
 
         <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
-          <Button to="/contact" size="md">
+          <Button to="/contact" size="md" arrow>
             Start Your Project
           </Button>
         </div>
@@ -158,6 +158,7 @@ export default function Header() {
             <Button
               to="/contact"
               size="md"
+              arrow
               className="mt-3 w-full"
               onClick={() => setOpen(false)}
             >

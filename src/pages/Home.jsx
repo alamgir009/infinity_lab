@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FiCheckCircle, FiCode, FiServer, FiSmartphone } from "react-icons/fi";
+import { FiCheckCircle, FiCloud, FiCode, FiSmartphone } from "react-icons/fi";
 import Seo from "../components/Seo";
 import Button from "../components/Button";
 import SectionHeading from "../components/SectionHeading";
@@ -19,25 +19,49 @@ const TRUST_STATS = [
 
 /**
  * Premium hero visual (theme-aware, shown in BOTH themes):
- * a glass product panel carrying the brand emblem inside glowing gradient
- * orbit rings, with floating capability chips for depth. All colors come
- * from --hv-* CSS tokens so light and dark both render correctly.
- * Decorative; aria-hidden.
+ * a white circular medallion carrying the brand infinity emblem, wrapped in
+ * precise concentric orbits (dotted outer ring rotates slowly), blue spherical
+ * nodes on the orbital paths, and thin connector lines linking nodes to three
+ * floating service cards. All colors come from --hv-* CSS tokens so light and
+ * dark both render correctly. Decorative; aria-hidden.
  */
-const EMBLEM_PATH =
-  "M24 24c1.8-3 3.4-5.6 7-5.6 3.5 0 6.3 2.5 6.3 5.6s-2.8 5.6-6.3 5.6c-3.6 0-5.2-2.6-7-5.6zm0 0c-1.8 3-3.4 5.6-7 5.6-3.5 0-6.3-2.5-6.3-5.6s2.8-5.6 6.3-5.6c3.6 0 5.2 2.6 7 5.6z";
+/* Smooth lemniscate (Bernoulli) sampled as a closed polyline — a true
+   infinity weave with a diagonal crossover, unlike the compact logo path
+   which only reads correctly at small tile sizes. */
+const LEMNISCATE = (() => {
+  const N = 96;
+  const a = 40;      // half-width -> 80px emblem in the 360 viewBox
+  const ys = 1.35;   // gentle vertical stretch for a balanced aspect
+  const pts = [];
+  for (let i = 0; i <= N; i++) {
+    const t = (i / N) * Math.PI * 2;
+    const d = 1 + Math.sin(t) ** 2;
+    pts.push(`${((a * Math.cos(t)) / d).toFixed(2)} ${(((a * Math.sin(t) * Math.cos(t)) / d) * ys).toFixed(2)}`);
+  }
+  return `M${pts.join("L")}Z`;
+})();
 
-/** Satellite dots on the outer rotating ring (cardinal = gold, diagonal = blue). */
-const SATELLITES = [
-  { x: 330, y: 180, gold: true },
-  { x: 286.1, y: 73.9, gold: false },
-  { x: 180, y: 30, gold: true },
-  { x: 73.9, y: 73.9, gold: false },
-  { x: 30, y: 180, gold: true },
-  { x: 73.9, y: 286.1, gold: false },
-  { x: 180, y: 330, gold: true },
-  { x: 286.1, y: 286.1, gold: false },
+/* Orbit geometry (viewBox 360x360, centre 180/180). Nodes sit on the rings
+   clear of the card footprints; connector endpoints touch each card edge —
+   cards are positioned to match (see HeroVisual). */
+const C = 180;
+const R_SOLID = 116;
+const R_DOT = 150;
+const NODES = [
+  { angle: 195, ring: R_SOLID }, // left of centre  -> card A (upper-left)
+  { angle: -25, ring: R_DOT },   // upper-right     -> card B (right)
+  { angle: 165, ring: R_SOLID }, // left of centre  -> card C (lower-left)
 ];
+const CONNECTORS = [
+  { x1: 68, y1: 150, x2: 134, y2: 89 },    // card A right edge
+  { x1: 316, y1: 117, x2: 300, y2: 135 },  // card B top-left edge
+  { x1: 68, y1: 210, x2: 132, y2: 254 },   // card C right edge
+];
+
+function polar(angleDeg, radius) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: C + radius * Math.cos(rad), y: C + radius * Math.sin(rad) };
+}
 
 function OrbitRings() {
   return (
@@ -48,84 +72,136 @@ function OrbitRings() {
           <stop offset="100%" style={{ stopColor: "var(--hv-orbit-b)" }} />
         </linearGradient>
         <radialGradient id="hv-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.18" />
-          <stop offset="60%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.06" />
+          <stop offset="0%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.16" />
+          <stop offset="60%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.05" />
           <stop offset="100%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="hv-node" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" style={{ stopColor: "var(--hv-node-hi)" }} />
+          <stop offset="100%" style={{ stopColor: "var(--hv-node-lo)" }} />
         </radialGradient>
       </defs>
 
-      {/* Core glow */}
-      <circle cx="180" cy="180" r="165" fill="url(#hv-glow)" />
+      {/* Ambient glow */}
+      <circle cx={C} cy={C} r="168" fill="url(#hv-glow)" />
 
-      {/* Frosted halo lifting the emblem off the rings */}
-      <circle cx="180" cy="180" r="78" fill="var(--hv-halo)" />
-
-      {/* Solid gradient orbit */}
-      <circle cx="180" cy="180" r="118" fill="none" stroke="url(#hv-grad)" strokeOpacity="0.8" strokeWidth="2" />
-      {/* Inner hairline orbit */}
-      <circle cx="180" cy="180" r="94" fill="none" stroke="url(#hv-grad)" strokeOpacity="0.25" strokeWidth="1" />
-
-      {/* Slowly rotating dotted outer ring with satellite dots */}
-      <g className="hv-orbit-spin">
-        <circle
-          cx="180" cy="180" r="152"
-          fill="none" stroke="url(#hv-grad)" strokeOpacity="0.55"
-          strokeWidth="1.4" strokeDasharray="1 9" strokeLinecap="round"
-        />
-        {SATELLITES.map((s, i) => (
-          <circle
-            key={i} cx={s.x} cy={s.y}
-            r={s.gold ? 4 : 3}
-            style={{ fill: s.gold ? "var(--hv-gold)" : "var(--hv-orbit-a)" }}
-            fillOpacity={s.gold ? 0.95 : 0.8}
-          />
+      {/* Connector lines: node -> service card (anchored under the card edge) */}
+      <g stroke="var(--hv-connector)" strokeWidth="1.25" className="hv-connectors">
+        {CONNECTORS.map((l, i) => (
+          <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} />
+        ))}
+      </g>
+      {/* Small anchor dots where the connectors meet the card edges */}
+      <g className="hv-connectors" style={{ fill: "var(--hv-node-lo)" }}>
+        {CONNECTORS.map((l, i) => (
+          <circle key={i} cx={l.x2} cy={l.y2} r="2.6" fillOpacity="0.85" />
         ))}
       </g>
 
-      {/* The brand emblem: single-stroke infinity loop, generous scale */}
-      <g transform="translate(180 180) scale(3.4) translate(-24 -24)">
-        <path
-          d={EMBLEM_PATH}
-          stroke="url(#hv-grad)" strokeOpacity="0.3" strokeWidth="7"
-          strokeLinecap="round" fill="none"
-        />
-        <path
-          d={EMBLEM_PATH}
-          stroke="url(#hv-grad)" strokeWidth="2.4" strokeLinecap="round" fill="none"
+      {/* Medallion: white disc with layered hairlines and soft depth */}
+      <g style={{ filter: "drop-shadow(0 14px 28px var(--hv-medallion-shadow))" }}>
+        <circle cx={C} cy={C} r="76" fill="var(--hv-medallion)" />
+      </g>
+      <circle cx={C} cy={C} r="76" fill="none" stroke="var(--hv-medallion-ring)" strokeWidth="1" />
+      <circle cx={C} cy={C} r="64" fill="none" stroke="var(--hv-medallion-ring)" strokeOpacity="0.7" strokeWidth="1" />
+
+      {/* Solid gradient orbit + inner hairline orbit */}
+      <circle cx={C} cy={C} r={R_SOLID} fill="none" stroke="url(#hv-grad)" strokeOpacity="0.8" strokeWidth="2" />
+      <circle cx={C} cy={C} r="96" fill="none" stroke="url(#hv-grad)" strokeOpacity="0.28" strokeWidth="1" />
+
+      {/* Slowly rotating dotted outer ring */}
+      <g className="hv-orbit-spin">
+        <circle
+          cx={C} cy={C} r={R_DOT}
+          fill="none" stroke="url(#hv-grad)" strokeOpacity="0.55"
+          strokeWidth="1.4" strokeDasharray="1 9" strokeLinecap="round"
         />
       </g>
-      {/* Focal accent above and below the loop */}
-      <circle cx="127" cy="180" r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
-      <circle cx="233" cy="180" r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
+
+      {/* Blue spherical nodes on the orbital paths */}
+      {NODES.map((n, i) => {
+        const p = polar(n.angle, n.ring);
+        return <circle key={i} cx={p.x} cy={p.y} r="5" fill="url(#hv-node)" />;
+      })}
+
+      {/* The brand emblem: mathematically smooth infinity weave */}
+      <g transform={`translate(${C} ${C})`}>
+        <path
+          d={LEMNISCATE}
+          stroke="url(#hv-grad)" strokeOpacity="0.15" strokeWidth="15"
+          strokeLinejoin="round" strokeLinecap="round" fill="none"
+        />
+        <path
+          d={LEMNISCATE}
+          stroke="url(#hv-grad)" strokeWidth="7" strokeLinejoin="round" fill="none"
+        />
+      </g>
+      {/* Focal accents at the loop tips */}
+      <circle cx="128" cy={C} r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
+      <circle cx="232" cy={C} r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
     </svg>
   );
 }
 
-function HeroVisual() {
-  const chipClass =
-    "absolute inline-flex items-center gap-2 rounded-full border border-border-subtle bg-surface-card px-3.5 py-2 text-xs font-semibold text-text-primary shadow-card dark:border-white/15 dark:text-white";
+/** Floating service card anchored over the illustration (decorative).
+ *  Compacts automatically in the 1024–1279px range so the right-hand card
+ *  never clips against the viewport edge; full size from xl up. */
+function OrbitCard({ icon: Icon, title, support, className }) {
+  return (
+    <div
+      className={`z-10 flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-card py-2.5 pl-2.5 pr-4 shadow-card lg:gap-2 lg:py-2 lg:pl-2 lg:pr-3 dark:border-white/15 dark:bg-surface-card dark:shadow-none xl:gap-3 xl:py-2.5 xl:pl-2.5 xl:pr-4 ${className}`}
+    >
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand lg:size-7 dark:bg-white/10 dark:text-accent-gold xl:size-9">
+        <Icon size={16} aria-hidden="true" className="size-4 lg:size-3.5 xl:size-4" />
+      </span>
+      <span className="min-w-0">
+        <span className="block whitespace-nowrap text-sm font-bold leading-5 text-text-primary lg:text-[13px] lg:leading-4 dark:text-white xl:text-sm xl:leading-5">
+          {title}
+        </span>
+        <span className="block whitespace-nowrap text-[11px] leading-4 text-text-secondary lg:text-[10px] lg:leading-3.5 dark:text-white/60 xl:text-[11px] xl:leading-4">
+          {support}
+        </span>
+      </span>
+    </div>
+  );
+}
 
+function HeroVisual() {
   return (
     <div className="relative" aria-hidden="true">
-      {/* Glass product panel */}
-      <div className="relative overflow-hidden rounded-[1.5rem] border border-border-subtle bg-gradient-to-br from-blue-50/80 via-white to-white p-6 shadow-card-hover sm:p-8 dark:border-white/10 dark:from-white/[0.06] dark:via-white/[0.03] dark:to-transparent dark:shadow-none">
-        <div className="relative mx-auto aspect-square max-w-[360px]">
-          <OrbitRings />
-        </div>
+      <div className="relative mx-auto aspect-square w-full max-w-[420px] lg:max-w-[340px] xl:max-w-[420px]">
+        {/* Soft rounded backdrop panel behind the illustration */}
+        <div className="absolute inset-[3%] rounded-[2rem] border border-border-subtle bg-gradient-to-br from-blue-50/70 via-white/60 to-white/20 shadow-card-hover dark:border-white/10 dark:from-white/[0.05] dark:via-white/[0.02] dark:to-transparent dark:shadow-none" />
+
+        {/* Orbital illustration (rings, medallion, nodes, connectors) */}
+        <OrbitRings />
+
+        {/* Desktop/tablet: floating service cards over the illustration */}
+        <OrbitCard
+          icon={FiCode}
+          title="Web platforms"
+          support="Modern, scalable, secure"
+          className="absolute left-[-9%] top-[20%] hidden sm:flex"
+        />
+        <OrbitCard
+          icon={FiCloud}
+          title="Cloud &amp; backend"
+          support="Reliable &amp; high performance"
+          className="absolute left-[78%] top-[38%] hidden sm:flex lg:left-[68%] xl:left-[72%]"
+        />
+        <OrbitCard
+          icon={FiSmartphone}
+          title="Mobile apps"
+          support="iOS &amp; Android"
+          className="absolute left-[-9%] top-[64%] hidden sm:flex"
+        />
       </div>
 
-      {/* Floating capability chips — honest content, staggered float */}
-      <div className={`${chipClass} hv-float -left-2 top-[16%] sm:-left-5`} style={{ animationDelay: "0s" }}>
-        <FiCode size={13} className="text-brand" />
-        Web platforms
-      </div>
-      <div className={`${chipClass} hv-float -right-2 top-[46%] sm:-right-4`} style={{ animationDelay: "1.2s" }}>
-        <FiServer size={13} className="text-brand" />
-        Cloud &amp; backend
-      </div>
-      <div className={`${chipClass} hv-float -left-2 bottom-[12%] sm:-left-5`} style={{ animationDelay: "2.4s" }}>
-        <FiSmartphone size={13} className="text-brand" />
-        Mobile apps
+      {/* Mobile: cards stack statically below the illustration (no connectors) */}
+      <div className="mx-auto mt-2 grid max-w-[420px] gap-3 sm:hidden">
+        <OrbitCard icon={FiCode} title="Web platforms" support="Modern, scalable, secure" className="" />
+        <OrbitCard icon={FiCloud} title="Cloud &amp; backend" support="Reliable &amp; high performance" className="" />
+        <OrbitCard icon={FiSmartphone} title="Mobile apps" support="iOS &amp; Android" className="" />
       </div>
     </div>
   );
@@ -163,7 +239,7 @@ export default function Home() {
               institutions, retailers and product teams across India.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Button to="/contact" size="lg" variant="inverse">
+              <Button to="/contact" size="lg" variant="inverse" arrow>
                 Start Your Project
               </Button>
               <Button to="/projects" size="lg" variant="secondary-inverse">
