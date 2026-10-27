@@ -58,15 +58,11 @@ export default function Projects() {
       {/* Page hero */}
       <section className="bg-brand-deep relative overflow-hidden">
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="container-section relative pt-12 pb-10 md:pt-16 md:pb-12">
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-border-subtle bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary dark:border-white/15 dark:bg-white/5 dark:text-white/80">
-            <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-brand dark:bg-accent-gold" />
-            Portfolio
-          </p>
-          <h1 className="type-display mt-6 font-display text-text-on-brand">
+        <div className="container-section relative pt-8 pb-10 md:pt-10 md:pb-12">
+          <h1 className="type-display font-display text-text-on-brand">
             Projects
           </h1>
-          <p className="container-text mt-5 text-lg leading-8 text-text-on-brand-muted">
+          <p className="container-text mt-4 text-lg leading-8 text-text-on-brand-muted">
             Every build listed here is a real delivery — with an honest note
             where a link is no longer reachable.
           </p>

@@ -21,12 +21,13 @@ import { SERVICES, METHODOLOGY } from "../data/services";
 import { PROJECTS } from "../data/projects";
 import { SITE } from "../data/siteConfig";
 
-const TRUST_STATS = [
-  { value: "2016", label: "Established", detail: "Software engineering since 2016" },
-  { value: "10", label: "Project engagements", detail: "Shown on our Projects page" },
-  { value: "3", label: "Core disciplines", detail: "Web, backend/cloud, mobile" },
-  { value: "10 yrs", label: "Engineering practice", detail: "Continuous delivery, 2016–2026" },
+const STATS = [
+  { value: "2016", label: "Founded", note: "Continuous delivery since 2016" },
+  { value: "10", label: "Production systems", note: "Shown on our Projects page" },
+  { value: "3", label: "Core disciplines", note: "Web, backend/cloud, mobile" },
+  { value: "4", label: "Client types", note: "Newsrooms, institutions, retail, product teams" },
 ];
+
 
 /**
  * Premium hero visual (theme-aware, shown in BOTH themes):
@@ -352,26 +353,20 @@ export default function Home() {
           theme differences expressed in CSS only. */}
       <section className="bg-brand-deep relative overflow-hidden">
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="container-section relative grid items-center gap-14 py-20 md:py-28 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="container-section relative grid items-center gap-10 pt-8 pb-14 md:pt-12 md:pb-20 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="inline-flex items-center gap-2.5 rounded-full border border-border-subtle bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary dark:border-white/15 dark:bg-white/5 dark:text-white/80">
-              <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-brand dark:bg-accent-gold" />
-              Since {SITE.founded} · India
-            </p>
-            <h1 className="type-display mt-6 font-display text-text-on-brand dark:text-white">
-              Software engineering,<br />
-              <span className="text-brand dark:text-white/60">done properly.</span>
+            <h1 className="type-display font-display text-text-on-brand dark:text-white">
+              Ten years of shipping systems<br />
+              <span className="text-brand dark:text-white/60">that stay up and scale.</span>
             </h1>
             <p className="container-text mt-6 text-lg leading-8 text-text-on-brand-muted">
-              Infinity Lab designs, builds and operates web platforms, backend
-              and cloud systems, and mobile applications — for newsrooms,
-              institutions, retailers and product teams across India.
+              Infinity Lab designs, builds and operates news portals, institutional platforms, management systems and mobile apps for teams across India.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Button to="/contact" size="lg" variant="inverse" arrow>
-                Start Your Project
+            <div className="mt-9 flex flex-col sm:flex-row flex-wrap gap-3">
+              <Button to="/contact" size="lg" variant="inverse" arrow className="w-full sm:w-auto">
+                Start your project
               </Button>
-              <Button to="/projects" size="lg" variant="secondary-inverse">
+              <Button to="/projects" size="lg" variant="secondary-inverse" className="w-full sm:w-auto">
                 See our work
               </Button>
             </div>
@@ -394,7 +389,7 @@ export default function Home() {
         {/* Trust metrics ribbon */}
         <div className="relative border-t border-border-subtle dark:border-white/10">
           <div className="container-section py-10">
-            <StatStrip stats={TRUST_STATS} />
+            <StatStrip stats={STATS} />
           </div>
         </div>
       </section>

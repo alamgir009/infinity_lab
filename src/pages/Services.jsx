@@ -47,15 +47,11 @@ export default function Services() {
       {/* ── Page hero ───────────────────────────────────────────────────── */}
       <section className="bg-brand-deep relative overflow-hidden">
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="container-section relative pt-12 pb-10 md:pt-16 md:pb-12">
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-border-subtle bg-surface-sunken px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary dark:border-white/15 dark:bg-white/5 dark:text-white/80">
-            <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-brand dark:bg-accent-gold" />
-            What we do
-          </p>
-          <h1 className="type-display mt-6 font-display text-text-on-brand">
+        <div className="container-section relative pt-8 pb-10 md:pt-10 md:pb-12">
+          <h1 className="type-display font-display text-text-on-brand">
             Services
           </h1>
-          <p className="container-text mt-6 text-lg leading-8 text-text-on-brand-muted">
+          <p className="container-text mt-4 text-lg leading-8 text-text-on-brand-muted">
             Three engineering disciplines, one accountable team. Whether you
             need a storefront, a platform or a system — this is how we can
             help.

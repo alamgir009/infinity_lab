@@ -3,7 +3,7 @@
  * dividers, tabular numerics and an equal grid. Fully theme-aware via the
  * brand-surface tokens (light: dark text on white; dark: light text on navy).
  *
- * @param {{ stats: Array<{ value: string, label: string, detail: string }> }} props
+ * @param {{ stats: Array<{ value: string, label: string, note?: string, detail?: string }> }} props
  */
 export default function StatStrip({ stats }) {
   return (
@@ -26,7 +26,7 @@ export default function StatStrip({ stats }) {
               {s.label}
             </span>
             <span className="mt-1 block text-xs leading-5 text-text-on-brand-muted">
-              {s.detail}
+              {s.note ?? s.detail}
             </span>
           </dd>
         </div>
