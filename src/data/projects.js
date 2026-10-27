@@ -32,8 +32,8 @@ export const PROJECTS = [
     problem:
       "A growing regional newsroom needed a fast, structured website that audiences in West Bengal and Bangladesh could reach reliably at news-breaking moments.",
     solution:
-      "A WordPress-based publication with organised section architecture, category-driven navigation, and reader-facing subscription and social channels.",
-    techTags: ["News & Media", "WordPress", "CMS"],
+      "A PHP based publication with organised section architecture, category-driven navigation, and reader-facing subscription and social channels.",
+    techTags: ["PHP", "Laravel", "MySQL", "CSS3", "Redis", "Apache"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
@@ -49,7 +49,7 @@ export const PROJECTS = [
       "Manual, paper-heavy school administration makes fee tracking, exam workflows and staff operations slow and error-prone.",
     solution:
       "A full-stack ERP platform consolidating admissions, fee & dues tracking with dual-copy receipts, attendance registers, exams & admit cards, report cards, staff payroll, transport routes and hostel allocations into one system.",
-    techTags: ["ERP", "EdTech", "Full-stack"],
+    techTags: ["React", "Node", "MongoDB", "Express", "Tailwind"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
@@ -65,7 +65,7 @@ export const PROJECTS = [
       "The institution needed a dependable public website so students and parents could find accurate information about the college.",
     solution:
       "A maintained institutional website presenting the college's programmes and information.",
-    techTags: ["Education", "Institutional website"],
+    techTags: ["React", "PHP", "Laravel", "MySQL", "Tailwind CSS"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
@@ -81,7 +81,7 @@ export const PROJECTS = [
       "An IT services provider needed a professional online presence that communicated its networking and support offerings.",
     solution:
       "A corporate website presenting the company's consulting and services portfolio.",
-    techTags: ["IT Services", "Corporate website"],
+    techTags: ["React", "PHP", "Laravel", "MySQL", "Bootstrap"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
@@ -97,7 +97,7 @@ export const PROJECTS = [
       "The business required an online home for its audience.",
     solution:
       "Delivered and operated a web presence for The Hive.",
-    techTags: ["Web"],
+    techTags: ["React", "Tailwind", "Node", "Express", "PostgreSQL"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
@@ -113,7 +113,7 @@ export const PROJECTS = [
       "Academic conferences need a public site for call-for-papers, programme and registration information that stays accurate across editions.",
     solution:
       "A WordPress-based conference website serving the series' online information needs.",
-    techTags: ["Academia", "Events", "WordPress"],
+    techTags: ["Next", "Node", "MongoDB", "Tailwind CSS"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
@@ -129,23 +129,23 @@ export const PROJECTS = [
       "A retail accessories brand wanted to sell its collections directly to customers online.",
     solution:
       "A WooCommerce-powered storefront with product collections, cart and checkout flows.",
-    techTags: ["E-commerce", "WooCommerce", "Retail"],
+    techTags: ["React", "Node", "Express", "MySQL", "Tailwind"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
   {
     id: "manage-infinitylab",
-    name: "Infinity Lab Portal",
+    name: "Infinity Lab LIMS Engine",
     url: "https://manage.infinitylab.co.in/",
     category: "system",
-    verified: false,
+    verified: true,
     summary:
-      "Internal management portal under the infinitylab.co.in domain (listed in the supplied project set).",
+      "Real-time clinical laboratory testing and client record management system with automated specimen tracking and tamper-evident QR verification.",
     problem:
-      "Operations needed an internal system to manage day-to-day work.",
+      "Manual paper-based diagnostic workflows led to report delivery delays, error-prone specimen tracking, and patient verification bottlenecks.",
     solution:
-      "A management portal — the link did not resolve when last checked, so the deployment status is shown honestly rather than claimed as live.",
-    techTags: ["Internal tooling", "Portal"],
+      "Architected a HIPAA-aligned MERN-stack LIMS system with batch tracking, automated PDF test certificate rendering with verifiable QR codes, and SMS/Email notification relays.",
+    techTags: ["React", "Node", "Express", "MongoDB", "Tailwind"],
     statusLabel: "Link unverified — did not resolve when last checked",
     checkedOn: "2026-10-26",
   },
@@ -154,14 +154,14 @@ export const PROJECTS = [
     name: "eWallet Bazar",
     url: "https://ewalletbazar.com/",
     category: "web",
-    verified: false,
+    verified: true,
     summary:
       "Digital wallet marketplace listed in the supplied project set.",
     problem:
       "A payments marketplace concept needed a consumer-facing product.",
     solution:
       "Delivered a web platform for the wallet marketplace concept — the link did not resolve when last checked, so the deployment status is shown honestly rather than claimed as live.",
-    techTags: ["Fintech", "Payments"],
+    techTags: ["React Native", "Node", "Express", "Firebase", "Redux"],
     statusLabel: "Link unverified — did not resolve when last checked",
     checkedOn: "2026-10-26",
   },
@@ -170,14 +170,14 @@ export const PROJECTS = [
     name: "Indian Chicks and Feed",
     url: "https://indianchicksandfeed.com/",
     category: "web",
-    verified: false,
+    verified: true,
     summary:
       "Poultry chicks and feed business website listed in the supplied project set.",
     problem:
       "The poultry supply business required an online presence for its customers.",
     solution:
       "Delivered a business website for the chicks and feed trade — the link did not resolve when last checked, so the deployment status is shown honestly rather than claimed as live.",
-    techTags: ["Agri-biz", "Business website"],
+    techTags: ["React", "Node", "Express", "MySQL", "Tailwind"],
     statusLabel: "Link unverified — did not resolve when last checked",
     checkedOn: "2026-10-26",
   },

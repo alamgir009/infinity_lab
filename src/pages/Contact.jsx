@@ -4,6 +4,7 @@ import SectionHeading from "../components/SectionHeading";
 import ContactForm from "../components/ContactForm";
 import Card from "../components/ui/Card";
 import { CONTACT, SITE } from "../data/siteConfig";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function Contact() {
   const telHref = `tel:${CONTACT.phone.replace(/\s+/g, "")}`;
@@ -20,7 +21,7 @@ export default function Contact() {
     },
     {
       id: "whatsapp",
-      icon: FiMessageCircle,
+      icon: FaWhatsapp,
       label: "WhatsApp",
       href: waHref,
       text: "Message us on WhatsApp",

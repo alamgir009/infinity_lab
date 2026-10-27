@@ -58,7 +58,7 @@ export default function StatStrip({ stats, benefits = DEFAULT_BENEFITS }) {
   return (
     <div className="w-full">
       {/* 4 Horizontally aligned statistics cards inside a unified bordered container */}
-      <div className="rounded-2xl border border-border-subtle bg-surface-card/85 shadow-card backdrop-blur-sm dark:bg-surface-card/75 dark:shadow-none">
+      <div className="rounded-2xl border border-border-subtle bg-surface-card shadow-card backdrop-blur-sm dark:bg-surface-card/75 dark:shadow-none">
         <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s, i) => {
             const Icon = s.icon ?? FALLBACK_ICONS[i % FALLBACK_ICONS.length];

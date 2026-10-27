@@ -11,32 +11,32 @@
    ========================================================================== */
 @layer base {
   :root {
-    /* Surfaces */
-    --surface: 255 255 255;          /* page background            */
-    --surface-sunken: 248 250 252;   /* alternating sections       */
-    --surface-card: 255 255 255;     /* card background            */
-    --surface-brand: 255 255 255;    /* brand surface (hero/CTA/footer) — light in light theme */
+    /* Surfaces — Fintech Light Hierarchy (Stripe / Linear / Cloudflare standard) */
+    --surface: 248 250 252;          /* page canvas (slate-50: #f8fafc) */
+    --surface-sunken: 241 245 249;   /* alternating sections & inner wells (slate-100: #f1f5f9) */
+    --surface-card: 255 255 255;     /* elevated cards & floating panels (pure white: #ffffff) */
+    --surface-brand: 248 250 252;    /* brand surface (hero/CTA/footer) — clean off-white */
     --surface-inverse-raised: 15 23 42;
 
-    /* Text — WCAG AA (>=4.5:1) & AAA (>=7.0:1) on white & sunken */
-    --text-primary: 15 23 42;        /* slate-900 (16.1:1 on white) */
-    --text-secondary: 71 85 105;     /* slate-600 (7.0:1 on white)  */
-    --text-muted: 100 116 139;       /* slate-500 (4.6:1 on white)  */
+    /* Text — WCAG AA (>=4.5:1) & AAA (>=7.0:1) on white, canvas & sunken */
+    --text-primary: 15 23 42;        /* slate-900 (15.6:1+ contrast) */
+    --text-secondary: 71 85 105;     /* slate-600 (6.3:1+ contrast)  */
+    --text-muted: 86 102 124;        /* slate-500 (4.8:1+ contrast on all surfaces) */
     --text-on-brand: 15 23 42;       /* text on brand surface — dark text in light theme */
     --text-on-brand-muted: 71 85 105;
 
     /* Borders */
-    --border-subtle: 226 232 240;
-    --border-strong: 203 213 225;
+    --border-subtle: 226 232 240;    /* crisp hairline on canvas (#e2e8f0) */
+    --border-strong: 203 213 225;    /* interactive border (#cbd5e1) */
 
     /* Brand */
-    --brand: 29 78 216;              /* links/accents, light theme (5.9:1) */
+    --brand: 29 78 216;              /* links/accents, light theme (5.7:1+) */
     --brand-hover: 30 64 175;
-    --brand-chip: 239 246 255;       /* soft chip background       */
+    --brand-chip: 239 246 255;       /* soft chip background (#eff6ff) */
     --brand-chip-text: 29 78 216;
     --btn-bg: 29 78 216;             /* primary buttons, light theme */
     --btn-bg-hover: 30 64 175;
-    --btn-text: 255 255 255;         /* 5.9:1 on --btn-bg           */
+    --btn-text: 255 255 255;         /* 5.9:1 on --btn-bg */
     --ring: 29 78 216;
 
     /* Accent (used sparingly on brand surfaces) */
@@ -56,11 +56,11 @@
     --hv-medallion-ring: rgb(15 23 42 / 0.08); /* medallion hairline */
     --hv-medallion-shadow: rgb(30 64 175 / 0.16); /* medallion depth */
 
-    /* Elevation */
+    /* Elevation — refined fintech physical depth */
     --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.05);
-    --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.07), 0 1px 2px -1px rgb(15 23 42 / 0.07);
-    --shadow-card-hover: 0 8px 24px -6px rgb(15 23 42 / 0.16), 0 2px 6px -2px rgb(15 23 42 / 0.08);
-    --shadow-pop: 0 12px 32px -8px rgb(15 23 42 / 0.28);
+    --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.08), 0 1px 2px -1px rgb(15 23 42 / 0.08);
+    --shadow-card-hover: 0 10px 25px -4px rgb(15 23 42 / 0.10), 0 4px 10px -2px rgb(15 23 42 / 0.05);
+    --shadow-pop: 0 12px 32px -8px rgb(15 23 42 / 0.20);
   }
 
   .dark {

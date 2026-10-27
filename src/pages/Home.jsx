@@ -585,8 +585,8 @@ export default function Home() {
                 our clients stay with us long after launch.
               </p>
             </div>
-            <div className="rounded-card border border-border-subtle bg-surface-sunken p-6 sm:p-8">
-              <h3 className="text-base font-bold text-text-primary">
+            <div className="rounded-card border border-border-subtle bg-surface-card p-6 shadow-card sm:p-8">
+              <h3 className="text-base font-semibold text-text-primary">
                 What that means in practice
               </h3>
               <ul className="mt-5 space-y-4 text-sm leading-6 text-text-secondary">
@@ -694,17 +694,17 @@ export default function Home() {
       {/* Start Project CTA */}
       <section aria-labelledby="cta-heading" className="py-16 md:py-24">
         <div className="container-section">
-          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] border border-border-subtle px-6 py-14 text-center shadow-card sm:px-12 md:py-16 dark:border-transparent dark:shadow-none">
+          <div className="relative overflow-hidden rounded-[1.25rem] border border-border-subtle bg-surface-card px-6 py-14 text-center shadow-card sm:px-12 md:py-16 dark:shadow-none">
             <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
             <div className="relative mx-auto max-w-2xl">
-              <h2 id="cta-heading" className="type-heading text-text-on-brand md:text-4xl">
+              <h2 id="cta-heading" className="type-heading text-text-primary md:text-4xl">
                 Have a project in mind?
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-lg leading-7 text-text-on-brand-muted">
+              <p className="mx-auto mt-5 max-w-xl text-lg leading-7 text-text-secondary">
                 Tell us what you are building. We will reply with an honest
                 scope, timeline and next step.
               </p>
-              <Button to="/contact" size="lg" variant="inverse" className="mt-8">
+              <Button to="/contact" size="lg" variant="primary" className="mt-8">
                 Start Your Project
               </Button>
               <p className="mt-6 text-sm text-text-on-brand-muted">

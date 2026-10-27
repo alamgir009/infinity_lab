@@ -211,17 +211,17 @@ export default function Services() {
       {/* ── CTA ─────────────────────────────────────────────────────────── */}
       <section aria-labelledby="svc-cta" className="pb-12 md:pb-16">
         <div className="container-section">
-          <div className="bg-brand-deep relative overflow-hidden rounded-[1.25rem] border border-border-subtle px-6 py-12 text-center shadow-card sm:px-12 md:py-16 dark:border-transparent dark:shadow-none">
+          <div className="relative overflow-hidden rounded-[1.25rem] border border-border-subtle bg-surface-card px-6 py-12 text-center shadow-card sm:px-12 md:py-16 dark:shadow-none">
             <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
             <div className="relative mx-auto max-w-2xl">
-              <h2 id="svc-cta" className="type-heading text-text-on-brand">
+              <h2 id="svc-cta" className="type-heading text-text-primary">
                 Not sure which model fits?
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-lg leading-7 text-text-on-brand-muted">
+              <p className="mx-auto mt-5 max-w-xl text-lg leading-7 text-text-secondary">
                 Describe your project in a sentence or two. We will recommend
                 the right approach — honestly.
               </p>
-              <Button to="/contact" size="lg" variant="inverse" className="mt-9">
+              <Button to="/contact" size="lg" variant="primary" className="mt-9">
                 Start Your Project
               </Button>
             </div>
