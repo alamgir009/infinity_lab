@@ -9,7 +9,11 @@ import {
   FiSearch,
   FiSmartphone,
   FiUploadCloud,
+  FiCalendar,
+  FiBox,
+  FiUsers,
 } from "react-icons/fi";
+import { LuShieldCheck } from "react-icons/lu";
 import Seo from "../components/Seo";
 import Button from "../components/Button";
 import Card from "../components/ui/Card";
@@ -22,10 +26,30 @@ import { PROJECTS } from "../data/projects";
 import { SITE } from "../data/siteConfig";
 
 const STATS = [
-  { value: "2016", label: "Founded", note: "Continuous delivery since 2016" },
-  { value: "10", label: "Production systems", note: "Shown on our Projects page" },
-  { value: "3", label: "Core disciplines", note: "Web, backend/cloud, mobile" },
-  { value: "4", label: "Client types", note: "Newsrooms, institutions, retail, product teams" },
+  {
+    value: "2016",
+    label: "Established",
+    note: "Software engineering since 2016",
+    icon: FiCalendar,
+  },
+  {
+    value: "10+",
+    label: "Project engagements",
+    note: "Web, mobile, cloud & enterprise",
+    icon: FiBox,
+  },
+  {
+    value: "3",
+    label: "Core disciplines",
+    note: "Web, backend/cloud, mobile",
+    icon: FiUsers,
+  },
+  {
+    value: "10 years",
+    label: "Engineering practice",
+    note: "Continuous delivery, 2016–2026",
+    icon: LuShieldCheck,
+  },
 ];
 
 
@@ -370,16 +394,6 @@ export default function Home() {
                 See our work
               </Button>
             </div>
-            <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-text-secondary dark:text-white/70">
-              {["Accessible by default", "Performance-first builds", "Real operational support"].map(
-                (item) => (
-                  <li key={item} className="flex items-center gap-2">
-                    <FiCheckCircle aria-hidden="true" className="text-brand dark:text-accent-gold" />
-                    {item}
-                  </li>
-                )
-              )}
-            </ul>
           </div>
           <div className="animate-fadeUp">
             <HeroVisual />
@@ -387,8 +401,8 @@ export default function Home() {
         </div>
 
         {/* Trust metrics ribbon */}
-        <div className="relative border-t border-border-subtle dark:border-white/10">
-          <div className="container-section py-10">
+        <div className="relative ">
+          <div className="container-section py-10 sm:py-12">
             <StatStrip stats={STATS} />
           </div>
         </div>
