@@ -67,10 +67,10 @@ export default function StatStrip({ stats, benefits = DEFAULT_BENEFITS }) {
               i === 0
                 ? ""
                 : i === 1
-                ? "border-t border-border-subtle sm:border-t-0 sm:border-l dark:border-blue-500/15"
-                : i === 2
-                ? "border-t border-border-subtle sm:border-t lg:border-t-0 lg:border-l dark:border-blue-500/15"
-                : "border-t border-border-subtle sm:border-t sm:border-l lg:border-t-0 lg:border-l dark:border-blue-500/15";
+                  ? "border-t border-border-subtle sm:border-t-0 sm:border-l dark:border-blue-500/15"
+                  : i === 2
+                    ? "border-t border-border-subtle sm:border-t lg:border-t-0 lg:border-l dark:border-blue-500/15"
+                    : "border-t border-border-subtle sm:border-t sm:border-l lg:border-t-0 lg:border-l dark:border-blue-500/15";
 
             return (
               <div

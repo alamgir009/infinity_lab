@@ -108,15 +108,21 @@ function OrbitRings({ docks }) {
     { x: 286, y: 252, r: 3 },
   ];
 
-  // Precision bezier curve routing with horizontal approach ending right at arrowhead base:
-  const dxWeb = targetWeb.x - nodeWeb.x;
-  const pathWeb = `M ${nodeWeb.x} ${nodeWeb.y} C ${nodeWeb.x + dxWeb * 0.4} ${nodeWeb.y}, ${targetWeb.x - dxWeb * 0.3} ${targetWeb.y}, ${targetWeb.x + 5} ${targetWeb.y}`;
+  // Straight angular routing — fintech-grade elbow paths (no curves).
+  // Each route leaves the orbit node horizontally, then turns at a right-angle
+  // elbow to reach the card dock pin in a clean L-shape.
 
-  const dxMobile = targetMobile.x - nodeMobile.x;
-  const pathMobile = `M ${nodeMobile.x} ${nodeMobile.y} C ${nodeMobile.x + dxMobile * 0.4} ${nodeMobile.y}, ${targetMobile.x - dxMobile * 0.3} ${targetMobile.y}, ${targetMobile.x + 5} ${targetMobile.y}`;
+  // Web (top-left card): go left horizontally, then angle up-left to dock
+  const webElbowX = targetWeb.x + 18;
+  const pathWeb = `M ${nodeWeb.x} ${nodeWeb.y} L ${webElbowX} ${nodeWeb.y} L ${targetWeb.x + 5} ${targetWeb.y}`;
 
-  const dxCloud = targetCloud.x - nodeCloud.x;
-  const pathCloud = `M ${nodeCloud.x} ${nodeCloud.y} C ${nodeCloud.x + dxCloud * 0.4} ${nodeCloud.y}, ${targetCloud.x - dxCloud * 0.3} ${targetCloud.y}, ${targetCloud.x - 5} ${targetCloud.y}`;
+  // Mobile (bottom-left card): go left horizontally, then angle down-left to dock
+  const mobileElbowX = targetMobile.x + 18;
+  const pathMobile = `M ${nodeMobile.x} ${nodeMobile.y} L ${mobileElbowX} ${nodeMobile.y} L ${targetMobile.x + 5} ${targetMobile.y}`;
+
+  // Cloud (right card): go right horizontally, then angle to dock
+  const cloudElbowX = targetCloud.x - 18;
+  const pathCloud = `M ${nodeCloud.x} ${nodeCloud.y} L ${cloudElbowX} ${nodeCloud.y} L ${targetCloud.x - 5} ${targetCloud.y}`;
 
   return (
     <svg viewBox="0 0 400 400" className="pointer-events-none h-full w-full overflow-visible">
