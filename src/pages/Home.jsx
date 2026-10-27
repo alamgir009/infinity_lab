@@ -1,3 +1,4 @@
+import { useRef, useState, useLayoutEffect, forwardRef } from "react";
 import { Link } from "react-router-dom";
 import {
   FiCheckCircle,
@@ -54,20 +55,29 @@ const STATS = [
 
 
 /**
- * Premium hero visual (theme-aware, shown in BOTH themes):
- * a white circular medallion carrying the brand infinity emblem, wrapped in
- * precise concentric orbits (dotted outer ring rotates slowly), blue spherical
- * nodes on the orbital paths, and thin connector lines linking nodes to three
- * floating service cards. All colors come from --hv-* CSS tokens so light and
- * dark both render correctly. Decorative; aria-hidden.
+ * Fintech-grade hero visual (Cloudflare & Google Cloud engineering aesthetic):
+ * Central core medallion with the brand infinity emblem, surrounded by precision
+ * concentric telemetry orbits and active egress nodes. Precision vector paths with
+ * animated live data-stream pulses and directional stealth arrowheads connect the
+ * central hub seamlessly to the 3 service cards: Web platforms, Cloud & backend,
+ * and Mobile apps.
+ *
+ * All coordinates are dynamically tracked via ResizeObserver and mapped to the SVG
+ * viewBox, guaranteeing 100% pixel-perfect docking alignment across all viewports
+ * and resolutions with zero layout shift.
  */
+const C = 200;
+const R_MEDALLION = 74;
+const R_INNER = 94;
+const R_SOLID = 118;
+const R_DOT = 152;
+
 /* Smooth lemniscate (Bernoulli) sampled as a closed polyline — a true
-   infinity weave with a diagonal crossover, unlike the compact logo path
-   which only reads correctly at small tile sizes. */
+   infinity weave with a diagonal crossover, scaled for 400x400 viewBox. */
 const LEMNISCATE = (() => {
   const N = 96;
-  const a = 40;      // half-width -> 80px emblem in the 360 viewBox
-  const ys = 1.35;   // gentle vertical stretch for a balanced aspect
+  const a = 44;      // balanced emblem in 400 viewBox
+  const ys = 1.35;   // vertical stretch for natural loop aspect
   const pts = [];
   for (let i = 0; i <= N; i++) {
     const t = (i / N) * Math.PI * 2;
@@ -77,39 +87,47 @@ const LEMNISCATE = (() => {
   return `M${pts.join("L")}Z`;
 })();
 
-/* Orbit geometry (viewBox 360x360, centre 180/180). Nodes sit on the rings
-   clear of the card footprints; connector endpoints touch each card edge —
-   cards are positioned to match (see HeroVisual). */
-const C = 180;
-const R_SOLID = 116;
-const R_DOT = 150;
-const NODES = [
-  { angle: 195, ring: R_SOLID }, // left of centre  -> card A (upper-left)
-  { angle: -25, ring: R_DOT },   // upper-right     -> card B (right)
-  { angle: 165, ring: R_SOLID }, // left of centre  -> card C (lower-left)
-];
-const CONNECTORS = [
-  { x1: 68, y1: 150, x2: 134, y2: 89 },    // card A right edge
-  { x1: 316, y1: 117, x2: 300, y2: 135 },  // card B top-left edge
-  { x1: 68, y1: 210, x2: 132, y2: 254 },   // card C right edge
-];
+function OrbitRings({ docks }) {
+  // Pre-calibrated initial fallback coordinates ensure zero-jump rendering
+  const targetWeb = { x: docks?.web?.x ?? 136, y: docks?.web?.y ?? 92 };
+  const targetCloud = { x: docks?.cloud?.x ?? 265, y: docks?.cloud?.y ?? 188 };
+  const targetMobile = { x: docks?.mobile?.x ?? 136, y: docks?.mobile?.y ?? 308 };
 
-function polar(angleDeg, radius) {
-  const rad = (angleDeg * Math.PI) / 180;
-  return { x: C + radius * Math.cos(rad), y: C + radius * Math.sin(rad) };
-}
+  // Origin nodes on the orbital routing mesh:
+  const nodeWeb = { x: 172, y: 145 };
+  const nodeMobile = { x: 172, y: 255 };
+  const nodeCloud = { x: 262, y: 200 };
 
-function OrbitRings() {
+  // Secondary telemetry nodes for architectural depth (fintech network topology)
+  const TELEMETRY_NODES = [
+    { x: 114, y: 148, r: 3.5 },
+    { x: 114, y: 252, r: 3.5 },
+    { x: 200, y: 82, r: 3 },
+    { x: 200, y: 318, r: 3 },
+    { x: 286, y: 148, r: 3 },
+    { x: 286, y: 252, r: 3 },
+  ];
+
+  // Precision bezier curve routing with horizontal approach ending right at arrowhead base:
+  const dxWeb = targetWeb.x - nodeWeb.x;
+  const pathWeb = `M ${nodeWeb.x} ${nodeWeb.y} C ${nodeWeb.x + dxWeb * 0.4} ${nodeWeb.y}, ${targetWeb.x - dxWeb * 0.3} ${targetWeb.y}, ${targetWeb.x + 5} ${targetWeb.y}`;
+
+  const dxMobile = targetMobile.x - nodeMobile.x;
+  const pathMobile = `M ${nodeMobile.x} ${nodeMobile.y} C ${nodeMobile.x + dxMobile * 0.4} ${nodeMobile.y}, ${targetMobile.x - dxMobile * 0.3} ${targetMobile.y}, ${targetMobile.x + 5} ${targetMobile.y}`;
+
+  const dxCloud = targetCloud.x - nodeCloud.x;
+  const pathCloud = `M ${nodeCloud.x} ${nodeCloud.y} C ${nodeCloud.x + dxCloud * 0.4} ${nodeCloud.y}, ${targetCloud.x - dxCloud * 0.3} ${targetCloud.y}, ${targetCloud.x - 5} ${targetCloud.y}`;
+
   return (
-    <svg viewBox="0 0 360 360" className="h-full w-full">
+    <svg viewBox="0 0 400 400" className="pointer-events-none h-full w-full overflow-visible">
       <defs>
-        <linearGradient id="hv-grad" x1="0" y1="0" x2="360" y2="360" gradientUnits="userSpaceOnUse">
+        <linearGradient id="hv-grad" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
           <stop offset="0%" style={{ stopColor: "var(--hv-orbit-a)" }} />
           <stop offset="100%" style={{ stopColor: "var(--hv-orbit-b)" }} />
         </linearGradient>
         <radialGradient id="hv-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.16" />
-          <stop offset="60%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.05" />
+          <stop offset="0%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.18" />
+          <stop offset="65%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0.04" />
           <stop offset="100%" style={{ stopColor: "var(--hv-glow)" }} stopOpacity="0" />
         </radialGradient>
         <radialGradient id="hv-node" cx="35%" cy="30%" r="75%">
@@ -118,53 +136,39 @@ function OrbitRings() {
         </radialGradient>
       </defs>
 
-      {/* Ambient glow */}
-      <circle cx={C} cy={C} r="168" fill="url(#hv-glow)" />
+      {/* Ambient radial glow */}
+      <circle cx={C} cy={C} r="185" fill="url(#hv-glow)" />
 
-      {/* Connector lines: node -> service card (anchored under the card edge) */}
-      <g stroke="var(--hv-connector)" strokeWidth="1.25" className="hv-connectors">
-        {CONNECTORS.map((l, i) => (
-          <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} />
-        ))}
-      </g>
-      {/* Small anchor dots where the connectors meet the card edges */}
-      <g className="hv-connectors" style={{ fill: "var(--hv-node-lo)" }}>
-        {CONNECTORS.map((l, i) => (
-          <circle key={i} cx={l.x2} cy={l.y2} r="2.6" fillOpacity="0.85" />
-        ))}
-      </g>
+      {/* Primary solid orbit & inner telemetry hairlines */}
+      <circle cx={C} cy={C} r={R_SOLID} fill="none" stroke="url(#hv-grad)" strokeOpacity="0.75" strokeWidth="1.75" />
+      <circle cx={C} cy={C} r={R_INNER} fill="none" stroke="url(#hv-grad)" strokeOpacity="0.32" strokeWidth="1" strokeDasharray="3 5" />
 
-      {/* Medallion: white disc with layered hairlines and soft depth */}
-      <g style={{ filter: "drop-shadow(0 14px 28px var(--hv-medallion-shadow))" }}>
-        <circle cx={C} cy={C} r="76" fill="var(--hv-medallion)" />
-      </g>
-      <circle cx={C} cy={C} r="76" fill="none" stroke="var(--hv-medallion-ring)" strokeWidth="1" />
-      <circle cx={C} cy={C} r="64" fill="none" stroke="var(--hv-medallion-ring)" strokeOpacity="0.7" strokeWidth="1" />
-
-      {/* Solid gradient orbit + inner hairline orbit */}
-      <circle cx={C} cy={C} r={R_SOLID} fill="none" stroke="url(#hv-grad)" strokeOpacity="0.8" strokeWidth="2" />
-      <circle cx={C} cy={C} r="96" fill="none" stroke="url(#hv-grad)" strokeOpacity="0.28" strokeWidth="1" />
-
-      {/* Slowly rotating dotted outer ring */}
+      {/* Slowly rotating dotted telemetry radar ring */}
       <g className="hv-orbit-spin">
         <circle
           cx={C} cy={C} r={R_DOT}
-          fill="none" stroke="url(#hv-grad)" strokeOpacity="0.55"
-          strokeWidth="1.4" strokeDasharray="1 9" strokeLinecap="round"
+          fill="none" stroke="url(#hv-grad)" strokeOpacity="0.5"
+          strokeWidth="1.3" strokeDasharray="2 10" strokeLinecap="round"
         />
       </g>
 
-      {/* Blue spherical nodes on the orbital paths */}
-      {NODES.map((n, i) => {
-        const p = polar(n.angle, n.ring);
-        return <circle key={i} cx={p.x} cy={p.y} r="5" fill="url(#hv-node)" />;
-      })}
+      {/* Secondary telemetry nodes on orbital tracks */}
+      {TELEMETRY_NODES.map((n, i) => (
+        <circle key={i} cx={n.x} cy={n.y} r={n.r} fill="url(#hv-node)" opacity="0.85" />
+      ))}
 
-      {/* The brand emblem: mathematically smooth infinity weave */}
+      {/* Central medallion: illuminated disc with layered hairlines & soft depth */}
+      <g style={{ filter: "drop-shadow(0 14px 28px var(--hv-medallion-shadow))" }}>
+        <circle cx={C} cy={C} r={R_MEDALLION} fill="var(--hv-medallion)" />
+      </g>
+      <circle cx={C} cy={C} r={R_MEDALLION} fill="none" stroke="var(--hv-medallion-ring)" strokeWidth="1" />
+      <circle cx={C} cy={C} r="62" fill="none" stroke="var(--hv-medallion-ring)" strokeOpacity="0.7" strokeWidth="1" />
+
+      {/* The brand infinity emblem: mathematically smooth Bernoulli lemniscate */}
       <g transform={`translate(${C} ${C})`}>
         <path
           d={LEMNISCATE}
-          stroke="url(#hv-grad)" strokeOpacity="0.15" strokeWidth="15"
+          stroke="url(#hv-grad)" strokeOpacity="0.16" strokeWidth="16"
           strokeLinejoin="round" strokeLinecap="round" fill="none"
         />
         <path
@@ -172,21 +176,89 @@ function OrbitRings() {
           stroke="url(#hv-grad)" strokeWidth="7" strokeLinejoin="round" fill="none"
         />
       </g>
-      {/* Focal accents at the loop tips */}
-      <circle cx="128" cy={C} r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
-      <circle cx="232" cy={C} r="3" style={{ fill: "var(--hv-gold)" }} fillOpacity="0.9" />
+
+
+      {/* Connected Arrows Section (Desktop/Tablet sm+):
+          Precision vector routes linking core nodes to each service card */}
+      <g className="hv-connectors">
+        {/* --- Route 1: Web Platforms (Top Left) --- */}
+        <g>
+          {/* Egress node on core orbit */}
+          <circle cx={nodeWeb.x} cy={nodeWeb.y} r="7" fill="none" stroke="var(--hv-node-lo)" strokeWidth="1" strokeOpacity="0.35" className="animate-pulse" />
+          <circle cx={nodeWeb.x} cy={nodeWeb.y} r="4" fill="url(#hv-node)" />
+
+          {/* Base connector line */}
+          <path d={pathWeb} fill="none" stroke="var(--hv-connector)" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Live data pulse packet */}
+          <path d={pathWeb} fill="none" stroke="var(--hv-pulse)" strokeWidth="2" strokeDasharray="6 24" strokeLinecap="round" className="hv-data-flow" opacity="0.9" />
+
+          {/* Stealth fintech arrowhead pointing directly into card dock pin */}
+          <polygon
+            points={`${targetWeb.x},${targetWeb.y} ${targetWeb.x + 8},${targetWeb.y - 4.5} ${targetWeb.x + 5.5},${targetWeb.y} ${targetWeb.x + 8},${targetWeb.y + 4.5}`}
+            fill="var(--hv-arrow)"
+          />
+        </g>
+
+        {/* --- Route 2: Mobile Apps (Bottom Left) --- */}
+        <g>
+          {/* Egress node on core orbit */}
+          <circle cx={nodeMobile.x} cy={nodeMobile.y} r="7" fill="none" stroke="var(--hv-node-lo)" strokeWidth="1" strokeOpacity="0.35" className="animate-pulse" />
+          <circle cx={nodeMobile.x} cy={nodeMobile.y} r="4" fill="url(#hv-node)" />
+
+          {/* Base connector line */}
+          <path d={pathMobile} fill="none" stroke="var(--hv-connector)" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Live data pulse packet */}
+          <path d={pathMobile} fill="none" stroke="var(--hv-pulse)" strokeWidth="2" strokeDasharray="6 24" strokeLinecap="round" className="hv-data-flow" opacity="0.9" />
+
+          {/* Stealth fintech arrowhead pointing directly into card dock pin */}
+          <polygon
+            points={`${targetMobile.x},${targetMobile.y} ${targetMobile.x + 8},${targetMobile.y - 4.5} ${targetMobile.x + 5.5},${targetMobile.y} ${targetMobile.x + 8},${targetMobile.y + 4.5}`}
+            fill="var(--hv-arrow)"
+          />
+        </g>
+
+        {/* --- Route 3: Cloud & Backend (Right) --- */}
+        <g>
+          {/* Egress node on core orbit */}
+          <circle cx={nodeCloud.x} cy={nodeCloud.y} r="7" fill="none" stroke="var(--hv-node-lo)" strokeWidth="1" strokeOpacity="0.35" className="animate-pulse" />
+          <circle cx={nodeCloud.x} cy={nodeCloud.y} r="4" fill="url(#hv-node)" />
+
+          {/* Base connector line */}
+          <path d={pathCloud} fill="none" stroke="var(--hv-connector)" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Live data pulse packet */}
+          <path d={pathCloud} fill="none" stroke="var(--hv-pulse)" strokeWidth="2" strokeDasharray="6 24" strokeLinecap="round" className="hv-data-flow" opacity="0.9" />
+
+          {/* Stealth fintech arrowhead pointing directly into card dock pin */}
+          <polygon
+            points={`${targetCloud.x},${targetCloud.y} ${targetCloud.x - 8},${targetCloud.y - 4.5} ${targetCloud.x - 5.5},${targetCloud.y} ${targetCloud.x - 8},${targetCloud.y + 4.5}`}
+            fill="var(--hv-arrow)"
+          />
+        </g>
+      </g>
     </svg>
   );
 }
 
 /** Floating service card anchored over the illustration (decorative).
  *  Compacts automatically in the 1024–1279px range so the right-hand card
- *  never clips against the viewport edge; full size from xl up. */
-function OrbitCard({ icon: Icon, title, support, className }) {
+ *  never clips against the viewport edge; full size from xl up.
+ *  Includes hardware docking port pin for connecting arrows. */
+function OrbitCard({ icon: Icon, title, support, className, dockSide, dockRef }) {
   return (
     <div
-      className={`z-10 flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-card py-2.5 pl-2.5 pr-4 shadow-card lg:gap-2 lg:py-2 lg:pl-2 lg:pr-3 dark:border-white/15 dark:bg-surface-card dark:shadow-none xl:gap-3 xl:py-2.5 xl:pl-2.5 xl:pr-4 ${className}`}
+      className={`z-10 flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-card/95 py-2.5 pl-2.5 pr-4 shadow-card backdrop-blur-sm transition-all duration-300 hover:border-brand/40 hover:shadow-card-hover lg:gap-2 lg:py-2 lg:pl-2 lg:pr-3 dark:border-white/15 dark:bg-surface-card/90 dark:shadow-none dark:hover:border-white/30 xl:gap-3 xl:py-2.5 xl:pl-2.5 xl:pr-4 ${className}`}
     >
+      {/* Dock pin on left if dockSide === 'left' */}
+      {dockSide === "left" && (
+        <span
+          ref={dockRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-1.5 top-1/2 hidden size-3 -translate-y-1/2 items-center justify-center sm:flex"
+        >
+          <span className="size-2 rounded-full border border-brand bg-white shadow-xs dark:border-accent-gold dark:bg-surface-card" />
+        </span>
+      )}
+
       <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand lg:size-7 dark:bg-white/10 dark:text-accent-gold xl:size-9">
         <Icon size={16} aria-hidden="true" className="size-4 lg:size-3.5 xl:size-4" />
       </span>
@@ -198,37 +270,114 @@ function OrbitCard({ icon: Icon, title, support, className }) {
           {support}
         </span>
       </span>
+
+      {/* Dock pin on right if dockSide === 'right' */}
+      {dockSide === "right" && (
+        <span
+          ref={dockRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-1.5 top-1/2 hidden size-3 -translate-y-1/2 items-center justify-center sm:flex"
+        >
+          <span className="size-2 rounded-full border border-brand bg-white shadow-xs dark:border-accent-gold dark:bg-surface-card" />
+        </span>
+      )}
     </div>
   );
 }
 
 function HeroVisual() {
+  const containerRef = useRef(null);
+  const dockWebRef = useRef(null);
+  const dockCloudRef = useRef(null);
+  const dockMobileRef = useRef(null);
+
+  // Exact coordinates mapped to 400x400 viewBox.
+  // Pre-calibrated initial fallback coordinates ensure zero layout shift before first paint:
+  const [docks, setDocks] = useState({
+    web: { x: 136, y: 92 },
+    cloud: { x: 265, y: 188 },
+    mobile: { x: 136, y: 308 },
+  });
+
+  useLayoutEffect(() => {
+    const updateDocks = () => {
+      if (!containerRef.current) return;
+      const cont = containerRef.current.getBoundingClientRect();
+      if (!cont.width || !cont.height) return;
+
+      const toSvg = (clientX, clientY) => ({
+        x: ((clientX - cont.left) / cont.width) * 400,
+        y: ((clientY - cont.top) / cont.height) * 400,
+      });
+
+      const next = {};
+      if (dockWebRef.current) {
+        const r = dockWebRef.current.getBoundingClientRect();
+        next.web = toSvg(r.left + r.width / 2, r.top + r.height / 2);
+      }
+      if (dockCloudRef.current) {
+        const r = dockCloudRef.current.getBoundingClientRect();
+        next.cloud = toSvg(r.left + r.width / 2, r.top + r.height / 2);
+      }
+      if (dockMobileRef.current) {
+        const r = dockMobileRef.current.getBoundingClientRect();
+        next.mobile = toSvg(r.left + r.width / 2, r.top + r.height / 2);
+      }
+
+      setDocks((prev) => ({ ...prev, ...next }));
+    };
+
+    updateDocks();
+    const raf = requestAnimationFrame(updateDocks);
+    window.addEventListener("resize", updateDocks);
+    const ro = new ResizeObserver(updateDocks);
+    ro.observe(containerRef.current);
+    if (dockWebRef.current) ro.observe(dockWebRef.current);
+    if (dockCloudRef.current) ro.observe(dockCloudRef.current);
+    if (dockMobileRef.current) ro.observe(dockMobileRef.current);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", updateDocks);
+      ro.disconnect();
+    };
+  }, []);
+
   return (
     <div className="relative" aria-hidden="true">
-      <div className="relative mx-auto aspect-square w-full max-w-[420px] lg:max-w-[340px] xl:max-w-[420px]">
+      <div
+        ref={containerRef}
+        className="relative mx-auto aspect-square w-full max-w-[420px] lg:max-w-[340px] xl:max-w-[420px]"
+      >
         {/* Soft rounded backdrop panel behind the illustration */}
-        <div className="absolute inset-[3%] rounded-[2rem] border border-border-subtle bg-gradient-to-br from-blue-50/70 via-white/10 to-white/20 shadow-card-hover dark:border-white/10 dark:from-white/[0.05] dark:via-white/[0.02] dark:to-transparent dark:shadow-none" />
+        <div className="pointer-events-none absolute inset-[3%] rounded-[2rem] border border-border-subtle bg-gradient-to-br from-blue-50/70 via-white/10 to-white/20 shadow-card-hover dark:border-white/10 dark:from-white/[0.05] dark:via-white/[0.02] dark:to-transparent dark:shadow-none" />
 
-        {/* Orbital illustration (rings, medallion, nodes, connectors) */}
-        <OrbitRings />
+        {/* Orbital illustration (rings, medallion, nodes, and fintech connected arrows) */}
+        <OrbitRings docks={docks} />
 
         {/* Desktop/tablet: floating service cards over the illustration */}
         <OrbitCard
           icon={FiCode}
           title="Web platforms"
           support="Modern, scalable, secure"
+          dockSide="right"
+          dockRef={dockWebRef}
           className="absolute left-[-9%] top-[20%] hidden sm:flex"
         />
         <OrbitCard
           icon={FiCloud}
           title="Cloud &amp; backend"
           support="Reliable &amp; high performance"
+          dockSide="left"
+          dockRef={dockCloudRef}
           className="absolute left-[78%] top-[38%] hidden sm:flex lg:left-[68%] xl:left-[72%]"
         />
         <OrbitCard
           icon={FiSmartphone}
           title="Mobile apps"
           support="iOS &amp; Android"
+          dockSide="right"
+          dockRef={dockMobileRef}
           className="absolute left-[-9%] top-[64%] hidden sm:flex"
         />
       </div>

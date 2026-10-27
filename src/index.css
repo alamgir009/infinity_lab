@@ -50,6 +50,8 @@
     --hv-node-hi: #bcd4ff;           /* spherical node highlight      */
     --hv-node-lo: #2563eb;           /* spherical node body           */
     --hv-connector: rgb(37 99 235 / 0.45); /* node -> card lines      */
+    --hv-arrow: #2563eb;             /* fintech connector arrowhead (light) */
+    --hv-pulse: #1d4ed8;             /* live data pulse packet (light) */
     --hv-medallion: #ffffff;         /* central medallion surface     */
     --hv-medallion-ring: rgb(15 23 42 / 0.08); /* medallion hairline */
     --hv-medallion-shadow: rgb(30 64 175 / 0.16); /* medallion depth */
@@ -94,6 +96,8 @@
     --hv-node-hi: #dbe7ff;
     --hv-node-lo: #4f86f7;
     --hv-connector: rgb(138 176 255 / 0.45);
+    --hv-arrow: #8ab0ff;             /* fintech connector arrowhead (dark) */
+    --hv-pulse: #93c5fd;             /* live data pulse packet (dark) */
     --hv-medallion: rgb(255 255 255 / 0.06);
     --hv-medallion-ring: rgb(255 255 255 / 0.14);
     --hv-medallion-shadow: rgb(0 0 0 / 0.45);
@@ -208,6 +212,11 @@
     animation: hv-spin 90s linear infinite;
   }
 
+  /* Fintech animated data stream / signal pulse along connector arrows */
+  .hv-data-flow {
+    animation: hv-flow 2.2s linear infinite;
+  }
+
   /* Theme toggle glyph swap: quick rotate/fade on theme change. */
   .theme-icon-swap {
     animation: theme-swap 0.28s ease-out;
@@ -236,5 +245,14 @@
 @keyframes hv-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes hv-flow {
+  0% {
+    stroke-dashoffset: 40;
+  }
+  100% {
+    stroke-dashoffset: 0;
   }
 }
