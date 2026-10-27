@@ -93,20 +93,18 @@ export default function Projects() {
                   type="button"
                   aria-pressed={selected}
                   onClick={() => setFilter(c.id)}
-                  className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-btn border px-4 py-2 text-sm font-semibold transition-[background-color,border-color,color] duration-150 ${
-                    selected
+                  className={`inline-flex min-h-[44px] items-center gap-2.5 rounded-btn border px-4 py-2 text-sm font-semibold transition-[background-color,border-color,color] duration-150 ${selected
                       ? "border-btn-bg bg-btn-bg text-btn-text shadow-card"
                       : "border-border-subtle bg-surface-card text-text-secondary hover:border-brand hover:text-brand"
-                  }`}
+                    }`}
                 >
                   {c.label}
                   <span
                     aria-label={`${count} ${count === 1 ? "project" : "projects"}`}
-                    className={`rounded-full px-2 py-0.5 text-xs font-bold [font-variant-numeric:tabular-nums] ${
-                      selected
+                    className={`rounded-full px-2 py-0.5 text-xs font-bold [font-variant-numeric:tabular-nums] ${selected
                         ? "bg-white/15 text-white"
                         : "bg-surface-sunken text-text-muted"
-                    }`}
+                      }`}
                   >
                     {count}
                   </span>

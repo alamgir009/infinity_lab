@@ -153,7 +153,7 @@ export const PROJECTS = [
     id: "ewalletbazar",
     name: "eWallet Bazar",
     url: "https://ewalletbazar.com/",
-    category: "web",
+    category: "mobile",
     verified: true,
     summary:
       "Digital wallet marketplace listed in the supplied project set.",
