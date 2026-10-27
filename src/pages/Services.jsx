@@ -112,11 +112,11 @@ export default function Services() {
               return (
                 <Card key={g} className="overflow-hidden">
                   {/* Category header */}
-                  <div className="flex items-center gap-3 border-b border-border-subtle bg-surface-sunken px-5 py-4 dark:bg-white/[0.02]">
+                  <div className="flex items-center gap-3 border-b border-border-subtle bg-surface-sunken px-5 py-4">
                     <span className={`inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${gradient} text-white shadow-sm`}>
                       <Icon size={15} aria-hidden="true" />
                     </span>
-                    <h3 className="font-display text-sm font-bold tracking-tight text-text-primary">
+                    <h3 className="font-display text-sm font-semibold tracking-tight text-text-primary">
                       {g}
                     </h3>
                     <span className={`ml-auto rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${chip}`}>
@@ -125,7 +125,7 @@ export default function Services() {
                   </div>
 
                   {/* Tech items list */}
-                  <ul className="divide-y divide-border-subtle px-5 py-2 dark:divide-white/[0.06]">
+                  <ul className="divide-y divide-border-subtle px-5 py-2">
                     {items.map((t) => (
                       <li
                         key={t.name}

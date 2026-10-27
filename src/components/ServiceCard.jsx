@@ -33,7 +33,7 @@ export default function ServiceCard({ service, detailed = false }) {
           <Icon size={20} aria-hidden="true" />
         </span>
 
-        <h3 className="mt-5 text-lg font-bold text-text-primary">
+        <h3 className="mt-5 text-lg font-semibold tracking-tight text-text-primary">
           {service.name}
         </h3>
         <p className="mt-1 text-sm text-text-secondary">{service.tagline}</p>
@@ -43,7 +43,7 @@ export default function ServiceCard({ service, detailed = false }) {
 
         {detailed && service.deliverables && (
           <>
-            <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">
+            <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
               What you get
             </h4>
             <ul className="mt-3 space-y-2.5 text-sm text-text-secondary">
@@ -53,7 +53,7 @@ export default function ServiceCard({ service, detailed = false }) {
                     aria-hidden="true"
                     className="mt-[7px] inline-block size-1.5 shrink-0 rounded-full bg-brand"
                   />
-                  <span className="text-text-primary">{d}</span>
+                  <span className="text-text-secondary">{d}</span>
                 </li>
               ))}
             </ul>

@@ -252,7 +252,7 @@ function OrbitRings({ docks }) {
 function OrbitCard({ icon: Icon, title, support, className, dockSide, dockRef }) {
   return (
     <div
-      className={`z-10 flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-card/95 py-2.5 pl-2.5 pr-4 shadow-card backdrop-blur-sm transition-all duration-300 hover:border-brand/40 hover:shadow-card-hover lg:gap-2 lg:py-2 lg:pl-2 lg:pr-3 dark:border-white/15 dark:bg-surface-card/90 dark:shadow-none dark:hover:border-white/30 xl:gap-3 xl:py-2.5 xl:pl-2.5 xl:pr-4 ${className}`}
+      className={`z-10 flex items-center gap-3 rounded-2xl border border-border-subtle bg-surface-card/95 py-2.5 pl-2.5 pr-4 shadow-card backdrop-blur-sm transition-all duration-300 hover:border-brand/40 hover:shadow-card-hover lg:gap-2 lg:py-2 lg:pl-2 lg:pr-3 dark:shadow-none xl:gap-3 xl:py-2.5 xl:pl-2.5 xl:pr-4 ${className}`}
     >
       {/* Dock pin on left if dockSide === 'left' */}
       {dockSide === "left" && (
@@ -261,18 +261,18 @@ function OrbitCard({ icon: Icon, title, support, className, dockSide, dockRef })
           aria-hidden="true"
           className="pointer-events-none absolute -left-1.5 top-1/2 hidden size-3 -translate-y-1/2 items-center justify-center sm:flex"
         >
-          <span className="size-2 rounded-full border border-brand bg-white shadow-xs dark:border-accent-gold dark:bg-surface-card" />
+          <span className="size-2 rounded-full border border-brand bg-surface-card shadow-xs" />
         </span>
       )}
 
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand lg:size-7 dark:bg-white/10 dark:text-accent-gold xl:size-9">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand-chip-text ring-1 ring-inset ring-brand/15 lg:size-7 xl:size-9">
         <Icon size={16} aria-hidden="true" className="size-4 lg:size-3.5 xl:size-4" />
       </span>
       <span className="min-w-0">
-        <span className="block whitespace-nowrap text-sm font-bold leading-5 text-text-primary lg:text-[13px] lg:leading-4 dark:text-white xl:text-sm xl:leading-5">
+        <span className="block whitespace-nowrap text-sm font-semibold leading-5 text-text-primary lg:text-[13px] lg:leading-4 xl:text-sm xl:leading-5">
           {title}
         </span>
-        <span className="block whitespace-nowrap text-[11px] leading-4 text-text-secondary lg:text-[10px] lg:leading-3.5 dark:text-white/60 xl:text-[11px] xl:leading-4">
+        <span className="block whitespace-nowrap text-[11px] leading-4 text-text-secondary lg:text-[10px] lg:leading-3.5 xl:text-[11px] xl:leading-4">
           {support}
         </span>
       </span>
@@ -284,7 +284,7 @@ function OrbitCard({ icon: Icon, title, support, className, dockSide, dockRef })
           aria-hidden="true"
           className="pointer-events-none absolute -right-1.5 top-1/2 hidden size-3 -translate-y-1/2 items-center justify-center sm:flex"
         >
-          <span className="size-2 rounded-full border border-brand bg-white shadow-xs dark:border-accent-gold dark:bg-surface-card" />
+          <span className="size-2 rounded-full border border-brand bg-surface-card shadow-xs" />
         </span>
       )}
     </div>
@@ -356,7 +356,7 @@ function HeroVisual() {
         className="relative mx-auto aspect-square w-full max-w-[420px] lg:max-w-[340px] xl:max-w-[420px]"
       >
         {/* Soft rounded backdrop panel behind the illustration */}
-        <div className="pointer-events-none absolute inset-[3%] rounded-[2rem] border border-border-subtle bg-gradient-to-br from-blue-50/70 via-white/10 to-white/20 shadow-card-hover dark:border-white/10 dark:from-white/[0.05] dark:via-white/[0.02] dark:to-transparent dark:shadow-none" />
+        <div className="pointer-events-none absolute inset-[3%] rounded-[2rem] border border-border-subtle bg-gradient-to-br from-blue-50/70 via-white/10 to-white/20 shadow-card-hover dark:border-border-subtle dark:from-white/[0.03] dark:via-transparent dark:to-transparent dark:shadow-none" />
 
         {/* Orbital illustration (rings, medallion, nodes, and fintech connected arrows) */}
         <OrbitRings docks={docks} />
@@ -451,28 +451,28 @@ function MethodStepCard({ phase, connector = "none" }) {
         />
         <div className="flex h-full flex-col p-5">
           <div className="flex items-center justify-between gap-3">
-            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand-chip-text ring-1 ring-inset ring-brand/15 dark:bg-white/10 dark:text-accent-gold dark:ring-white/15">
+            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand-chip-text ring-1 ring-inset ring-brand/15 dark:bg-surface-sunken dark:text-brand dark:ring-border-subtle">
               <Icon size={16} aria-hidden="true" />
             </span>
             <span
               aria-hidden="true"
-              className="font-display text-xs font-semibold tracking-[0.2em] text-text-on-brand-muted"
+              className="font-display text-xs font-semibold tracking-[0.2em] text-text-muted"
             >
               {String(phase.step).padStart(2, "0")}
             </span>
           </div>
-          <h3 className="mt-4 text-base font-bold text-text-on-brand">{phase.name}</h3>
-          <p className="mb-4 mt-2 text-sm leading-6 text-text-on-brand-muted">
+          <h3 className="mt-4 text-base font-semibold text-text-primary">{phase.name}</h3>
+          <p className="mb-4 mt-2 text-sm leading-6 text-text-secondary">
             {phase.description}
           </p>
-          <ul className="mt-auto space-y-2 border-t border-border-subtle pt-4 text-[13px] leading-5 dark:border-white/10">
+          <ul className="mt-auto space-y-2 border-t border-border-subtle pt-4 text-[13px] leading-5">
             {phase.points.map((point) => (
               <li key={point} className="flex items-start gap-2.5">
                 <FiCheckCircle
                   aria-hidden="true"
-                  className="mt-[3px] size-3.5 shrink-0 text-brand dark:text-accent-gold"
+                  className="mt-[3px] size-3.5 shrink-0 text-brand"
                 />
-                <span className="text-text-on-brand-muted">{point}</span>
+                <span className="text-text-secondary">{point}</span>
               </li>
             ))}
           </ul>
@@ -534,9 +534,9 @@ export default function Home() {
         <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="container-section relative grid items-center gap-10 pt-8 pb-14 md:pt-12 md:pb-20 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <h1 className="type-display font-display text-text-on-brand dark:text-white">
+            <h1 className="type-display font-display text-text-on-brand">
               Ten years of shipping systems<br />
-              <span className="text-brand dark:text-white/60">that stay up and scale.</span>
+              <span className="text-brand">that stay up and scale.</span>
             </h1>
             <p className="container-text mt-6 text-lg leading-8 text-text-on-brand-muted">
               Infinity Lab designs, builds and operates news portals, institutional platforms, management systems and mobile apps for teams across India.
@@ -711,7 +711,7 @@ export default function Home() {
                 Prefer to browse first?{" "}
                 <Link
                   to="/projects"
-                  className="font-semibold text-brand dark:text-accent-gold underline underline-offset-4 hover:no-underline"
+                  className="font-semibold text-brand underline underline-offset-4 hover:no-underline"
                 >
                   See all projects
                 </Link>

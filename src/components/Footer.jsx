@@ -21,7 +21,7 @@ const headingClass =
  */
 export default function Footer() {
   return (
-    <footer className="border-t border-border-subtle bg-surface-brand text-text-on-brand-muted dark:border-white/10">
+    <footer className="border-t border-border-subtle bg-surface-brand text-text-on-brand-muted">
       <div className="container-section grid gap-12 py-16 md:grid-cols-12 md:gap-8">
         {/* Brand */}
         <div className="md:col-span-5">
@@ -100,7 +100,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-border-subtle dark:border-white/10">
+      <div className="border-t border-border-subtle">
         <div className="container-section flex flex-col items-center justify-between gap-3 py-6 text-xs sm:flex-row">
           <p>© {new Date().getFullYear()} Infinity Lab. All rights reserved.</p>
           <p className="text-text-on-brand-muted">

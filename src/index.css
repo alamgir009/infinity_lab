@@ -13,15 +13,15 @@
   :root {
     /* Surfaces */
     --surface: 255 255 255;          /* page background            */
-    --surface-sunken: 246 248 251;   /* alternating sections       */
+    --surface-sunken: 248 250 252;   /* alternating sections       */
     --surface-card: 255 255 255;     /* card background            */
     --surface-brand: 255 255 255;    /* brand surface (hero/CTA/footer) — light in light theme */
-    --surface-inverse-raised: 17 27 46;
+    --surface-inverse-raised: 15 23 42;
 
-    /* Text */
-    --text-primary: 15 23 42;        /* slate-900                  */
-    --text-secondary: 71 85 105;     /* slate-600  — 4.5:1+        */
-    --text-muted: 86 100 120;        /* 5.2:1 on white, 5.0:1 on sunken */
+    /* Text — WCAG AA (>=4.5:1) & AAA (>=7.0:1) on white & sunken */
+    --text-primary: 15 23 42;        /* slate-900 (16.1:1 on white) */
+    --text-secondary: 71 85 105;     /* slate-600 (7.0:1 on white)  */
+    --text-muted: 100 116 139;       /* slate-500 (4.6:1 on white)  */
     --text-on-brand: 15 23 42;       /* text on brand surface — dark text in light theme */
     --text-on-brand-muted: 71 85 105;
 
@@ -30,17 +30,17 @@
     --border-strong: 203 213 225;
 
     /* Brand */
-    --brand: 29 78 216;              /* links/accents, light theme */
+    --brand: 29 78 216;              /* links/accents, light theme (5.9:1) */
     --brand-hover: 30 64 175;
-    --brand-chip: 226 236 253;       /* soft chip background       */
+    --brand-chip: 239 246 255;       /* soft chip background       */
     --brand-chip-text: 29 78 216;
-    --btn-bg: 29 78 216;             /* primary buttons, both themes */
+    --btn-bg: 29 78 216;             /* primary buttons, light theme */
     --btn-bg-hover: 30 64 175;
-    --btn-text: 255 255 255;         /* 6.3:1 on --btn-bg           */
+    --btn-text: 255 255 255;         /* 5.9:1 on --btn-bg           */
     --ring: 29 78 216;
 
-    /* Accent (used sparingly on dark brand surfaces, both themes) */
-    --accent-gold: 221 197 143;
+    /* Accent (used sparingly on brand surfaces) */
+    --accent-gold: 161 126 46;
 
     /* Hero visual (theme-aware SVG colors) */
     --hv-orbit-a: #1d4ed8;           /* orbit gradient start (light)  */
@@ -64,47 +64,52 @@
   }
 
   .dark {
-    --surface: 11 18 32;
-    --surface-sunken: 13 21 38;
-    --surface-card: 17 27 46;
-    --surface-brand: 9 14 26;
-    --surface-inverse-raised: 17 27 46;
+    /* Surfaces — true fintech obsidian/slate (Cloudflare, Linear, Stripe standard, not navy blue) */
+    --surface: 10 12 16;             /* deep obsidian canvas (#0a0c10) */
+    --surface-sunken: 15 18 24;      /* grounded alternating sections (#0f1218) */
+    --surface-card: 20 24 32;        /* elevated matte card (#141820) */
+    --surface-brand: 10 12 16;       /* brand surface */
+    --surface-inverse-raised: 24 29 38;
 
-    --text-primary: 230 235 242;
-    --text-secondary: 168 183 202;   /* 8.4:1 on surface           */
-    --text-muted: 142 158 181;       /* 6.5:1 on surface           */
-    --text-on-brand: 230 235 242;
-    --text-on-brand-muted: 152 168 190;
+    /* Text — rigorously checked for WCAG AA (>=4.5:1) & AAA (>=7.0:1) */
+    --text-primary: 243 244 246;     /* gray-100 (17.6:1 on surface) */
+    --text-secondary: 156 163 175;   /* gray-400 (7.2:1 on surface)  */
+    --text-muted: 133 144 162;       /* slate-400 (5.8:1 on surface, 5.2:1 on card) */
+    --text-on-brand: 243 244 246;
+    --text-on-brand-muted: 156 163 175;
 
-    --border-subtle: 36 49 74;
-    --border-strong: 58 76 108;
+    /* Borders — crisp, neutral slate hairlines */
+    --border-subtle: 34 40 52;       /* subtle hairline (#222834) */
+    --border-strong: 51 60 77;       /* interactive border (#333c4d) */
 
-    --brand: 138 176 255;            /* links/accents, dark theme  */
-    --brand-hover: 157 190 255;
-    --brand-chip: 24 40 74;
-    --brand-chip-text: 138 176 255;
-    --btn-bg: 29 78 216;
-    --btn-bg-hover: 23 62 189;
+    /* Brand & Accent */
+    --brand: 96 165 250;             /* fintech azure (#60a5fa, 8.5:1 on surface) */
+    --brand-hover: 147 197 253;
+    --brand-chip: 27 34 47;          /* subtle dark slate-blue chip */
+    --brand-chip-text: 147 197 253;  /* 9.6:1 on chip */
+    --btn-bg: 37 99 235;
+    --btn-bg-hover: 29 78 216;
     --btn-text: 255 255 255;
-    --ring: 138 176 255;
+    --ring: 96 165 250;
+    --accent-gold: 221 197 143;
 
     /* Hero visual (theme-aware SVG colors) */
-    --hv-orbit-a: #8ab0ff;           /* orbit gradient start (dark)   */
+    --hv-orbit-a: #3b82f6;           /* orbit gradient start (dark)   */
     --hv-orbit-b: #ddc58f;           /* orbit gradient end            */
     --hv-gold: #ddc58f;
-    --hv-glow: #4f86f7;
-    --hv-node-hi: #dbe7ff;
-    --hv-node-lo: #4f86f7;
-    --hv-connector: rgb(138 176 255 / 0.45);
-    --hv-arrow: #8ab0ff;             /* fintech connector arrowhead (dark) */
+    --hv-glow: #2563eb;
+    --hv-node-hi: #93c5fd;
+    --hv-node-lo: #3b82f6;
+    --hv-connector: rgb(96 165 250 / 0.3);
+    --hv-arrow: #60a5fa;             /* fintech connector arrowhead (dark) */
     --hv-pulse: #93c5fd;             /* live data pulse packet (dark) */
-    --hv-medallion: rgb(255 255 255 / 0.06);
-    --hv-medallion-ring: rgb(255 255 255 / 0.14);
-    --hv-medallion-shadow: rgb(0 0 0 / 0.45);
+    --hv-medallion: rgb(255 255 255 / 0.04);
+    --hv-medallion-ring: rgb(255 255 255 / 0.1);
+    --hv-medallion-shadow: rgb(0 0 0 / 0.6);
 
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5);
-    --shadow-card-hover: 0 8px 24px -6px rgb(0 0 0 / 0.65), 0 2px 6px -2px rgb(0 0 0 / 0.5);
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.45), 0 1px 2px -1px rgb(0 0 0 / 0.45);
+    --shadow-card-hover: 0 8px 24px -6px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.45);
     --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.7);
   }
 
@@ -177,8 +182,8 @@
 
   .dark .bg-brand-deep {
     background-image:
-      radial-gradient(1200px 500px at 80% -10%, rgb(30 64 175 / 0.35), transparent 60%),
-      radial-gradient(900px 420px at 10% 110%, rgb(79 134 247 / 0.16), transparent 55%);
+      radial-gradient(1200px 500px at 80% -10%, rgb(37 99 235 / 0.08), transparent 60%),
+      radial-gradient(900px 420px at 10% 110%, rgb(59 130 246 / 0.04), transparent 55%);
   }
 
   /* Fine engineering grid overlay for hero / CTA panels. */

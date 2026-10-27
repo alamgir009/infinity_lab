@@ -43,14 +43,14 @@ export default function ProjectCard({ project, detailed = false }) {
         <div className="flex items-start justify-between gap-3">
           <span
             aria-hidden="true"
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-brand-chip font-display text-base font-bold text-brand-chip-text"
+            className="inline-flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-brand-chip font-display text-base font-semibold text-brand-chip-text"
           >
             {monogram}
           </span>
           <LinkStatusBadge verified={verified} />
         </div>
 
-        <h3 className="mt-4 text-lg font-bold leading-snug text-text-primary">
+        <h3 className="mt-4 text-lg font-semibold leading-snug tracking-tight text-text-primary">
           {name}
         </h3>
         <a

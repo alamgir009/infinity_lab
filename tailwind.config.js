@@ -29,8 +29,9 @@ export default {
         "accent-gold": "rgb(var(--accent-gold) / <alpha-value>)",
       },
       fontFamily: {
-        display: ["Space_Grotesk", "sans-serif"],
-        body: ["Inter", "sans-serif"],
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        display: ["Space Grotesk", "Inter", "sans-serif"],
+        body: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
       },
       boxShadow: {
         xs: "var(--shadow-xs)",
