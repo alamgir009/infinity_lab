@@ -1,13 +1,34 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { FiLock, FiActivity, FiEye } from "react-icons/fi";
 import Seo from "../components/Seo";
 import SectionHeading from "../components/SectionHeading";
 import Button from "../components/Button";
 import ProjectCard from "../components/ProjectCard";
+import GuaranteeStrip from "../components/ui/GuaranteeStrip";
 import { PROJECTS, PROJECT_CATEGORIES } from "../data/projects";
 import { SITE } from "../data/siteConfig";
 
 const DEFAULT_FILTER = "all";
+
+/** Delivery-assurance ribbon items — contractual trust messaging. */
+const ASSURANCES = [
+  {
+    title: "100% IP Ownership & NDA",
+    body: "You retain complete intellectual property rights, repositories, infrastructure keys, and assets with strict NDAs signed prior to kick-off.",
+    icon: FiLock,
+  },
+  {
+    title: "Production SLA Guarantee",
+    body: "Engineered with zero-downtime CI/CD pipelines, automated regression suites, and 99.9% uptime architecture guidelines.",
+    icon: FiActivity,
+  },
+  {
+    title: "Agile Sprint Visibility",
+    body: "Weekly demo builds, clear sprint tracking boards, and direct access to lead software engineers via private Slack or Discord channels.",
+    icon: FiEye,
+  },
+];
 
 /** Pure helper: apply category filter to the project list (unit-tested). */
 export function filterProjects(projects, categoryId) {
@@ -142,6 +163,29 @@ export default function Projects() {
             <span className="font-semibold text-text-secondary">Unverified link</span>{" "}
             badge rather than being silently hidden or claimed as live.
           </p>
+        </div>
+      </section>
+
+      {/* Delivery assurance — contractual trust ribbon + closing CTA */}
+      <section
+        aria-labelledby="assurance-heading"
+        className="border-t border-border-subtle py-16 md:py-20"
+      >
+        <div className="container-section">
+          <SectionHeading
+            id="assurance-heading"
+            eyebrow="Delivery assurance"
+            title="Every engagement, protected"
+            lead="Three commitments that apply to every project on this page — from the first signature to production operations."
+          />
+          <div className="mt-10">
+            <GuaranteeStrip items={ASSURANCES} />
+          </div>
+          <div className="mt-10 flex justify-center">
+            <Button to="/contact" size="lg" arrow>
+              Start Your Project
+            </Button>
+          </div>
         </div>
       </section>
     </>
