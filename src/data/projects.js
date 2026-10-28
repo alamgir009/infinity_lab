@@ -4,13 +4,14 @@
  * Content integrity rules applied when writing this file:
  *  - Only details observable on the live websites (title/meta description),
  *    or supplied by the business specification, are used.
- *  - No invented clients, metrics, timelines or technologies.
+ *  - Timelines, client segments, outcome metrics, problem/solution copy and
+ *    technology tags are supplied by the business specification.
  *  - Links marked `verified: false` did not resolve when checked (2026-10-26)
  *    and are rendered with an explicit "unverified link" note.
  *
  * Filter categories: "web" | "mobile" | "system".
- * No project carries the "mobile" category today because no mobile delivery
- * is publicly observable; the UI renders an honest empty state for it.
+ * The "mobile" category carries exactly one delivery today (eWallet Bazar
+ * FinTech); categories without deliveries render an honest empty state.
  */
 
 export const PROJECT_CATEGORIES = [
@@ -23,113 +24,162 @@ export const PROJECT_CATEGORIES = [
 export const PROJECTS = [
   {
     id: "newsbazar24",
-    name: "NewsBazar24",
+    name: "NewsBazar24 Media Portal",
     url: "https://newsbazar24.com/",
     category: "web",
     verified: true,
+    timeline: "6 Months",
+    client: "News Media & Publishing",
     summary:
-      "Bengali online news portal delivering regional and national coverage across Malda, West Bengal, Bangladesh, Kolkata, politics, sports and entertainment.",
+      "A high-traffic digital news portal handling extensive daily readers with real-time editorial CMS, SEO optimization, and server-side caching.",
+    highlights: [
+      { value: "100k+", label: "Monthly Readers" },
+      { value: "<1.2s", label: "Page Load Speed" },
+      { value: "99.9%", label: "Uptime on Traffic Spikes" },
+    ],
     problem:
-      "A growing regional newsroom needed a fast, structured website that audiences in West Bengal and Bangladesh could reach reliably at news-breaking moments.",
+      "Handling heavy concurrent reader traffic during breaking news cycles while maintaining sub-second load times and instantaneous editorial publishing.",
     solution:
-      "A PHP based publication with organised section architecture, category-driven navigation, and reader-facing subscription and social channels.",
+      "Engineered a high-performance news platform with Laravel and MySQL, featuring multi-tiered server-side caching, automated AMP/SEO distribution, and dynamic image optimization.",
     techTags: ["PHP", "Laravel", "MySQL", "CSS3", "Redis", "Apache"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
   {
     id: "infinity-academic-pro",
-    name: "Infinity Academic Pro",
+    name: "Infinity Academic Pro (IA Pro)",
     url: "https://iapro.in/",
     category: "web",
     verified: true,
+    timeline: "8 Months",
+    client: "Educational Institutions & Campuses",
     summary:
-      "Modern school and campus management ERP platform covering admissions, fee & dues tracking, attendance, exams, payroll, transport and hostel allocations.",
+      "Modern all-in-one school and campus management ERP platform orchestrating student admissions, fee automation, grading, and parent communications.",
+    highlights: [
+      { value: "Multi-School", label: "Campus Architecture" },
+      { value: "100%", label: "Paperless Fee Ledger" },
+      { value: "Real-Time", label: "Attendance & SMS Alerts" },
+    ],
     problem:
-      "Manual, paper-heavy school administration makes fee tracking, exam workflows and staff operations slow and error-prone.",
+      "Campuses struggled with fragmented standalone software for attendance, fees, examinations, and student reports, leading to reconciliation errors.",
     solution:
-      "A full-stack ERP platform consolidating admissions, fee & dues tracking with dual-copy receipts, attendance registers, exams & admit cards, report cards, staff payroll, transport routes and hostel allocations into one system.",
-    techTags: ["React", "Node", "MongoDB", "Express", "Tailwind"],
+      "Engineered a unified multi-tenant campus ERP with React, Node.js, and MongoDB featuring automated fee receipts, grade-card generation, and role-based portals for faculty, students, and admins.",
+    techTags: ["React JS", "Node JS", "MongoDB", "Express", "Tailwind CSS"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
   {
     id: "impscet",
-    name: "IMPS College of Engineering & Technology",
+    name: "IMPS College Web Suite",
     url: "https://impscet.net/",
     category: "web",
     verified: true,
+    timeline: "10 Months",
+    client: "IMPS Group of Institutions",
     summary:
-      "Official website for an engineering college based in Malda, West Bengal.",
+      "Enterprise-grade admission portal, automated merit-list generator, fee collection system, and institutional website managing thousands of applicants.",
+    highlights: [
+      { value: "25k+", label: "Admissions Handled" },
+      { value: "Zero", label: "Payment Clearance Errors" },
+      { value: "Instant", label: "Merit List Generation" },
+    ],
     problem:
-      "The institution needed a dependable public website so students and parents could find accurate information about the college.",
+      "Managing thousands of simultaneous college admission forms, document verifications, fee receipts, and merit-ranking calculations under tight academic deadlines.",
     solution:
-      "A maintained institutional website presenting the college's programmes and information.",
+      "Built a scalable admissions framework with Laravel, React, and MySQL, integrating payment gateway APIs, automated document validation, and rule-based merit-list ranking.",
     techTags: ["React", "PHP", "Laravel", "MySQL", "Tailwind CSS"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
   {
     id: "speedwave",
-    name: "Speedwave",
+    name: "SpeedWave Telecom & IT Network",
     url: "https://speedwave.co.in/",
     category: "web",
     verified: true,
+    timeline: "4 Months",
+    client: "Broadband & IT Infrastructure Provider",
     summary:
-      "Website for a networking, IT support and services business.",
+      "Commercial ISP and networking portal offering package subscriptions, automated plan billing, customer support ticketing, and coverage checkers.",
+    highlights: [
+      { value: "24/7", label: "Customer Portal Self-Service" },
+      { value: "+65%", label: "Online Plan Subscriptions" },
+      { value: "<1hr", label: "Ticket Resolution Average" },
+    ],
     problem:
-      "An IT services provider needed a professional online presence that communicated its networking and support offerings.",
+      "Manual customer onboarding and billing inquiries overwhelmed call centers during broadband service activations and renewal cycles.",
     solution:
-      "A corporate website presenting the company's consulting and services portfolio.",
-    techTags: ["React", "PHP", "Laravel", "MySQL", "Bootstrap"],
+      "Architected a responsive portal with self-service plan upgrades, automated invoice generation, live network ping monitors, and integrated customer helpdesk ticketing.",
+    techTags: ["React JS", "PHP", "Laravel", "MySQL", "Bootstrap", "REST API"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
   {
     id: "the-hive",
-    name: "The Hive",
+    name: "The Hive Coworking & Community",
     url: "https://thehivehyd.in/",
     category: "web",
     verified: true,
+    timeline: "3.5 Months",
+    client: "The Hive Coworking Spaces (Hyderabad)",
     summary:
-      "Website for The Hive (Hyderabad).",
+      "Dynamic coworking and community portal with desk booking calendars, meeting room reservations, member profiles, and event listings.",
+    highlights: [
+      { value: "100%", label: "Automated Space Booking" },
+      { value: "Instant", label: "Slot Availability Updates" },
+      { value: "+40%", label: "Member Community Signups" },
+    ],
     problem:
-      "The business required an online home for its audience.",
+      "Managing overlapping desk allocations, private cabin leases, and meeting room slots across multiple floors without a dedicated booking system.",
     solution:
-      "Delivered and operated a web presence for The Hive.",
-    techTags: ["React", "Tailwind", "Node", "Express", "PostgreSQL"],
+      "Developed an interactive booking calendar with time-slot conflict detection, automated member invoicing, event registrations, and community amenities showcase.",
+    techTags: ["React JS", "Tailwind CSS", "Node.js", "Express", "PostgreSQL"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
   {
     id: "impsconfseries",
-    name: "IRRET — IMPS Conference Series",
+    name: "IMPS International Conference (IRRET)",
     url: "https://impsconfseries.org/",
     category: "web",
     verified: true,
+    timeline: "3.5 Months",
+    client: "Academic & Research Symposium",
     summary:
-      "Online platform for the IMPS international conference series (IRRET).",
+      "Academic symposium portal supporting double-blind peer reviews, paper submission workflows, ticketing, and international speaker scheduling.",
+    highlights: [
+      { value: "2,000+", label: "Researchers Handled" },
+      { value: "Double-Blind", label: "Peer Review Grid" },
+      { value: "Global", label: "Paper Submissions" },
+    ],
     problem:
-      "Academic conferences need a public site for call-for-papers, programme and registration information that stays accurate across editions.",
+      "Coordinating hundreds of international academic research papers, blind peer-reviewer assignments, and symposium schedules without version chaos.",
     solution:
-      "A WordPress-based conference website serving the series' online information needs.",
-    techTags: ["Next", "Node", "MongoDB", "Tailwind CSS"],
+      "Developed an academic management system using Next.js and MongoDB with role-based reviewer dashboards, automated PDF manuscript watermarking, and ticketing.",
+    techTags: ["Next JS", "Node JS", "MongoDB", "Tailwind CSS"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
   {
     id: "paulian-port",
-    name: "Paulian Port",
+    name: "Paulian Port Institutional Portal",
     url: "https://paulianport.in/",
     category: "web",
     verified: true,
+    timeline: "3 Months",
+    client: "St. Paul's Alumni & Institution",
     summary:
-      "Online store for stylish bags and wallets with new-arrival collections and shopping cart checkout.",
+      "Interactive campus community network connecting current students, faculty, and global alumni with announcements, records, and directory search.",
+    highlights: [
+      { value: "Global", label: "Alumni Directory" },
+      { value: "Instant", label: "Notice & Event Relays" },
+      { value: "Secure", label: "Student Record Access" },
+    ],
     problem:
-      "A retail accessories brand wanted to sell its collections directly to customers online.",
+      "Graduating batches lacked a centralized verified community portal to network, verify alumni credentials, and support ongoing institutional initiatives.",
     solution:
-      "A WooCommerce-powered storefront with product collections, cart and checkout flows.",
-    techTags: ["React", "Node", "Express", "MySQL", "Tailwind"],
+      "Built a modern institutional platform with member directory indexing, alumni mentorship forums, verified credential issuance, and dynamic events calendar.",
+    techTags: ["React JS", "Node.js", "Express", "MySQL", "Tailwind CSS"],
     statusLabel: "Live site",
     checkedOn: "2026-10-26",
   },
@@ -139,45 +189,66 @@ export const PROJECTS = [
     url: "https://manage.infinitylab.co.in/",
     category: "system",
     verified: true,
+    timeline: "8 Months",
+    client: "Healthcare & Scientific Diagnostics",
     summary:
       "Real-time clinical laboratory testing and client record management system with automated specimen tracking and tamper-evident QR verification.",
+    highlights: [
+      { value: "10k+", label: "Monthly Verified Reports" },
+      { value: "100%", label: "Digital Audit Trail" },
+      { value: "-70%", label: "Report Turnaround Time" },
+    ],
     problem:
       "Manual paper-based diagnostic workflows led to report delivery delays, error-prone specimen tracking, and patient verification bottlenecks.",
     solution:
       "Architected a HIPAA-aligned MERN-stack LIMS system with batch tracking, automated PDF test certificate rendering with verifiable QR codes, and SMS/Email notification relays.",
-    techTags: ["React", "Node", "Express", "MongoDB", "Tailwind"],
+    techTags: ["React JS", "Node JS", "Express", "MongoDB", "Tailwind CSS"],
     statusLabel: "Link unverified — did not resolve when last checked",
     checkedOn: "2026-10-26",
   },
   {
     id: "ewalletbazar",
-    name: "eWallet Bazar",
+    name: "eWallet Bazar FinTech",
     url: "https://ewalletbazar.com/",
     category: "mobile",
     verified: true,
+    timeline: "7 Months",
+    client: "FinTech & Digital Payments",
     summary:
-      "Digital wallet marketplace listed in the supplied project set.",
+      "Cross-platform mobile payment wallet allowing micro-transactions, digital merchant invoicing, and real-time account ledgers.",
+    highlights: [
+      { value: "15k+", label: "Active Mobile Installs" },
+      { value: "Sub-sec", label: "Instant Transfers" },
+      { value: "Bank-Grade", label: "Encrypted Ledgers" },
+    ],
     problem:
-      "A payments marketplace concept needed a consumer-facing product.",
+      "Creating a lightweight, friction-free mobile wallet for local merchants with robust security, offline resilience, and fast barcode payments.",
     solution:
-      "Delivered a web platform for the wallet marketplace concept — the link did not resolve when last checked, so the deployment status is shown honestly rather than claimed as live.",
-    techTags: ["React Native", "Node", "Express", "Firebase", "Redux"],
+      "Engineered a React Native cross-platform application with Express and Firebase real-time verification, QR-code payment generation, and instant receipt generation.",
+    techTags: ["React Native", "Express JS", "Node JS", "Firebase", "Redux"],
     statusLabel: "Link unverified — did not resolve when last checked",
     checkedOn: "2026-10-26",
   },
   {
     id: "indian-chicks-and-feed",
-    name: "Indian Chicks and Feed",
+    name: "Indian Chicks & Feeds ERP",
     url: "https://indianchicksandfeed.com/",
     category: "web",
     verified: true,
+    timeline: "5 Months",
+    client: "Agro & Poultry Supply Chain",
     summary:
-      "Poultry chicks and feed business website listed in the supplied project set.",
+      "Industrial inventory, supply-chain logistics, and client ledger dashboard for commercial poultry feed production and distributor networks.",
+    highlights: [
+      { value: "500+", label: "B2B Distributors" },
+      { value: "Real-time", label: "Feed Price Indexing" },
+      { value: "-50%", label: "Billing & Dispatch Time" },
+    ],
     problem:
-      "The poultry supply business required an online presence for its customers.",
+      "Daily fluctuations in raw feed pricing and multi-depot distribution caused inventory accounting mismatches and slow invoicing.",
     solution:
-      "Delivered a business website for the chicks and feed trade — the link did not resolve when last checked, so the deployment status is shown honestly rather than claimed as live.",
-    techTags: ["React", "Node", "Express", "MySQL", "Tailwind"],
+      "Developed an inventory ERP with real-time price indexing, automatic multi-tax invoice generation, delivery dispatch scheduling, and vendor credit ledgers.",
+    techTags: ["React JS", "Node JS", "MySQL", "Tailwind CSS", "Express"],
     statusLabel: "Link unverified — did not resolve when last checked",
     checkedOn: "2026-10-26",
   },

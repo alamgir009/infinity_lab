@@ -102,8 +102,8 @@ export default function Projects() {
                   <span
                     aria-label={`${count} ${count === 1 ? "project" : "projects"}`}
                     className={`rounded-full px-2 py-0.5 text-xs font-bold [font-variant-numeric:tabular-nums] ${selected
-                        ? "bg-white/15 text-white"
-                        : "bg-surface-sunken text-text-muted"
+                        ? "bg-white text-blue-900"
+                        : "bg-surface-sunken text-text-secondary"
                       }`}
                   >
                     {count}

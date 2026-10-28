@@ -12,8 +12,10 @@ describe("filterProjects", () => {
     expect(web.length).toBeGreaterThan(0);
     expect(web.every((p) => p.category === "web")).toBe(true);
   });
-  it("returns no projects for 'mobile' (honest empty state)", () => {
-    expect(filterProjects(PROJECTS, "mobile")).toHaveLength(0);
+  it("returns only the eWallet Bazar mobile delivery for 'mobile'", () => {
+    const mobile = filterProjects(PROJECTS, "mobile");
+    expect(mobile.map((p) => p.id)).toEqual(["ewalletbazar"]);
+    expect(mobile.every((p) => p.category === "mobile")).toBe(true);
   });
   it("returns only system projects for the 'system' filter", () => {
     const sys = filterProjects(PROJECTS, "system");
@@ -34,6 +36,17 @@ describe("project data shape", () => {
   it("every project carries the required shape", () => {
     for (const p of PROJECTS) {
       expect(validateShape(p)).toBe(true);
+    }
+  });
+  it("every project carries timeline, client and three outcome metrics", () => {
+    for (const p of PROJECTS) {
+      expect(Boolean(p.timeline?.trim())).toBe(true);
+      expect(Boolean(p.client?.trim())).toBe(true);
+      expect(p.highlights).toHaveLength(3);
+      for (const h of p.highlights) {
+        expect(Boolean(h.value?.trim())).toBe(true);
+        expect(Boolean(h.label?.trim())).toBe(true);
+      }
     }
   });
 });
