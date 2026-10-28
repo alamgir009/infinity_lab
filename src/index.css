@@ -195,18 +195,19 @@
     mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 40%, transparent 75%);
   }
 
-  /* Fluid display size for page-level headlines. */
+  /* Fluid display size for page-level headlines.
+     Tracking tuned for Manrope's slightly wider geometric metrics. */
   .type-display {
     font-size: clamp(2.25rem, 1.8rem + 2.2vw, 3.75rem);
     line-height: 1.06;
-    letter-spacing: -0.022em;
-    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-weight: 800;
   }
 
   .type-heading {
     font-size: clamp(1.625rem, 1.35rem + 1.3vw, 2.125rem);
     line-height: 1.15;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.02em;
     font-weight: 700;
   }
 

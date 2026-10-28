@@ -54,7 +54,7 @@ export default function ProjectCard({ project, detailed = false }) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-0.5 inline-flex min-h-[36px] items-center text-xs text-text-muted hover:text-brand"
+          className="mt-0.5 inline-flex min-h-[36px] items-center font-mono text-xs text-text-muted hover:text-brand"
         >
           {domain}
         </a>
@@ -63,7 +63,7 @@ export default function ProjectCard({ project, detailed = false }) {
         {detailed && (timeline || client) && (
           <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs">
             {timeline && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border-subtle bg-brand-chip px-2.5 py-0.5 font-semibold text-brand-chip-text">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border-subtle bg-brand-chip px-2.5 py-0.5 font-mono text-[11px] font-semibold text-brand-chip-text">
                 <FiClock size={11} aria-hidden="true" />
                 {timeline}
               </span>
@@ -97,7 +97,7 @@ export default function ProjectCard({ project, detailed = false }) {
                   <span className="block font-display text-base font-semibold leading-6 tracking-tight text-text-primary [font-variant-numeric:tabular-nums]">
                     {h.value}
                   </span>
-                  <span className="mt-0.5 block text-[11px] font-medium leading-[14px] text-text-muted line-clamp-2">
+                  <span className="mt-0.5 block font-mono text-[10px] font-medium leading-[14px] text-text-muted line-clamp-2">
                     {h.label}
                   </span>
                 </dd>
@@ -126,7 +126,7 @@ export default function ProjectCard({ project, detailed = false }) {
           >
             {techTags.map((t) => (
               <li key={t}>
-                <Badge>{t}</Badge>
+                <Badge className="font-mono">{t}</Badge>
               </li>
             ))}
           </ul>

@@ -263,7 +263,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting" || !hasEndpoint}
-        className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-btn bg-btn-bg px-7 py-3 font-display text-base font-semibold text-btn-text transition-colors duration-150 hover:bg-btn-bg-hover disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-btn bg-btn-bg px-7 py-3 text-base font-semibold text-btn-text transition-colors duration-150 hover:bg-btn-bg-hover disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
         <FiSend aria-hidden="true" className={status === "submitting" ? "animate-spin" : ""} />
         {status === "submitting" ? "Sending your inquiry…" : "Send inquiry"}

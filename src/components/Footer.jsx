@@ -12,7 +12,7 @@ const ROUTES = [
 ];
 
 const headingClass =
-  "font-display text-xs font-semibold uppercase tracking-[0.14em] text-text-on-brand-muted";
+  "font-mono text-xs font-semibold uppercase tracking-[0.08em] text-text-on-brand-muted";
 
 /**
  * Site footer — brand anchor on the theme-aware brand surface (light: white

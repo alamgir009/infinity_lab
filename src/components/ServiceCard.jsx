@@ -43,7 +43,7 @@ export default function ServiceCard({ service, detailed = false }) {
 
         {detailed && service.deliverables && (
           <>
-            <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+            <h4 className="mt-6 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-text-muted">
               What you get
             </h4>
             <ul className="mt-3 space-y-2.5 text-sm text-text-secondary">

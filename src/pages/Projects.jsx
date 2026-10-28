@@ -122,7 +122,7 @@ export default function Projects() {
                   {c.label}
                   <span
                     aria-label={`${count} ${count === 1 ? "project" : "projects"}`}
-                    className={`rounded-full px-2 py-0.5 text-xs font-bold [font-variant-numeric:tabular-nums] ${selected
+                    className={`rounded-full px-2 py-0.5 font-mono text-xs font-bold [font-variant-numeric:tabular-nums] ${selected
                         ? "bg-white text-blue-900"
                         : "bg-surface-sunken text-text-secondary"
                       }`}
@@ -158,8 +158,10 @@ export default function Projects() {
           )}
 
           <p className="mt-10 max-w-3xl text-xs leading-5 text-text-muted">
-            Link availability checked on 2026-10-26. Projects whose domains no
-            longer resolve are kept listed with an explicit{" "}
+            Link availability checked on{" "}
+            <span className="font-mono [font-variant-numeric:tabular-nums]">2026-10-26</span>.
+            Projects whose domains no longer resolve are kept listed with an
+            explicit{" "}
             <span className="font-semibold text-text-secondary">Unverified link</span>{" "}
             badge rather than being silently hidden or claimed as live.
           </p>

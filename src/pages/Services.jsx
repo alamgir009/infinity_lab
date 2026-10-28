@@ -90,7 +90,7 @@ export default function Services() {
               title="Stacks we build on"
               lead="Named tools and frameworks across every engineering discipline — chosen per project, the observable ones already in production."
             />
-            <div className="flex shrink-0 items-center gap-5 pb-1 text-[11px] font-semibold uppercase tracking-wider">
+            <div className="flex shrink-0 items-center gap-5 pb-1 font-mono text-[11px] font-semibold uppercase tracking-[0.08em]">
               <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                 <span className="inline-block size-2 rounded-full bg-emerald-500" />
                 Delivered builds
@@ -119,7 +119,7 @@ export default function Services() {
                     <h3 className="font-display text-sm font-semibold tracking-tight text-text-primary">
                       {g}
                     </h3>
-                    <span className={`ml-auto rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${chip}`}>
+                    <span className={`ml-auto rounded-full px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-widest ${chip}`}>
                       {items.length}
                     </span>
                   </div>

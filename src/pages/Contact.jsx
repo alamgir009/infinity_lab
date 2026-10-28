@@ -85,7 +85,7 @@ export default function Contact() {
                         <Icon size={18} aria-hidden="true" />
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">
+                        <span className="block font-mono text-xs font-semibold uppercase tracking-[0.08em] text-text-muted">
                           {c.label}
                         </span>
                         <span className="block text-sm font-semibold text-text-primary break-all">
@@ -103,7 +103,7 @@ export default function Contact() {
                     <FiMapPin size={18} aria-hidden="true" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">
+                    <span className="block font-mono text-xs font-semibold uppercase tracking-[0.08em] text-text-muted">
                       Location
                     </span>
                     <span className="block text-sm font-semibold text-text-primary">

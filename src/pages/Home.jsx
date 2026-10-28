@@ -456,7 +456,7 @@ function MethodStepCard({ phase, connector = "none" }) {
             </span>
             <span
               aria-hidden="true"
-              className="font-display text-xs font-semibold tracking-[0.2em] text-text-muted"
+              className="font-mono text-xs font-semibold tracking-[0.2em] text-text-muted"
             >
               {String(phase.step).padStart(2, "0")}
             </span>

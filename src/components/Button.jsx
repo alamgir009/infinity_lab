@@ -4,7 +4,7 @@ import Badge from "./ui/Badge";
 
 /* Standardized CTA variants, token-driven so they adapt to light/dark. */
 const base =
-  "group/cta inline-flex items-center justify-center gap-2 rounded-btn font-display font-semibold transition-[background-color,box-shadow] duration-150 shadow-xs";
+  "group/cta inline-flex items-center justify-center gap-2 rounded-btn font-semibold transition-[background-color,box-shadow] duration-150 shadow-xs";
 const sizes = {
   md: "min-h-[44px] px-5 py-2 text-sm",
   lg: "min-h-[48px] px-7 py-3 text-base",

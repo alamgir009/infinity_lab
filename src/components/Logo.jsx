@@ -1,6 +1,6 @@
 /**
  * Bespoke brand mark for Infinity Lab: the infinity loop drawn as one stroke
- * on a brand-gradient tile, paired with a hard-cased wordmark.
+ * on a brand-gradient tile, paired with a hard-cased Inter wordmark.
  *
  * @param {{ className?: string, onBrand?: boolean, size?: "md"|"lg" }} props
  * `onBrand` — rendered on a brand surface (hero/footer): theme-aware text
@@ -34,11 +34,11 @@ export default function Logo({ className = "", onBrand = false, size = "md" }) {
         />
       </svg>
       <span
-        className={`font-display font-bold tracking-tight ${
+        className={`font-sans font-bold tracking-tight ${
           size === "lg" ? "text-xl" : "text-lg"
         } ${onBrand ? "text-text-on-brand" : "text-text-primary"}`}
       >
-        Infinity{" "}
+        Infinity
         <span className={onBrand ? "text-brand dark:text-accent-gold" : "text-brand"}>
           Lab
         </span>
