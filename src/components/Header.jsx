@@ -82,14 +82,14 @@ export default function Header() {
       <div className="container-section flex h-[72px] items-center justify-between gap-4">
         <Link
           to="/"
-          className="inline-flex items-center gap-2.5 rounded-btn"
+          className="inline-flex shrink-0 items-center gap-2.5 rounded-btn"
           aria-label="Infinity Lab"
         >
           <Logo />
         </Link>
 
         <nav aria-label="Primary" className="hidden md:block">
-          <ul className="flex items-center gap-6">
+          <ul className="flex items-center gap-4 lg:gap-6">
             {NAV_ITEMS.map((item) => (
               <li key={item.to}>
                 <NavLink
@@ -117,15 +117,15 @@ export default function Header() {
           <button
             type="button"
             ref={menuButtonRef}
-            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-btn border border-border-subtle text-text-secondary"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-btn border border-border-subtle bg-surface-card text-text-secondary shadow-xs transition-colors duration-150 hover:border-border-strong hover:bg-surface-sunken focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((o) => !o)}
           >
             {open ? (
-              <FiX size={22} aria-hidden="true" />
+              <FiX size={20} aria-hidden="true" className="shrink-0" />
             ) : (
-              <FiMenu size={22} aria-hidden="true" />
+              <FiMenu size={20} aria-hidden="true" className="shrink-0" />
             )}
             <span className="sr-only">
               {open ? "Close navigation menu" : "Open navigation menu"}

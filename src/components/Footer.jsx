@@ -25,8 +25,11 @@ export default function Footer() {
       <div className="container-section grid gap-12 py-16 md:grid-cols-12 md:gap-8">
         {/* Brand */}
         <div className="md:col-span-5">
-          <Link to="/" className="inline-flex rounded-btn">
-            <Logo onBrand />
+          <Link
+            to="/"
+            className="inline-flex rounded-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Logo onBrand size="lg" />
             <span className="sr-only">Infinity Lab — home</span>
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-6">
@@ -35,7 +38,7 @@ export default function Footer() {
           <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-xs">
             <div className="flex items-center gap-2">
               <dt className="sr-only">Founded</dt>
-              <FiClock aria-hidden="true" className="size-3.5 text-text-on-brand-muted" />
+              <FiClock aria-hidden="true" className="size-4 shrink-0 text-text-on-brand-muted" />
               <dd>
                 Est. {SITE.founded} · Software engineering, India
               </dd>
@@ -84,7 +87,7 @@ export default function Footer() {
             </li>
             {CONTACT.address && (
               <li className="flex items-start gap-3">
-                <FiMapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-text-on-brand-muted" />
+                <FiMapPin aria-hidden="true" className="mt-1 size-4 shrink-0 text-text-on-brand-muted" />
                 <span className="pt-0.5 text-text-on-brand-muted">{CONTACT.address}</span>
               </li>
             )}

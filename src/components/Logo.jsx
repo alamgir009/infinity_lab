@@ -1,47 +1,56 @@
+import markWebp from "../assets/brand/inf-lab-mark.webp";
+import markPng from "../assets/brand/inf-lab-mark.png";
+
 /**
- * Bespoke brand mark for Infinity Lab: the infinity loop drawn as one stroke
- * on a brand-gradient tile, paired with a hard-cased Inter wordmark.
+ * Brand lockup: the gradient infinity mark (optimised WebP with a high-DPI
+ * PNG fallback) paired with a monochrome Inter wordmark.
+ *
+ * Engineered with fintech-grade optical alignment and responsive scaling
+ * across mobile, tablet, laptop, and 4K desktop screens.
  *
  * @param {{ className?: string, onBrand?: boolean, size?: "md"|"lg" }} props
  * `onBrand` — rendered on a brand surface (hero/footer): theme-aware text
- * (dark text on the light surface, light text on the navy surface).
+ * (dark text on the light surface, light text on the obsidian surface).
  */
 export default function Logo({ className = "", onBrand = false, size = "md" }) {
-  const tile = size === "lg" ? 44 : 36;
+  const isLg = size === "lg";
+
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <svg
-        width={tile}
-        height={tile}
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <defs>
-          <linearGradient id="ilg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#1D4ED8" />
-            <stop offset="100%" stopColor="#4F86F7" />
-          </linearGradient>
-        </defs>
-        <rect width="48" height="48" rx="12" fill="url(#ilg)" />
-        <path
-          d="M24 24c1.8-3 3.4-5.6 7-5.6 3.5 0 6.3 2.5 6.3 5.6s-2.8 5.6-6.3 5.6c-3.6 0-5.2-2.6-7-5.6zm0 0c-1.8 3-3.4 5.6-7 5.6-3.5 0-6.3-2.5-6.3-5.6s2.8-5.6 6.3-5.6c3.6 0 5.2 2.6 7 5.6z"
-          stroke="#fff"
-          strokeWidth="2.4"
-          strokeLinecap="round"
+    <span
+      className={`inline-flex shrink-0 items-center select-none ${
+        isLg ? "gap-2.5 sm:gap-3" : "gap-2 sm:gap-2.5 lg:gap-3"
+      } ${className}`}
+    >
+      <picture className="flex shrink-0 items-center">
+        <source
+          srcSet={markWebp}
+          type="image/webp"
+          media="(max-resolution: 1.5dppx)"
         />
-      </svg>
+        <img
+          src={markPng}
+          width="242"
+          height="128"
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          draggable={false}
+          className={`block w-auto select-none pointer-events-none transition-transform duration-150 dark:brightness-110 sm:dark:brightness-125 ${
+            isLg
+              ? "h-[26px] sm:h-[30px] lg:h-[32px]"
+              : "h-[22px] xs:h-[24px] sm:h-[26px] lg:h-[27px]"
+          }`}
+        />
+      </picture>
       <span
-        className={`font-sans font-bold tracking-tight ${
-          size === "lg" ? "text-xl" : "text-lg"
+        className={`whitespace-nowrap font-sans font-bold tracking-tight leading-none ${
+          isLg
+            ? "text-lg sm:text-xl lg:text-[22px]"
+            : "text-[16.5px] sm:text-[18px] lg:text-[18.5px]"
         } ${onBrand ? "text-text-on-brand" : "text-text-primary"}`}
       >
-        Infinity
-        <span className={onBrand ? "text-brand dark:text-accent-gold" : "text-brand"}>
-          Lab
-        </span>
+        Infinity Lab
       </span>
     </span>
   );

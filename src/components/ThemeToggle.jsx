@@ -19,11 +19,11 @@ export default function ThemeToggle() {
       onClick={() => setTheme(next)}
       aria-label={`Colour theme: ${LABELS[pref]}. Switch to ${LABELS[next]} theme`}
       title={`Theme: ${LABELS[pref]}`}
-      className="inline-flex h-11 min-w-[40px] items-center justify-center rounded-btn border border-border-subtle bg-surface-card px-3.5 shadow-xs transition-colors duration-150 hover:border-border-strong hover:bg-surface-sunken"
+      className="inline-flex h-11 min-w-[44px] items-center justify-center rounded-btn border border-border-subtle bg-surface-card px-3.5 shadow-xs transition-colors duration-150 hover:border-border-strong hover:bg-surface-sunken focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {/* key=pref remounts the glyph so the swap animation replays */}
-      <span key={pref} className="theme-icon-swap inline-flex" aria-hidden="true">
-        <Icon size={15} />
+      <span key={pref} className="theme-icon-swap inline-flex items-center justify-center" aria-hidden="true">
+        <Icon size={17} className="shrink-0" />
       </span>
       <span className="sr-only">
         Colour theme: {LABELS[pref]}. Switch to {LABELS[next]} theme
