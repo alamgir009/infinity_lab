@@ -29,9 +29,9 @@ export const SITE = {
 };
 
 export const CONTACT = {
-  email: import.meta.env.VITE_CONTACT_EMAIL || "info@iapro.in",
-  phone: import.meta.env.VITE_CONTACT_PHONE || "+91 9239252150",
-  whatsapp: import.meta.env.VITE_CONTACT_WHATSAPP || "+91 9239252150",
+  email: import.meta.env.VITE_CONTACT_EMAIL || "info@infinitylab.co.in",
+  phone: import.meta.env.VITE_CONTACT_PHONE || "+91 9851109954",
+  whatsapp: import.meta.env.VITE_CONTACT_WHATSAPP || "+91 9851109954",
   // Display address rendered on the Contact page and footer. Intentionally
   // empty by default: the company's public location is not currently
   // verifiable from supplied sources, and inventing one is not allowed.

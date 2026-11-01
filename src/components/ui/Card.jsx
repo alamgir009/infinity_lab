@@ -1,12 +1,10 @@
 /**
- * Shared card primitive: hairline border, token elevation, hover lift.
- * Keeps every card on the site visually consistent (services, projects,
- * engagement models) with equal-height support via flex utilities.
+ * Shared card primitive: fintech-grade elevated panel with micro-hairline border,
+ * dark-mode top rim reflection, smooth multi-layer ambient shadow, and fluid hover lift.
  *
  * @param {object} props
- * @param {boolean} [props.interactive] Hover elevation + accent hairline.
- * @param {string} [props.className]     Extra classes; include h-full or
- *                                       flex utilities as needed.
+ * @param {boolean} [props.interactive] Hover elevation + subtle border illumination.
+ * @param {string} [props.className]     Extra classes; include h-full or flex utilities as needed.
  * @param {import("react").ReactNode} props.children
  */
 export default function Card({
@@ -17,10 +15,10 @@ export default function Card({
 }) {
   return (
     <div
-      className={`group/card relative flex flex-col overflow-hidden rounded-card border border-border-subtle bg-surface-card ${
+      className={`group/card relative flex flex-col overflow-hidden rounded-card border border-border-subtle bg-surface-card card-rim shadow-card ${
         interactive
-          ? "shadow-card transition-[box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover motion-reduce:hover:translate-y-0"
-          : "shadow-card"
+          ? "transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-card-hover dark:hover:border-slate-700/80"
+          : ""
       } ${className}`}
       {...rest}
     >

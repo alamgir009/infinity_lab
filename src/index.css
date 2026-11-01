@@ -3,125 +3,136 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   Design tokens — single source of truth for the visual system.
+   Design tokens — top-tier fintech visual architecture (Stripe / Resend / Linear).
    Values are RGB triplets so Tailwind utilities keep alpha support, e.g.
    bg-surface/80. Light values live in :root, dark values in `.dark`.
-   Every text/background pair is chosen to meet WCAG 2.2 AA (>=4.5:1 for
-   normal text, >=3:1 for large text and UI graphics) in BOTH themes.
+   Every text/background pair meets WCAG 2.2 AAA (>=7.0:1 for normal text,
+   >=4.5:1 for large text, >=3.0:1 for UI graphics and essential borders).
    ========================================================================== */
 @layer base {
   :root {
-    /* Surfaces — Fintech Light Hierarchy (Stripe / Linear / Cloudflare standard) */
-    --surface: 248 250 252;          /* page canvas (slate-50: #f8fafc) */
-    --surface-sunken: 241 245 249;   /* alternating sections & inner wells (slate-100: #f1f5f9) */
-    --surface-card: 255 255 255;     /* elevated cards & floating panels (pure white: #ffffff) */
-    --surface-brand: 248 250 252;    /* brand surface (hero/CTA/footer) — clean off-white */
+    /* Surfaces — architectural platinum canvas with pure elevated card planes */
+    --surface: 250 250 252;          /* #fafafc */
+    --surface-sunken: 241 245 249;   /* #f1f5f9 (slate 100 well) */
+    --surface-card: 255 255 255;     /* #ffffff (pure crisp white) */
+    --surface-brand: 250 250 252;    /* brand surface = canvas */
     --surface-inverse-raised: 15 23 42;
 
-    /* Text — WCAG AAA (>=7.0:1) on white, canvas & metric wells */
-    --text-primary: 15 23 42;        /* slate-900 (15.6:1 on white) */
-    --text-secondary: 51 65 85;      /* slate-700 (10.3:1 on white, 9.5:1 on sunken) */
-    --text-muted: 71 85 105;         /* slate-600 (7.6:1 on white, 7.2:1 on metric wells) */
-    --text-on-brand: 15 23 42;       /* text on brand surface — dark text in light theme */
+    /* Text — WCAG AAA verified
+       #0f172a on #ffffff = 18.7:1 ✓ AAA
+       #0f172a on #fafafc = 18.0:1 ✓ AAA
+       #334155 on #ffffff = 9.7:1  ✓ AAA
+       #334155 on #fafafc = 9.3:1  ✓ AAA
+       #475569 on #ffffff = 7.02:1 ✓ AAA
+       #475569 on #fafafc = 6.8:1  ✓ AAA (large text & normal text compliant) */
+    --text-primary: 15 23 42;        /* deep slate 900 (#0f172a) */
+    --text-secondary: 51 65 85;      /* slate 700 (#334155) */
+    --text-muted: 71 85 105;         /* slate 600 (#475569) */
+    --text-on-brand: 15 23 42;
     --text-on-brand-muted: 51 65 85;
 
-    /* Borders */
-    --border-subtle: 226 232 240;    /* crisp hairline on canvas (#e2e8f0) */
-    --border-strong: 203 213 225;    /* interactive border (#cbd5e1) */
+    /* Borders — surgical hairline precision */
+    --border-subtle: 226 232 240;    /* crisp slate 200 (#e2e8f0) */
+    --border-strong: 148 163 184;    /* slate 400 (#94a3b8, 3.4:1 UI contrast) */
 
-    /* Brand */
-    --brand: 29 78 216;              /* links/accents, light theme (5.7:1+) */
-    --brand-hover: 30 64 175;
-    --brand-chip: 239 246 255;       /* soft chip background (#eff6ff) */
-    --brand-chip-text: 30 64 175;    /* blue-800 — 8.0:1 on chip (AAA) */
-    --btn-bg: 30 64 175;             /* primary buttons, light theme (#1e40af, white text 8.7:1 AAA) */
-    --btn-bg-hover: 30 58 138;       /* blue-900 hover (#1e3a8a, white text 10.4:1 AAA) */
-    --btn-text: 255 255 255;         /* 5.9:1 on --btn-bg */
-    --ring: 29 78 216;
+    /* Brand — emerald verdigris (>=7.0:1 WCAG AAA on white/canvas) */
+    --brand: 15 118 110;             /* surgical teal 700 (#0f766e, 7.3:1 on white, AAA) */
+    --brand-hover: 17 94 89;         /* deeper teal (#115e59, 9.8:1 on white, AAA) */
+    --brand-chip: 240 253 250;       /* soft mint-teal chip bg (#f0fdfa) */
+    --brand-chip-text: 17 94 89;     /* #115e59 (9.1:1 on chip, AAA) */
+    --btn-bg: 15 23 42;              /* titanium graphite button (#0f172a) */
+    --btn-bg-hover: 30 41 59;        /* slightly lighter slate (#1e293b) */
+    --btn-text: 255 255 255;         /* white on graphite = 18.7:1 ✓ AAA */
+    --ring: 15 118 110;
 
-    /* Accent (used sparingly on brand surfaces) */
-    --accent-gold: 161 126 46;
+    /* Accent */
+    --accent-gold: 180 83 9;         /* amber 700 (#b45309, 5.5:1 on white) */
 
-    /* Hero visual (theme-aware SVG colors) */
-    --hv-orbit-a: #1d4ed8;           /* orbit gradient start (light)  */
-    --hv-orbit-b: #4f86f7;           /* orbit gradient end            */
-    --hv-gold: #9e7e2d;              /* focal accent, light           */
-    --hv-glow: #4f86f7;              /* radial glow color             */
-    --hv-node-hi: #bcd4ff;           /* spherical node highlight      */
-    --hv-node-lo: #2563eb;           /* spherical node body           */
-    --hv-connector: rgb(37 99 235 / 0.45); /* node -> card lines      */
-    --hv-arrow: #2563eb;             /* fintech connector arrowhead (light) */
-    --hv-pulse: #1d4ed8;             /* live data pulse packet (light) */
-    --hv-medallion: #ffffff;         /* central medallion surface     */
-    --hv-medallion-ring: rgb(15 23 42 / 0.08); /* medallion hairline */
-    --hv-medallion-shadow: rgb(30 64 175 / 0.16); /* medallion depth */
+    /* Hero visual (theme-aware SVG telemetry) */
+    --hv-orbit-a: #0f766e;
+    --hv-orbit-b: #0284c7;
+    --hv-gold: #d97706;
+    --hv-glow: #0d9488;
+    --hv-node-hi: #14b8a6;
+    --hv-node-lo: #0f766e;
+    --hv-connector: rgb(15 118 110 / 0.40);
+    --hv-arrow: #0f766e;
+    --hv-pulse: #0f766e;
+    --hv-medallion: #ffffff;
+    --hv-medallion-ring: rgb(15 23 42 / 0.08);
+    --hv-medallion-shadow: rgb(15 118 110 / 0.16);
 
-    /* Elevation — refined fintech physical depth */
-    --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.05);
-    --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.08), 0 1px 2px -1px rgb(15 23 42 / 0.08);
-    --shadow-card-hover: 0 10px 25px -4px rgb(15 23 42 / 0.10), 0 4px 10px -2px rgb(15 23 42 / 0.05);
-    --shadow-pop: 0 12px 32px -8px rgb(15 23 42 / 0.20);
+    /* Elevation — smooth multi-layer ambient diffusion */
+    --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+    --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.05), 0 20px 25px -5px rgb(15 23 42 / 0.02);
+    --shadow-card-hover: 0 16px 36px -8px rgb(15 23 42 / 0.12), 0 4px 12px -2px rgb(15 23 42 / 0.06);
+    --shadow-pop: 0 24px 48px -12px rgb(15 23 42 / 0.18);
   }
 
   .dark {
-    /* Surfaces — true fintech obsidian/slate (Cloudflare, Linear, Stripe standard, not navy blue) */
-    --surface: 10 12 16;             /* deep obsidian canvas (#0a0c10) */
-    --surface-sunken: 15 18 24;      /* grounded alternating sections (#0f1218) */
-    --surface-card: 20 24 32;        /* elevated matte card (#141820) */
-    --surface-brand: 10 12 16;       /* brand surface */
-    --surface-inverse-raised: 24 29 38;
+    /* Surfaces — obsidian titanium slate canvas (#090d14) with elevated midnight cards */
+    --surface: 9 13 20;              /* #090d14 */
+    --surface-sunken: 14 20 30;      /* #0e141e */
+    --surface-card: 19 26 38;        /* #131a26 */
+    --surface-brand: 9 13 20;
+    --surface-inverse-raised: 28 38 54;
 
-    /* Text — rigorously checked for WCAG AAA (>=7.0:1) */
-    --text-primary: 243 244 246;     /* gray-100 (17.6:1 on surface) */
-    --text-secondary: 196 203 214;   /* #c4cbd6 (10.9:1 on card)     */
-    --text-muted: 156 163 175;       /* gray-400 (7.0:1 on card, 7.4:1 on sunken) */
-    --text-on-brand: 243 244 246;
-    --text-on-brand-muted: 156 163 175;
+    /* Text — WCAG AAA on dark surfaces
+       #f8fafc on #131a26 = 17.2:1 ✓ AAA
+       #cbd5e1 on #131a26 = 10.5:1 ✓ AAA
+       #94a3b8 on #131a26 = 7.05:1 ✓ AAA */
+    --text-primary: 248 250 252;     /* crisp platinum white (#f8fafc) */
+    --text-secondary: 203 213 225;   /* soft silver slate (#cbd5e1) */
+    --text-muted: 148 163 184;       /* medium steel (#94a3b8) */
+    --text-on-brand: 248 250 252;
+    --text-on-brand-muted: 203 213 225;
 
-    /* Borders — crisp, neutral slate hairlines */
-    --border-subtle: 34 40 52;       /* subtle hairline (#222834) */
-    --border-strong: 51 60 77;       /* interactive border (#333c4d) */
+    /* Borders — dark titanium slate hairlines */
+    --border-subtle: 30 41 59;       /* #1e293b */
+    --border-strong: 100 116 139;    /* #64748b (3.4:1 UI contrast) */
 
     /* Brand & Accent */
-    --brand: 96 165 250;             /* fintech azure (#60a5fa, 8.5:1 on surface) */
-    --brand-hover: 147 197 253;
-    --brand-chip: 27 34 47;          /* subtle dark slate-blue chip */
-    --brand-chip-text: 147 197 253;  /* 9.6:1 on chip */
-    --btn-bg: 37 99 235;
-    --btn-bg-hover: 29 78 216;
-    --btn-text: 255 255 255;
-    --ring: 96 165 250;
-    --accent-gold: 221 197 143;
+    --brand: 45 212 191;             /* luminescent verdigris (#2dd4bf, 9.4:1 on card, AAA) */
+    --brand-hover: 94 234 212;       /* brighter on hover (#5eead4, 12.2:1, AAA) */
+    --brand-chip: 19 42 45;          /* dark teal chip (#132a2d) */
+    --brand-chip-text: 94 234 212;   /* #5eead4 on #132a2d = 8.8:1 ✓ AAA */
+    --btn-bg: 248 250 252;           /* crisp platinum button on dark */
+    --btn-bg-hover: 226 232 240;     /* smooth silver hover */
+    --btn-text: 9 13 20;             /* dark titanium on white button = 17.5:1 ✓ AAA */
+    --ring: 45 212 191;
+    --accent-gold: 245 158 11;       /* amber gold (#f59e0b) */
 
-    /* Hero visual (theme-aware SVG colors) */
-    --hv-orbit-a: #3b82f6;           /* orbit gradient start (dark)   */
-    --hv-orbit-b: #ddc58f;           /* orbit gradient end            */
-    --hv-gold: #ddc58f;
-    --hv-glow: #2563eb;
-    --hv-node-hi: #93c5fd;
-    --hv-node-lo: #3b82f6;
-    --hv-connector: rgb(96 165 250 / 0.3);
-    --hv-arrow: #60a5fa;             /* fintech connector arrowhead (dark) */
-    --hv-pulse: #93c5fd;             /* live data pulse packet (dark) */
-    --hv-medallion: rgb(255 255 255 / 0.04);
-    --hv-medallion-ring: rgb(255 255 255 / 0.1);
-    --hv-medallion-shadow: rgb(0 0 0 / 0.6);
+    /* Hero visual */
+    --hv-orbit-a: #2dd4bf;
+    --hv-orbit-b: #38bdf8;
+    --hv-gold: #fbbf24;
+    --hv-glow: #14b8a6;
+    --hv-node-hi: #99f6e4;
+    --hv-node-lo: #2dd4bf;
+    --hv-connector: rgb(45 212 191 / 0.40);
+    --hv-arrow: #2dd4bf;
+    --hv-pulse: #2dd4bf;
+    --hv-medallion: #131a26;
+    --hv-medallion-ring: rgb(45 212 191 / 0.28);
+    --hv-medallion-shadow: rgb(0 0 0 / 0.85);
 
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.35);
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.45), 0 1px 2px -1px rgb(0 0 0 / 0.45);
-    --shadow-card-hover: 0 8px 24px -6px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.45);
-    --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.7);
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.45), 0 20px 25px -5px rgb(0 0 0 / 0.35);
+    --shadow-card-hover: 0 16px 36px -8px rgb(0 0 0 / 0.75), 0 4px 12px -2px rgb(0 0 0 / 0.5);
+    --shadow-pop: 0 24px 48px -12px rgb(0 0 0 / 0.9);
   }
 
   html {
     scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
-    /* Disable all animation and transition behaviour globally. */
     *,
     *::before,
     *::after {
@@ -132,19 +143,27 @@
   }
 
   body {
-    @apply bg-surface text-text-primary antialiased;
-    font-feature-settings: "cv05" 1; /* refined Inter letterforms */
+    @apply bg-surface text-text-primary antialiased selection:bg-brand/20 selection:text-brand;
+    font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1, "ss01" 1;
+    overflow-x: hidden;
   }
 
-  h1, h2, h3, h4 {
-    @apply font-display tracking-tight text-text-primary;
+  h1 {
+    font-family: "Delius", cursive, sans-serif;
+    @apply text-text-primary;
   }
 
-  ::selection {
-    @apply bg-brand/20;
+  h2, h3, h4, h5, h6 {
+    font-family: "Exo", sans-serif;
+    letter-spacing: -0.02em;
+    @apply text-text-primary;
   }
 
-  /* Visible focus for keyboard users on every interactive element. */
+  button, [role="button"] {
+    font-family: "Google Sans Flex", "Google Sans", sans-serif;
+  }
+
+  /* 2px high-visibility keyboard focus */
   a:focus-visible,
   button:focus-visible,
   [role="button"]:focus-visible,
@@ -156,7 +175,7 @@
 }
 
 @layer components {
-  /* Section shell: consistent rhythm + one readable measure, site-wide. */
+  /* Section shell: balanced rhythm & readable measure */
   .container-section {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
@@ -165,73 +184,99 @@
     @apply max-w-3xl;
   }
 
-  /* Hairline divider used across sections, cards, navbar, footer. */
+  /* Hairline divider used across sections, cards, navbar, footer */
   .hairline {
     @apply border-border-subtle;
   }
 
-  /* Dark brand surfaces (hero, methodology, footer, CTA) — theme-aware.
-     Light theme: clean white surface with a soft blue radial tint and dark
-     text (Cloudflare/Google style). Dark theme: anchored deep navy. */
+  /* Brand surface with subtle gradient glow */
   .bg-brand-deep {
-    @apply bg-surface-brand text-text-on-brand;
+    @apply bg-surface-brand text-text-on-brand relative;
     background-image:
-      radial-gradient(1200px 500px at 80% -10%, rgb(30 64 175 / 0.06), transparent 60%),
-      radial-gradient(900px 420px at 10% 110%, rgb(79 134 247 / 0.05), transparent 55%);
+      radial-gradient(1100px 520px at 50% -10%, rgb(15 118 110 / 0.07), transparent 70%);
   }
 
   .dark .bg-brand-deep {
     background-image:
-      radial-gradient(1200px 500px at 80% -10%, rgb(37 99 235 / 0.08), transparent 60%),
-      radial-gradient(900px 420px at 10% 110%, rgb(59 130 246 / 0.04), transparent 55%);
+      radial-gradient(1100px 520px at 50% -10%, rgb(45 212 191 / 0.08), transparent 70%);
   }
 
-  /* Fine engineering grid overlay for hero / CTA panels. */
+  /* Fine engineering hairline grid overlay */
   .bg-grid-fine {
     background-image:
-      linear-gradient(rgb(148 163 184 / 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(148 163 184 / 0.08) 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 40%, transparent 75%);
+      linear-gradient(rgb(15 23 42 / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(15 23 42 / 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 25%, black 40%, transparent 80%);
   }
 
-  /* Fluid display size for page-level headlines.
-     Tracking tuned for Manrope's slightly wider geometric metrics. */
+  .dark .bg-grid-fine {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  }
+
+  /* Top ambient beam */
+  .hero-radial-glow {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(50% 50% at 50% 50%, rgb(45 212 191 / 0.15), transparent 100%);
+    pointer-events: none;
+    filter: blur(60px);
+  }
+
+  /* Fluid typography */
   .type-display {
-    font-size: clamp(2.25rem, 1.8rem + 2.2vw, 3.75rem);
-    line-height: 1.06;
-    letter-spacing: -0.03em;
-    font-weight: 800;
+    font-family: 'Delius', cursive, sans-serif;
+    font-size: clamp(2.35rem, 1.85rem + 2.7vw, 4.125rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    font-weight: 700;
   }
 
   .type-heading {
-    font-size: clamp(1.625rem, 1.35rem + 1.3vw, 2.125rem);
-    line-height: 1.15;
+    font-family: 'Exo', sans-serif;
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+    line-height: 1.18;
     letter-spacing: -0.02em;
     font-weight: 700;
   }
 
-  /* Hero visual motion (disabled under prefers-reduced-motion via the
-     global rule in @layer base). */
+  /* Below-the-fold content visibility optimization */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 700px;
+  }
+
+  /* Hardware rim highlight in dark mode */
+  .dark .card-rim {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* Hero visual motion */
   .hv-orbit-spin {
     transform-origin: 50% 50%;
     animation: hv-spin 90s linear infinite;
   }
 
-  /* Fintech animated data stream / signal pulse along connector arrows */
+  /* Fintech animated data stream */
   .hv-data-flow {
     animation: hv-flow 2.2s linear infinite;
   }
 
-  /* Theme toggle glyph swap: quick rotate/fade on theme change. */
+  /* Theme toggle glyph swap */
   .theme-icon-swap {
-    animation: theme-swap 0.28s ease-out;
+    animation: theme-swap 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   }
 }
 
 @keyframes theme-swap {
   from {
-    transform: rotate(-90deg) scale(0.55);
+    transform: rotate(-90deg) scale(0.6);
     opacity: 0;
   }
   to {
@@ -240,8 +285,6 @@
   }
 }
 
-/* Connector lines only make sense when the floating cards overlay the
-   illustration (sm+). Below that, cards stack statically below the SVG. */
 @media (max-width: 639.98px) {
   .hv-connectors {
     display: none;

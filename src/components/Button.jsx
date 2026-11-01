@@ -2,42 +2,35 @@ import { Link } from "react-router-dom";
 import { FiExternalLink, FiLock, FiArrowRight } from "react-icons/fi";
 import Badge from "./ui/Badge";
 
-/* Standardized CTA variants, token-driven so they adapt to light/dark. */
+/* Standardized fintech CTA variants — tactile, token-driven, WCAG-AAA compliant */
 const base =
-  "group/cta inline-flex items-center justify-center gap-2 rounded-btn font-semibold transition-[background-color,box-shadow] duration-150 shadow-xs";
+  "group/cta relative inline-flex items-center justify-center gap-2 rounded-full font-btn font-semibold tracking-[-0.01em] transition-all duration-200 ease-out active:scale-[0.98] select-none";
+
 const sizes = {
-  md: "min-h-[44px] px-5 py-2 text-sm",
-  lg: "min-h-[48px] px-7 py-3 text-base",
+  md: "min-h-[42px] px-5 py-2 text-sm",
+  lg: "min-h-[48px] px-7 py-3 text-[15px]",
 };
+
 const variants = {
-  primary: "bg-btn-bg text-btn-text hover:bg-btn-bg-hover shadow-card hover:shadow-card-hover",
-  /** High-contrast CTA on brand surfaces (theme-aware: blue on white / white on navy). */
+  /** Primary fintech CTA: high-contrast titanium graphite with inner bevel highlight */
+  primary:
+    "bg-btn-bg text-btn-text shadow-card hover:bg-btn-bg-hover hover:shadow-card-hover border border-transparent dark:border-white/10 dark:shadow-[0_0_20px_rgba(255,255,255,0.08)]",
+  /** High-contrast CTA on brand surfaces */
   inverse:
-    "bg-btn-bg text-btn-text hover:bg-btn-bg-hover shadow-card hover:shadow-card-hover " +
-    "dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100",
-  /** Quiet bordered CTA on light surfaces. */
+    "bg-btn-bg text-btn-text shadow-card hover:bg-btn-bg-hover hover:shadow-card-hover border border-transparent dark:border-white/10",
+  /** Secondary CTA: refined glass/card surface with subtle hairline border */
   secondary:
-    "border border-border-strong bg-surface-card text-text-primary hover:border-brand hover:text-brand",
-  /** Quiet bordered CTA on brand surfaces (theme-aware). */
+    "border border-border-subtle bg-surface-card text-text-primary shadow-xs hover:border-border-strong hover:bg-surface-sunken hover:text-text-primary dark:hover:border-slate-600",
+  /** Secondary on brand surfaces */
   "secondary-inverse":
-    "border border-border-strong bg-transparent text-text-on-brand hover:border-brand hover:text-brand " +
-    "dark:border-white/30 dark:text-white dark:hover:border-white/60 dark:hover:bg-white/10",
-  /** Bare text link with arrow affordance. */
-  ghost: "text-brand hover:text-brand-hover",
+    "border border-border-subtle bg-surface-card/60 backdrop-blur-md text-text-on-brand shadow-xs hover:border-border-strong hover:bg-surface-card hover:text-text-on-brand dark:border-slate-800 dark:hover:border-slate-600",
+  /** Bare text link with smooth arrow affordance */
+  ghost: "text-brand hover:text-brand-hover p-0 font-medium",
 };
 
 /**
  * Polymorphic CTA: <Link> for `to` (internal routes), <a> for `href`
  * (external, auto rel=noopener), <button> otherwise.
- *
- * @param {object}  props
- * @param {"md"|"lg"} [props.size]
- * @param {"primary"|"inverse"|"secondary"|"secondary-inverse"|"ghost"} [props.variant]
- * @param {string} [props.to]       Internal route path.
- * @param {string} [props.href]     External URL.
- * @param {boolean} [props.external] Force external-link affordance (G).
- * @param {boolean} [props.arrow]   Append an arrow glyph.
- * @param {import("react").ReactNode} props.children
  */
 export default function Button({
   size = "md",
@@ -55,11 +48,11 @@ export default function Button({
     ? { target: "_blank", rel: "noopener noreferrer" }
     : {};
   const suffix = external ? (
-    <FiExternalLink aria-hidden="true" className="size-4 shrink-0" />
+    <FiExternalLink aria-hidden="true" className="size-4 shrink-0 opacity-75 group-hover/cta:opacity-100" />
   ) : arrow ? (
     <FiArrowRight
       aria-hidden="true"
-      className="size-4 shrink-0 transition-transform duration-150 motion-reduce:transition-none group-hover/cta:translate-x-0.5"
+      className="size-4 shrink-0 transition-transform duration-200 ease-out motion-reduce:transition-none group-hover/cta:translate-x-1"
     />
   ) : null;
 

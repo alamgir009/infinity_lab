@@ -1,4 +1,4 @@
-import { FiCalendar, FiBox, FiUsers, FiCheckCircle, FiShield } from "react-icons/fi";
+import { FiCalendar, FiBox, FiUsers, FiCheckCircle } from "react-icons/fi";
 import { LuShieldCheck } from "react-icons/lu";
 
 const DEFAULT_BENEFITS = [
@@ -11,7 +11,7 @@ const FALLBACK_ICONS = [FiCalendar, FiBox, FiUsers, LuShieldCheck];
 
 /**
  * EngineeringBenefitsRow — clean horizontally aligned strip with restrained
- * cyan/blue check icons, compact readable typography, and flanking horizontal hairlines.
+ * emerald check icons, compact readable typography, and subtle pill chips.
  */
 export function EngineeringBenefitsRow({ benefits = DEFAULT_BENEFITS, className = "" }) {
   if (!benefits || benefits.length === 0) return null;
@@ -23,11 +23,14 @@ export function EngineeringBenefitsRow({ benefits = DEFAULT_BENEFITS, className 
     >
       <div
         aria-hidden="true"
-        className="hidden h-px flex-1 max-w-[120px] bg-gradient-to-r from-transparent to-border-subtle sm:block md:max-w-xs"
+        className="hidden h-px flex-1 max-w-[100px] bg-gradient-to-r from-transparent to-border-subtle sm:block md:max-w-xs"
       />
-      <ul className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5 text-xs font-semibold text-text-secondary sm:gap-x-9 sm:text-sm">
+      <ul className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs font-semibold sm:text-sm">
         {benefits.map((item) => (
-          <li key={item} className="flex items-center gap-2">
+          <li
+            key={item}
+            className="inline-flex items-center gap-2 rounded-full border border-border-subtle bg-surface-card/80 px-3.5 py-1.5 shadow-xs backdrop-blur-sm dark:bg-surface-card/50"
+          >
             <FiCheckCircle
               aria-hidden="true"
               className="size-4 shrink-0 text-brand"
@@ -38,7 +41,7 @@ export function EngineeringBenefitsRow({ benefits = DEFAULT_BENEFITS, className 
       </ul>
       <div
         aria-hidden="true"
-        className="hidden h-px flex-1 max-w-[120px] bg-gradient-to-l from-transparent to-border-subtle sm:block md:max-w-xs"
+        className="hidden h-px flex-1 max-w-[100px] bg-gradient-to-l from-transparent to-border-subtle sm:block md:max-w-xs"
       />
     </div>
   );
@@ -46,8 +49,8 @@ export function EngineeringBenefitsRow({ benefits = DEFAULT_BENEFITS, className 
 
 /**
  * StatStrip — brand trust metrics and engineering benefits.
- * Features a clean elevated card container, subtle borders,
- * restrained accents, consistent icon containers, and large readable metrics.
+ * Features an elevated fintech telemetry panel, subtle hairlines,
+ * restrained accents, and large tabular numerals.
  *
  * @param {{
  *   stats: Array<{ value: string, label: string, note?: string, detail?: string, icon?: React.ComponentType<{ size?: number, className?: string }> }>,
@@ -57,40 +60,32 @@ export function EngineeringBenefitsRow({ benefits = DEFAULT_BENEFITS, className 
 export default function StatStrip({ stats, benefits = DEFAULT_BENEFITS }) {
   return (
     <div className="w-full">
-      {/* 4 Horizontally aligned statistics cards inside a unified bordered container */}
-      <div className="rounded-2xl border border-border-subtle bg-surface-card shadow-card backdrop-blur-sm dark:bg-surface-card/75 dark:shadow-none">
-        <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 4 Horizontally aligned statistics cells inside a unified bordered container */}
+      <div className="overflow-hidden rounded-card-lg border border-border-subtle bg-surface-card card-rim shadow-card dark:border-slate-800">
+        <dl className="grid grid-cols-1 divide-y divide-border-subtle sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4 lg:divide-y-0">
           {stats.map((s, i) => {
             const Icon = s.icon ?? FALLBACK_ICONS[i % FALLBACK_ICONS.length];
-            const borderClasses =
-              i === 0
-                ? ""
-                : i === 1
-                  ? "border-t border-border-subtle sm:border-t-0 sm:border-l"
-                  : i === 2
-                    ? "border-t border-border-subtle sm:border-t lg:border-t-0 lg:border-l"
-                    : "border-t border-border-subtle sm:border-t sm:border-l lg:border-t-0 lg:border-l";
 
             return (
               <div
                 key={s.label}
-                className={`flex h-full min-w-0 flex-col justify-between p-6 transition-colors duration-150 sm:p-7 lg:p-6 xl:p-7 ${borderClasses}`}
+                className="group relative flex h-full min-w-0 flex-col justify-between p-6 transition-colors duration-200 hover:bg-surface-sunken/40 sm:p-7"
               >
                 <div>
                   <div className="flex items-center gap-3.5">
                     {Icon && (
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-brand-chip text-brand-chip-text dark:bg-surface-sunken dark:text-brand">
-                        <Icon size={19} aria-hidden="true" className="shrink-0" />
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border-subtle bg-brand-chip text-brand-chip-text transition-colors duration-200 group-hover:border-brand/30 dark:bg-surface-sunken dark:text-brand">
+                        <Icon size={20} aria-hidden="true" className="shrink-0" />
                       </div>
                     )}
-                    <span className="block font-display text-3xl font-bold tracking-tight text-text-primary [font-variant-numeric:tabular-nums] sm:text-4xl">
+                    <span className="block font-display text-3xl font-extrabold tracking-tight text-text-primary [font-variant-numeric:tabular-nums] sm:text-4xl">
                       {s.value}
                     </span>
                   </div>
 
                   <dt className="sr-only">{s.label}</dt>
-                  <dd className="mt-3.5">
-                    <span className="block text-sm font-semibold tracking-normal text-text-primary">
+                  <dd className="mt-4">
+                    <span className="block text-sm font-bold tracking-tight text-text-primary">
                       {s.label}
                     </span>
                     <span className="mt-1 block text-xs leading-5 text-text-secondary">
@@ -109,4 +104,3 @@ export default function StatStrip({ stats, benefits = DEFAULT_BENEFITS }) {
     </div>
   );
 }
-
