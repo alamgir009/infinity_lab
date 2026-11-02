@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   FiCheckCircle,
   FiCheckSquare,
@@ -54,136 +55,351 @@ const STATS = [
 
 /** The three disciplines, stated exactly as the hero always has. */
 const CAPABILITIES = [
-  { icon: FiCode, title: "Web platforms", support: "Modern, scalable, secure" },
+  {
+    icon: FiCode,
+    title: "Web platforms",
+    support: "Modern, scalable, secure",
+    angleDeg: -150,
+  },
   {
     icon: FiCloud,
     title: "Cloud & backend",
     support: "Reliable & high performance",
+    angleDeg: -30,
   },
-  { icon: FiSmartphone, title: "Mobile apps", support: "iOS & Android" },
+  {
+    icon: FiSmartphone,
+    title: "Mobile apps",
+    support: "iOS & Android",
+    angleDeg: 90,
+  },
 ];
 
 /**
- * One floating spec card. The same markup serves the phone ledger and the
- * desktop instrument; only the anchor classes change.
+ * 3 nodes at 120° spacing on shared orbit radius R = 32.5cqw.
+ * In a 500x500 coordinate space (center 250, 250):
+ * - Node 0 (-150°): cos = -0.866, sin = -0.5  -> left: calc(50% - 28.15cqw), top: calc(50% - 16.25cqw)
+ * - Node 1 (-30°):  cos = +0.866, sin = -0.5  -> left: calc(50% + 28.15cqw), top: calc(50% - 16.25cqw)
+ * - Node 2 (90°):   cos = 0,      sin = +1.0  -> left: 50%,                 top: calc(50% + 32.5cqw)
  */
-function HeroCard({ icon: Icon, title, support, anchor, connector }) {
+const ORBITAL_NODES = [
+  {
+    ...CAPABILITIES[0],
+    left: "calc(50% - 28.15cqw)",
+    top: "calc(50% - 16.25cqw)",
+    x1: 203,
+    y1: 223,
+    x2: 138,
+    y2: 185,
+  },
+  {
+    ...CAPABILITIES[1],
+    left: "calc(50% + 28.15cqw)",
+    top: "calc(50% - 16.25cqw)",
+    x1: 297,
+    y1: 223,
+    x2: 362,
+    y2: 185,
+  },
+  {
+    ...CAPABILITIES[2],
+    left: "50%",
+    top: "calc(50% + 32.5cqw)",
+    x1: 250,
+    y1: 304,
+    x2: 250,
+    y2: 378,
+  },
+];
+
+/**
+ * Orbital Capability Card:
+ * - Desktop/tablet (≥640px): full glass card with 1px hairline border, brand icon tile,
+ *   600-weight title and high-contrast muted subtitle.
+ * - Mobile (<640px): compact 44px icon-only glass chip with aria-label + visible label below.
+ */
+function OrbitalCard({ icon: Icon, title, support }) {
   return (
-    <li className={`relative ${anchor}`}>
-      <div className="flex items-center gap-2.5 rounded-card border border-border-subtle bg-surface-card py-3 pl-2.5 pr-3.5 shadow-card sm:w-[204px]">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-[3px] border border-border-subtle bg-brand-soft text-brand-soft-text">
-          <Icon size={15} aria-hidden="true" />
+    <div
+      role="group"
+      tabIndex={0}
+      aria-label={`${title}: ${support}`}
+      className="group relative select-none rounded-[6px] transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 hover:scale-[1.02]"
+    >
+      {/* ── Desktop & Tablet Card (≥640px) ─────────────────────────── */}
+      <div className="hidden sm:flex items-center gap-2.5 rounded-[6px] border border-slate-200/90 bg-white/80 px-3 py-2.5 shadow-[0_8px_30px_-12px_rgba(30,27,75,0.18)] backdrop-blur-md transition-colors duration-200 hover:border-slate-300 dark:border-white/10 dark:bg-[#14151A]/80 dark:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] dark:hover:border-white/20 sm:w-[34cqw] sm:min-w-[164px] sm:max-w-[188px]">
+        {/* Brand-tinted icon tile */}
+        <span
+          aria-hidden="true"
+          className="flex size-8 shrink-0 items-center justify-center rounded-[4px] border border-indigo-200/60 bg-gradient-to-br from-indigo-50 to-purple-100/70 text-indigo-700 dark:border-indigo-400/20 dark:from-indigo-950/70 dark:to-purple-900/40 dark:text-indigo-300"
+        >
+          <Icon size={15} />
         </span>
 
+        {/* Text lockup */}
         <span className="min-w-0">
-          <span className="block text-[13px] font-semibold leading-4 tracking-[-0.01em] text-text-primary">
+          <span className="block truncate text-[12.5px] font-semibold leading-tight tracking-[-0.01em] text-[#0B0B0F] dark:text-[#F5F6F8]">
             {title}
           </span>
-          <span className="mt-0.5 block text-[10.5px] leading-4 text-text-muted">
+          <span className="mt-0.5 block truncate text-[10.5px] leading-tight text-[#5B606B] dark:text-[#9AA0AC]">
             {support}
           </span>
         </span>
       </div>
 
-      {connector === "right" && (
-        <>
+      {/* ── Mobile Compact Chip (<640px) ───────────────────────────── */}
+      <div className="flex sm:hidden flex-col items-center justify-center">
+        <div className="flex size-11 items-center justify-center rounded-full border border-slate-200/90 bg-white/85 text-indigo-700 shadow-[0_6px_20px_-6px_rgba(30,27,75,0.22)] backdrop-blur-md transition-colors dark:border-white/15 dark:bg-[#14151A]/85 dark:text-indigo-300 dark:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.1)]">
           <span
             aria-hidden="true"
-            className="absolute right-[-14px] top-1/2 hidden h-px w-3.5 -translate-y-1/2 bg-border-strong/35 sm:block"
-          />
-          <span
-            aria-hidden="true"
-            className="absolute right-[-16px] top-1/2 hidden size-[3px] -translate-y-1/2 rounded-full bg-border-strong/60 sm:block"
-          />
-        </>
-      )}
-      {connector === "left" && (
-        <>
-          <span
-            aria-hidden="true"
-            className="absolute left-[-14px] top-1/2 hidden h-px w-3.5 -translate-y-1/2 bg-border-strong/35 sm:block"
-          />
-          <span
-            aria-hidden="true"
-            className="absolute left-[-16px] top-1/2 hidden size-[3px] -translate-y-1/2 rounded-full bg-border-strong/60 sm:block"
-          />
-        </>
-      )}
-    </li>
+            className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-50 to-purple-100/80 dark:from-indigo-950/70 dark:to-purple-900/40"
+          >
+            <Icon size={16} />
+          </span>
+        </div>
+        <span
+          aria-hidden="true"
+          className="hidden xs:block mt-1 max-w-[76px] truncate text-center text-[9.5px] font-medium leading-tight text-[#0B0B0F] dark:text-[#F5F6F8]"
+        >
+          {title}
+        </span>
+      </div>
+    </div>
   );
 }
 
-/** Where each card sits on the 480px stage, and which edge carries its tick. */
-const CARD_ANCHORS = [
-  "sm:absolute sm:left-0 sm:top-[9%]",
-  "sm:absolute sm:right-0 sm:top-[44%]",
-  "sm:absolute sm:left-[3%] sm:top-[78%]",
-];
-const CARD_CONNECTORS = ["right", "left", "right"];
-
 /**
- * The infinity instrument. A fixed 480px stage holds everything: three
- * hairline orbits, the brand mark on a paper medallion, and one spec card
- * per ring quadrant. Below 640px the rings disappear and the same three
- * cards read as the capability ledger.
- *
- * Static by construction — no filters, no gradients, no animation, no
- * layout reads. The whole thing is one SVG plus three divs.
+ * Fintech-grade Orbital Instrument:
+ * - Single square container sized proportionally via container queries (cqw).
+ * - Exact center: logo disc (20cqw) with brand gradient glow and subtle pulse, z-20.
+ * - 3 concentric rings (inner dotted, mid hairline, outer dotted) with token strokes.
+ * - Rotating conic sweep on mid ring.
+ * - 4 satellites on inner/outer rings at different speeds and directions (40s, -70s, 90s, -50s).
+ * - 3 capability cards spaced at 120° on shared radius R = 32.5cqw rotating clockwise (60s),
+ *   counter-rotating counter-clockwise (-60s) so text remains upright.
+ * - Strict No-Overlap Rule: R - cardWidth/2 >= logoRadius + 8px at every angle.
+ * - Rotation pauses on hover/focus-within and when tab is hidden.
+ * - Reduced motion safe: animations disabled, cards fixed at -150°/-30°/90°.
  */
 function HeroInstrument() {
+  const [isTabHidden, setIsTabHidden] = useState(false);
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      setIsTabHidden(document.hidden);
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
+  const isPaused = isTabHidden;
+
   return (
-    <div className="relative mx-auto w-full max-w-[480px]">
-      {/* Orbits. Decorative: the cards carry the meaning. */}
+    <div
+      className="orbital-container relative mx-auto aspect-square w-full max-w-[480px] sm:max-w-[540px] select-none"
+      style={{ aspectRatio: "1 / 1" }}
+    >
+      {/* ── 1. Concentric Rings (Concentric at exact center 250, 250) ── */}
       <svg
-        viewBox="0 0 480 480"
-        className="absolute inset-0 hidden h-full w-full text-border-strong sm:block"
+        viewBox="0 0 500 500"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none"
         fill="none"
-        stroke="currentColor"
         aria-hidden="true"
       >
-        <circle cx="240" cy="240" r="206" strokeWidth="1" strokeDasharray="1 7" opacity="0.45" />
-        <circle cx="240" cy="240" r="164" strokeWidth="1" opacity="0.5" />
-        <circle cx="240" cy="240" r="122" strokeWidth="1" strokeDasharray="1 6" opacity="0.32" />
-        <circle cx="240" cy="240" r="78" strokeWidth="1" strokeDasharray="1 5" opacity="0.32" />
-        <g fill="currentColor" stroke="none">
-          <circle cx="343" cy="62" r="2" opacity="0.6" />
-          <circle cx="343" cy="418" r="2" opacity="0.6" />
-          <circle cx="46" cy="311" r="2" opacity="0.6" />
-        </g>
+        {/* Outer dotted ring: r = 220 (44cqw) */}
+        <circle
+          cx="250"
+          cy="250"
+          r="220"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeDasharray="2 7"
+          className="text-slate-900/[0.15] dark:text-white/10"
+        />
+
+        {/* Mid solid hairline ring: r = 162.5 (32.5cqw) */}
+        <circle
+          cx="250"
+          cy="250"
+          r="162.5"
+          stroke="currentColor"
+          strokeWidth="1"
+          className="text-slate-900/[0.15] dark:text-white/10"
+        />
+
+        {/* Inner dotted ring: r = 110 (22cqw) */}
+        <circle
+          cx="250"
+          cy="250"
+          r="110"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeDasharray="1.5 5"
+          className="text-slate-900/[0.15] dark:text-white/10"
+        />
       </svg>
 
-      {/* Medallion — the real brand mark, not a redrawn one. */}
+      {/* ── 2. Faint rotating sweep on mid ring ─────────────────────── */}
       <div
-        className="absolute left-1/2 top-1/2 hidden size-[104px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border-subtle bg-surface-card shadow-card sm:flex"
+        className="orbital-rotates pointer-events-none absolute inset-0 will-change-transform"
+        style={{
+          animation: "orbit-spin 25s linear infinite",
+          animationPlayState: isPaused ? "paused" : "running",
+        }}
         aria-hidden="true"
       >
+        <svg viewBox="0 0 500 500" className="h-full w-full" fill="none">
+          <defs>
+            <linearGradient id="orbit-mid-sweep" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.4" />
+              <stop offset="40%" stopColor="#2f4bff" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <circle
+            cx="250"
+            cy="250"
+            r="162.5"
+            stroke="url(#orbit-mid-sweep)"
+            strokeWidth="1.5"
+            strokeDasharray="85 255"
+          />
+        </svg>
+      </div>
+
+      {/* ── 3. Satellites on inner & outer rings ───────────────────── */}
+      {/* Sat 1: Inner ring (22cqw), 40s clockwise */}
+      <div
+        className="orbital-rotates pointer-events-none absolute inset-0 will-change-transform"
+        style={{
+          animation: "orbit-spin 40s linear infinite",
+          animationPlayState: isPaused ? "paused" : "running",
+        }}
+        aria-hidden="true"
+      >
+        <span className="absolute left-1/2 top-[calc(50%-22cqw)] size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/80 shadow-[0_0_6px_rgba(55,48,163,0.7)] dark:bg-brand dark:shadow-[0_0_8px_rgba(165,180,252,0.8)]" />
+      </div>
+
+      {/* Sat 2: Outer ring (44cqw), 70s counter-clockwise (-70s) */}
+      <div
+        className="orbital-rotates pointer-events-none absolute inset-0 will-change-transform"
+        style={{
+          animation: "orbit-counter-spin 70s linear infinite",
+          animationPlayState: isPaused ? "paused" : "running",
+        }}
+        aria-hidden="true"
+      >
+        <span className="absolute left-[calc(50%+44cqw)] top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400/80 shadow-[0_0_6px_rgba(148,163,184,0.5)] dark:bg-white/60 dark:shadow-[0_0_6px_rgba(255,255,255,0.4)]" />
+      </div>
+
+      {/* Sat 3: Outer ring (44cqw), 90s clockwise */}
+      <div
+        className="orbital-rotates pointer-events-none absolute inset-0 will-change-transform"
+        style={{
+          animation: "orbit-spin 90s linear infinite",
+          animationPlayState: isPaused ? "paused" : "running",
+        }}
+        aria-hidden="true"
+      >
+        <span className="absolute left-1/2 top-[calc(50%+44cqw)] size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400/60 dark:bg-white/40" />
+      </div>
+
+      {/* Sat 4: Inner ring (22cqw), 50s counter-clockwise */}
+      <div
+        className="orbital-rotates pointer-events-none absolute inset-0 will-change-transform"
+        style={{
+          animation: "orbit-counter-spin 50s linear infinite",
+          animationPlayState: isPaused ? "paused" : "running",
+        }}
+        aria-hidden="true"
+      >
+        <span className="absolute left-[calc(50%-22cqw)] top-1/2 size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#db2777]/70 shadow-[0_0_6px_rgba(219,39,119,0.5)] dark:bg-[#f472b6]/70" />
+      </div>
+
+      {/* ── 4. Center Logo Disc (~20cqw, z-20 above rings and connectors) ── */}
+      <div
+        className="absolute left-1/2 top-1/2 z-20 flex size-[20cqw] min-h-[64px] min-w-[64px] max-h-[110px] max-w-[110px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200/80 bg-white/90 shadow-[0_4px_24px_-4px_rgba(55,48,163,0.18),0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur-md dark:border-white/15 dark:bg-[#14151a]/90 dark:shadow-[0_8px_32px_-6px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.1)]"
+        aria-hidden="true"
+      >
+        {/* Soft brand-gradient glow with subtle pulse */}
+        <div
+          className="orbital-rotates pointer-events-none absolute -inset-3 rounded-full bg-gradient-to-tr from-[#2f4bff]/25 via-[#7c3aed]/20 to-[#db2777]/25 blur-md dark:from-[#6d8bff]/30 dark:via-[#a78bfa]/25 dark:to-[#f472b6]/30"
+          style={{
+            animation: "orbit-pulse 4s ease-in-out infinite alternate",
+            animationPlayState: isPaused ? "paused" : "running",
+          }}
+        />
+
+        {/* Authentic brand mark asset */}
         <img
           src={markWebp}
           width="242"
           height="128"
           alt=""
           loading="eager"
+          fetchPriority="high"
           decoding="async"
           draggable={false}
-          className="h-11 w-auto"
+          className="relative z-10 h-[44%] w-auto max-w-[70%] select-none pointer-events-none object-contain dark:brightness-110"
         />
       </div>
 
-      <ul
-        aria-label="What we build"
-        className="relative flex flex-col gap-3 sm:block sm:aspect-square"
+      {/* ── 5. Shared Orbit Wrapper (rotating 360deg linear infinite ~60s) ── */}
+      <div
+        className="orbital-rotates pointer-events-none absolute inset-0 will-change-transform"
+        style={{
+          animation: "orbit-spin 60s linear infinite",
+          animationPlayState: isPaused ? "paused" : "running",
+        }}
       >
-        {CAPABILITIES.map(({ icon, title, support }, i) => (
-          <HeroCard
-            key={title}
-            icon={icon}
-            title={title}
-            support={support}
-            anchor={CARD_ANCHORS[i]}
-            connector={CARD_CONNECTORS[i]}
-          />
+        {/* Faint radial hairlines from logo edge to card edge, behind cards (z-0) */}
+        <svg
+          viewBox="0 0 500 500"
+          className="pointer-events-none absolute inset-0 h-full w-full select-none"
+          fill="none"
+          aria-hidden="true"
+        >
+          {ORBITAL_NODES.map((node) => (
+            <line
+              key={node.title}
+              x1={node.x1}
+              y1={node.y1}
+              x2={node.x2}
+              y2={node.y2}
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeDasharray="2 3"
+              className="text-slate-300/60 dark:text-white/10"
+            />
+          ))}
+        </svg>
+
+        {/* 3 Nodes at 120° spacing on shared radius R = 32.5cqw */}
+        {ORBITAL_NODES.map((node) => (
+          <div
+            key={node.title}
+            className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 z-10"
+            style={{ left: node.left, top: node.top }}
+          >
+            {/* Counter-rotating wrapper: -360deg so text remains upright */}
+            <div
+              className="orbital-rotates will-change-transform"
+              style={{
+                animation: "orbit-counter-spin 60s linear infinite",
+                animationPlayState: isPaused ? "paused" : "running",
+              }}
+            >
+              <OrbitalCard
+                icon={node.icon}
+                title={node.title}
+                support={node.support}
+              />
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
@@ -250,15 +466,20 @@ export default function Home() {
 
       {/* Hero — paper canvas, headline left, instrument right */}
       <section className="relative overflow-hidden">
-        <div className="container-section relative grid items-start gap-12 pb-14 pt-10 md:pb-20 md:pt-16 xl:grid-cols-[minmax(0,600px)_minmax(0,1fr)] xl:gap-16 xl:pb-24 xl:pt-20">
+        <div className="container-section relative grid items-center gap-10 pb-14 pt-10 md:pb-20 md:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 xl:grid-cols-[minmax(0,580px)_minmax(0,1fr)] xl:gap-16 xl:pb-24 xl:pt-20">
           <div>
             <div className="mb-10 flex items-center gap-3" aria-hidden="true">
               <span className="signal-tick" />
               <span className="h-px flex-1 bg-border-subtle" />
             </div>
 
-            <h1 className="type-hero max-w-[9.7em] text-text-primary">
-              Ten years of shipping systems {" "} <span className="text-text-on-brand-muted">that stay up and scale.</span>
+            <h1 className="type-hero max-w-[10.5em]">
+              <span className="block text-[#0B0B0F] dark:text-[#F5F6F8]">
+                Ten years of shipping systems
+              </span>
+              <span className="block text-[#5B606B] dark:text-[#9AA0AC]">
+                that stay up and scale.
+              </span>
             </h1>
 
             <div className="signal-rule mt-10 w-20" aria-hidden="true" />
@@ -277,7 +498,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="animate-fadeUp w-full xl:self-center">
+          <div className="animate-fadeUp mx-auto w-full max-w-[480px] sm:max-w-[540px] lg:max-w-none lg:self-center">
             <HeroInstrument />
           </div>
         </div>

@@ -496,3 +496,50 @@
     opacity: 1;
   }
 }
+
+/* ── Hero Orbital Visual ─────────────────────────────────────────────── */
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-counter-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes orbit-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+.orbital-container {
+  container-type: inline-size;
+  contain: layout paint;
+}
+
+.orbital-container:hover .orbital-rotates,
+.orbital-container:focus-within .orbital-rotates {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbital-rotates {
+    animation: none !important;
+  }
+}
+
