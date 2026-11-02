@@ -9,24 +9,43 @@
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+
+    <!-- Self-hosted faces: no third-party connection, no render blocking. -->
+    <link
+      rel="preload"
+      href="/fonts/geist-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/manrope-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <title>Infinity Lab — Software Engineering Company</title>
     <meta name="description" content="Infinity Lab builds reliable software: full-stack web, backend & cloud architecture, and mobile apps. Established 2016." />
-    <meta name="theme-color" content="#0a0c10" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Delius&family=Exo:ital,wght@0,400..900;1,400..900&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@300;400;500;600;700;800&family=Saira:ital,wght@0,300..900;1,300..900&display=swap"
-    />
+    <meta name="theme-color" content="#F6F7F8" />
     <script>
       /* Theme bootstrap — runs before first paint to prevent a flash of the
          wrong theme. Mirrors the logic of src/theme/useTheme.js.
          Binary light/dark; light is the default. */
       (function () {
         try {
-          if (localStorage.getItem("il-theme") === "dark") {
-            document.documentElement.classList.add("dark");
-          }
+          var dark = localStorage.getItem("il-theme") === "dark";
+          if (dark) document.documentElement.classList.add("dark");
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", dark ? "#090a0e" : "#F6F7F8");
         } catch (e) {}
       })();
     </script>

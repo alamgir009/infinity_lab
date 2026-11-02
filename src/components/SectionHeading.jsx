@@ -1,41 +1,58 @@
 /**
- * Shared section heading: fintech-grade eyebrow chip, display title, and calibrated lead paragraph.
- *
- * @param {{ eyebrow?: string, title: string, lead?: string, id?: string,
- *          centered?: boolean, onBrand?: boolean, className?: string }} props
- */
+ * Editorial section header: optional decorative index, signal-ticked eyebrow,
+ * display title, and a calibrated lead. The index is aria-hidden — it is a
+ * typographic device, never information.
+  *
+  * Colours come from the ambient token scope.
+  *
+  * @param {{ eyebrow?: string, title: string, lead?: string, id?: string,
+  *          centered?: boolean, index?: string, className?: string }} props
+  */
 export default function SectionHeading({
   eyebrow,
   title,
   lead,
   id,
   centered = false,
-  onBrand = false,
+  index,
   className = "",
 }) {
   return (
-    <div className={`max-w-2xl ${centered ? "mx-auto text-center" : ""} ${className}`}>
-      {eyebrow && (
-        <div className={`mb-3 inline-flex items-center ${centered ? "justify-center" : ""}`}>
-          <span
-            className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand"
-          >
-            // {eyebrow}
-          </span>
+    <div
+      className={`max-w-3xl ${centered ? "mx-auto text-center" : ""} ${className}`}
+    >
+      {(index || eyebrow) && (
+        <div
+          className={`flex items-center gap-3 ${centered ? "justify-center" : ""}`}
+        >
+          {index && (
+            <>
+              <span
+                aria-hidden="true"
+                className="font-mono text-[10.5px] tabular-nums tracking-[0.16em] text-text-muted"
+              >
+                {index}
+              </span>
+              <span
+                aria-hidden="true"
+                className="h-px w-5 bg-border-subtle"
+              />
+            </>
+          )}
+          {eyebrow && (
+            <span className={`eyebrow ${centered ? "justify-center" : ""}`}>
+              {eyebrow}
+            </span>
+          )}
         </div>
       )}
-      <h2
-        id={id}
-        className={`type-heading font-subheading tracking-tight ${onBrand ? "text-text-on-brand" : "text-text-primary"}`}
-      >
+
+      <h2 id={id} className="type-heading mt-5 text-text-primary">
         {title}
       </h2>
+
       {lead && (
-        <p
-          className={`mt-3.5 text-base leading-relaxed md:text-lg md:leading-normal ${
-            onBrand ? "text-text-on-brand-muted" : "text-text-secondary"
-          }`}
-        >
+        <p className="type-lead mt-5 max-w-[60ch] text-text-secondary">
           {lead}
         </p>
       )}

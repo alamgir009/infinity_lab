@@ -57,7 +57,7 @@ export default function useTheme() {
     document.documentElement.classList.toggle("dark", pref === "dark");
     document.documentElement.style.colorScheme = pref;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = pref === "dark" ? "#0B1220" : "#ffffff";
+    if (meta) meta.content = pref === "dark" ? "#090a0e" : "#faf9f6";
   }, [pref]);
 
   /**

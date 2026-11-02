@@ -18,16 +18,20 @@ function ScrollToTop() {
 }
 
 const Loading = () => (
-  <p className="container-section py-16 text-sm text-text-muted" role="status">
+  <p className="container-section py-16 font-mono text-[11px] uppercase tracking-[0.14em] text-text-muted" role="status">
     Loading page…
   </p>
 );
 
 function NotFound() {
   return (
-    <section className="container-section py-24 text-center">
-      <h1 className="type-heading">Page not found</h1>
-      <p className="mt-4 text-text-secondary">
+    <section className="container-section py-24 text-center md:py-32">
+      <div className="mx-auto mb-8 flex max-w-xs items-center gap-3" aria-hidden="true">
+        <span className="signal-tick" />
+        <span className="h-px flex-1 bg-border-subtle" />
+      </div>
+      <h1 className="type-display text-text-primary">Page not found</h1>
+      <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-text-secondary">
         The page you are looking for does not exist. Please use the navigation
         above or return to the homepage.
       </p>

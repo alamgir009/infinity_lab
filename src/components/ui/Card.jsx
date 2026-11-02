@@ -1,9 +1,9 @@
 /**
- * Shared card primitive: fintech-grade elevated panel with micro-hairline border,
- * dark-mode top rim reflection, smooth multi-layer ambient shadow, and fluid hover lift.
+ * Shared card primitive: a flat ledger panel with a single hairline border,
+ * one quiet plate shadow, and a restrained hover lift. No glass, no glow.
  *
  * @param {object} props
- * @param {boolean} [props.interactive] Hover elevation + subtle border illumination.
+ * @param {boolean} [props.interactive] Hover elevation + border illumination.
  * @param {string} [props.className]     Extra classes; include h-full or flex utilities as needed.
  * @param {import("react").ReactNode} props.children
  */
@@ -15,10 +15,8 @@ export default function Card({
 }) {
   return (
     <div
-      className={`group/card relative flex flex-col overflow-hidden rounded-card border border-border-subtle bg-surface-card card-rim shadow-card ${
-        interactive
-          ? "transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-card-hover dark:hover:border-slate-700/80"
-          : ""
+      className={`group/card panel flex flex-col ${
+        interactive ? "panel-interactive" : ""
       } ${className}`}
       {...rest}
     >

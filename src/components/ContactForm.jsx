@@ -7,12 +7,13 @@ import {
   FiPhone,
   FiLayers,
   FiChevronDown,
+  FiMessageSquare,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { CONTACT } from "../data/siteConfig";
 
 /**
- * Contact inquiry form — top-tier fintech input architecture.
+ * Contact inquiry form — engineering precision input architecture.
  *
  * Behaviour:
  *  - Client-side required/email validation before submission.
@@ -149,16 +150,16 @@ export default function ContactForm() {
 
     return (
       <div key={f.id} className="group/field space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <label
             htmlFor={f.id}
-            className="block font-mono text-[11px] font-bold uppercase tracking-wider text-text-primary"
+            className="block text-[14px] font-semibold  text-text-secondary"
           >
             {f.label}
             {f.required ? (
-              <span aria-hidden="true" className="ml-1 text-red-500 font-bold">*</span>
+              <span aria-hidden="true" className="ml-1 font-semibold text-danger">*</span>
             ) : (
-              <span className="ml-2 font-mono text-[10px] font-normal uppercase tracking-normal text-text-muted">
+              <span className="ml-2 text-[13px] font-normal text-text-muted">
                 (Optional)
               </span>
             )}
@@ -171,7 +172,7 @@ export default function ContactForm() {
               aria-hidden="true"
               className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150 group-focus-within/field:text-brand"
             >
-              <Icon size={16} />
+              <Icon size={15} />
             </span>
           )}
           <input
@@ -185,18 +186,12 @@ export default function ContactForm() {
             aria-required={f.required || undefined}
             aria-invalid={hasError ? "true" : undefined}
             aria-describedby={hasError ? `${f.id}-error` : undefined}
-            className={`block w-full min-h-[48px] rounded-xl border ${
-              Icon ? "pl-11" : "pl-4"
-            } pr-4 py-3 text-sm text-text-primary placeholder:text-text-muted/60 transition-all duration-200 bg-surface-sunken/40 hover:bg-surface-card hover:border-slate-300 dark:bg-surface-sunken/50 dark:hover:border-slate-700 focus:bg-surface-card focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10 dark:focus:ring-brand/15 ${
-              hasError
-                ? "border-red-500/80 bg-red-50/40 dark:border-red-400 dark:bg-red-950/20 focus:border-red-500 focus:ring-red-500/10"
-                : "border-border-subtle"
-            }`}
+            className={`field-input ${Icon ? "pl-10" : "pl-4"} pr-4`}
           />
         </div>
 
         {hasError && (
-          <p id={`${f.id}-error`} role="alert" className="text-xs font-medium text-red-600 dark:text-red-400">
+          <p id={`${f.id}-error`} role="alert" className="text-xs font-semibold text-danger">
             {errors[f.id]}
           </p>
         )}
@@ -222,68 +217,76 @@ export default function ContactForm() {
 
       <div className="grid gap-5 sm:grid-cols-2">
         {FIELDS.map(renderField)}
-      </div>
 
-      {/* Dropdown (Select) */}
-      <div className="group/field space-y-2">
-        <div className="flex items-center justify-between">
-          <label
-            htmlFor="service"
-            className="block font-mono text-[11px] font-bold uppercase tracking-wider text-text-primary"
-          >
-            What do you need help with?
-          </label>
-          <span className="font-mono text-[10px] text-text-muted uppercase tracking-normal">
-            (Optional)
-          </span>
-        </div>
+        {/* Dropdown — shares the second ledger row with the phone field */}
+        <div className="group/field space-y-2">
+          <div className="flex items-center justify-between gap-3">
+            <label
+              htmlFor="service"
+              className="block text-[14px] font-semibold   text-text-secondary"
+            >
+              What do you need help with?
+            </label>
+            <span className=" text-[13px]  text-text-muted">
+              (Optional)
+            </span>
+          </div>
 
-        <div className="relative">
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150 group-focus-within/field:text-brand"
-          >
-            <FiLayers size={16} />
-          </span>
-          <select
-            id="service"
-            name="service"
-            value={values.service}
-            onChange={handleChange}
-            className="block w-full min-h-[48px] appearance-none cursor-pointer rounded-xl border border-border-subtle bg-surface-sunken/40 pl-11 pr-10 py-3 text-sm text-text-primary transition-all duration-200 hover:bg-surface-card hover:border-slate-300 focus:bg-surface-card focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10 dark:bg-surface-sunken/50 dark:hover:border-slate-700 dark:focus:ring-brand/15 dark:[&>option]:bg-[#131A26] dark:[&>option]:text-text-primary"
-          >
-            <option value="">Select a service discipline</option>
-            {SERVICE_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150 group-focus-within/field:text-brand"
-          >
-            <FiChevronDown size={17} />
-          </span>
+          <div className="relative">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150 group-focus-within/field:text-brand"
+            >
+              <FiLayers size={15} />
+            </span>
+            <select
+              id="service"
+              name="service"
+              value={values.service}
+              onChange={handleChange}
+              className={`field-input cursor-pointer appearance-none pl-10 pr-10 dark:[&>option]:bg-[#14151b] dark:[&>option]:text-text-primary ${
+                values.service ? "text-text-primary" : "text-text-muted"
+              }`}
+            >
+              <option value="">Select a service discipline</option>
+              {SERVICE_OPTIONS.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150 group-focus-within/field:text-brand"
+            >
+              <FiChevronDown size={16} />
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Textarea */}
       <div className="group/field space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <label
             htmlFor="message"
-            className="block font-mono text-[11px] font-bold uppercase tracking-wider text-text-primary"
+            className="block text-[14px] font-semibold text-text-secondary"
           >
             About your project
-            <span aria-hidden="true" className="ml-1 text-red-500 font-bold">*</span>
+            <span aria-hidden="true" className="ml-1 font-semibold text-danger">*</span>
           </label>
-          <span className="font-mono text-[11px] text-text-muted">
+          <span className="font-mono text-[10px] tabular-nums text-text-muted">
             {values.message.length > 0 ? `${values.message.length} chars` : ""}
           </span>
         </div>
 
         <div className="relative">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3.5 top-3.5 text-text-muted transition-colors duration-150 group-focus-within/field:text-brand"
+          >
+            <FiMessageSquare size={15} />
+          </span>
           <textarea
             id="message"
             name="message"
@@ -294,16 +297,12 @@ export default function ContactForm() {
             aria-invalid={errors.message ? "true" : undefined}
             aria-describedby={errors.message ? "message-error" : undefined}
             placeholder="A few sentences about your goals, timelines, expected load, and current tech stack..."
-            className={`block w-full rounded-xl border p-4 text-sm text-text-primary placeholder:text-text-muted/60 transition-all duration-200 bg-surface-sunken/40 hover:bg-surface-card hover:border-slate-300 dark:bg-surface-sunken/50 dark:hover:border-slate-700 focus:bg-surface-card focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10 dark:focus:ring-brand/15 ${
-              errors.message
-                ? "border-red-500/80 bg-red-50/40 dark:border-red-400 dark:bg-red-950/20 focus:border-red-500 focus:ring-red-500/10"
-                : "border-border-subtle"
-            }`}
+            className="field-input min-h-[140px] resize-y pl-10 pr-4 leading-relaxed"
           />
         </div>
 
         {errors.message && (
-          <p id="message-error" role="alert" className="text-xs font-medium text-red-600 dark:text-red-400">
+          <p id="message-error" role="alert" className="text-xs font-semibold text-danger">
             {errors.message}
           </p>
         )}
@@ -314,28 +313,28 @@ export default function ContactForm() {
         ref={liveRef}
         tabIndex={-1}
         aria-live="polite"
-        className={`flex items-start gap-2.5 rounded-xl text-sm ${
+        className={`flex items-start gap-2.5 rounded-[3px] text-sm ${
           status === "success"
-            ? "border border-emerald-300/80 bg-emerald-50/80 p-4 text-emerald-900 dark:border-emerald-700/50 dark:bg-emerald-950/40 dark:text-emerald-200"
+            ? "border border-positive/30 bg-positive-soft p-4 text-positive"
             : status === "error"
-              ? "border border-red-300/80 bg-red-50/80 p-4 text-red-900 dark:border-red-700/50 dark:bg-red-950/30 dark:text-red-200"
+              ? "border border-danger/30 bg-danger-soft p-4 text-danger"
               : "sr-only"
         }`}
       >
-        {status === "success" && <FiCheckCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />}
-        {status === "error" && <FiAlertCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-red-600 dark:text-red-400" />}
+        {status === "success" && <FiCheckCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0" />}
+        {status === "error" && <FiAlertCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0" />}
         {feedback || "Form status updates appear here."}
       </p>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
+      <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="submit"
-          className="group inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-full font-btn bg-btn-bg px-8 py-3 text-sm font-semibold text-btn-text shadow-card transition-all duration-200 hover:bg-btn-bg-hover hover:shadow-card-hover active:scale-[0.98] w-full sm:w-auto"
+          className="group inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-btn bg-btn-bg px-8 py-3 text-sm font-semibold text-btn-text transition-colors duration-150 hover:bg-btn-bg-hover active:translate-y-px sm:w-auto"
         >
-          <FaWhatsapp aria-hidden="true" className="size-4 text-emerald-400 transition-transform group-hover:scale-110" />
+          <FaWhatsapp aria-hidden="true" className="size-4" />
           <span>Send inquiry</span>
         </button>
-        <span className="font-mono text-xs text-text-muted">
+        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-text-muted">
           Connects directly to WhatsApp
         </span>
       </div>

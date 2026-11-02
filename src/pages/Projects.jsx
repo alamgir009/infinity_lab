@@ -77,33 +77,42 @@ export default function Projects() {
       />
 
       {/* Page hero */}
-      <section className="bg-brand-deep relative overflow-hidden">
-        <div className="bg-grid-fine pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="container-section relative pt-10 pb-12 md:pt-14 md:pb-16">
-          <h1 className="type-display font-heading text-text-on-brand tracking-tight">
-            Projects
-          </h1>
-          <p className="container-text mt-4 text-lg leading-relaxed text-text-on-brand-muted sm:text-xl">
-            Every build listed here is a real delivery — with an honest note
-            where a link is no longer reachable.
-          </p>
+      <section className="relative overflow-hidden">
+        <div className="container-section pb-12 pt-10 md:pb-16 md:pt-14">
+          <div className="mb-8 flex items-center gap-3" aria-hidden="true">
+            <span className="signal-tick" />
+            <span className="h-px flex-1 bg-border-subtle" />
+          </div>
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <h1 className="type-display text-text-primary">Projects</h1>
+              <div className="signal-rule mt-7 w-20" aria-hidden="true" />
+            </div>
+            <div className="lg:col-span-5">
+              <p className="type-lead max-w-[52ch] text-text-secondary">
+                Every build listed here is a real delivery — with an honest note
+                where a link is no longer reachable.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="projects-list-heading" className="pt-12 pb-16 md:pt-16 md:pb-24">
+      <section aria-labelledby="projects-list-heading" className="section pt-4 md:pt-6">
         <div className="container-section">
           <SectionHeading
             id="projects-list-heading"
+            index="01"
             eyebrow="Delivered work"
             title="Filter by discipline"
             lead="Choose the kind of system you are planning. Filters are toggle buttons — keyboard operable, with announced result counts."
           />
 
-          {/* Accessible filter group — fintech pill control */}
+          {/* Accessible filter group — squared ledger control */}
           <div
             role="group"
             aria-label="Filter projects by category"
-            className="mt-10 flex flex-wrap gap-2.5"
+            className="mt-10 flex flex-wrap gap-2 border-b border-border-subtle pb-5"
           >
             {PROJECT_CATEGORIES.map((c) => {
               const selected = active === c.id;
@@ -114,19 +123,19 @@ export default function Projects() {
                   type="button"
                   aria-pressed={selected}
                   onClick={() => setFilter(c.id)}
-                  className={`inline-flex min-h-[42px] items-center gap-2.5 rounded-full font-btn border px-5 py-2 text-sm font-semibold transition-all duration-150 select-none ${
+                  className={`inline-flex min-h-[42px] select-none items-center gap-2.5 rounded-btn border px-4 py-2 text-[13px] font-semibold transition-colors duration-150 ${
                     selected
-                      ? "border-btn-bg bg-btn-bg text-btn-text shadow-card dark:border-white/20"
-                      : "border-border-subtle bg-surface-card text-text-secondary hover:border-slate-400 hover:text-text-primary dark:hover:border-slate-600"
+                      ? "border-transparent bg-btn-bg text-btn-text"
+                      : "border-border-subtle bg-transparent text-text-secondary hover:border-border-strong hover:text-text-primary"
                   }`}
                 >
                   {c.label}
                   <span
                     aria-label={`${count} ${count === 1 ? "project" : "projects"}`}
-                    className={`rounded-full px-2 py-0.5 font-mono text-xs font-bold [font-variant-numeric:tabular-nums] ${
+                    className={`rounded-[2px] px-1.5 py-0.5 font-mono text-[10px] font-medium tabular-nums ${
                       selected
                         ? "bg-btn-text text-btn-bg"
-                        : "border border-border-subtle bg-surface-sunken text-text-muted dark:border-slate-700"
+                        : "border border-border-subtle bg-surface-sunken text-text-muted"
                     }`}
                   >
                     {count}
@@ -138,8 +147,8 @@ export default function Projects() {
           <p aria-live="polite" className="sr-only">{announced}</p>
 
           {visible.length === 0 ? (
-            <div className="mt-12 rounded-card-lg border border-dashed border-border-strong bg-surface-sunken/60 p-10 text-center sm:p-14">
-              <h3 className="font-display text-lg font-bold text-text-primary">
+            <div className="mt-12 rounded-card border border-dashed border-border-strong bg-surface-sunken/60 p-10 text-center sm:p-14">
+              <h3 className="font-display text-2xl tracking-[-0.02em] text-text-primary">
                 No {activeLabel.toLowerCase()} projects published yet
               </h3>
               <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-text-secondary">
@@ -148,7 +157,7 @@ export default function Projects() {
                 discuss it — see the Contact page.
               </p>
               <div className="mt-8 flex justify-center">
-                <Button to="/contact" size="md">
+                <Button to="/contact" size="md" arrow>
                   Start Your Project
                 </Button>
               </div>
@@ -161,14 +170,11 @@ export default function Projects() {
             </div>
           )}
 
-          <div className="mt-12 rounded-xl border border-border-subtle bg-surface-sunken/40 p-4">
+          <div className="relative mt-12 border border-border-subtle bg-surface-sunken/40 p-4 pl-5">
+            <span className="signal-bar absolute bottom-0 left-0 top-0 w-0.5" aria-hidden="true" />
             <p className="max-w-3xl text-xs leading-relaxed text-text-muted">
-              Link availability checked on{" "}
-              <span className="font-mono font-semibold [font-variant-numeric:tabular-nums]">2026-10-26</span>.
-              Projects whose domains no longer resolve are kept listed with an
-              explicit{" "}
-              <span className="font-semibold text-text-secondary">Unverified link</span>{" "}
-              badge rather than being silently hidden or claimed as live.
+              Our portfolio reflects our commitment to transparency.{" "}
+              Project links are periodically reviewed, and their verification status is clearly communicated for a reliable browsing experience.
             </p>
           </div>
         </div>
@@ -177,22 +183,24 @@ export default function Projects() {
       {/* Delivery assurance — contractual trust ribbon + closing CTA */}
       <section
         aria-labelledby="assurance-heading"
-        className="cv-auto border-t border-border-subtle py-16 md:py-24"
+        className="cv-auto section border-t border-border-subtle"
       >
         <div className="container-section">
-          <SectionHeading
-            id="assurance-heading"
-            eyebrow="Delivery assurance"
-            title="Every engagement, protected"
-            lead="Three commitments that apply to every project on this page — from the first signature to production operations."
-          />
-          <div className="mt-12">
-            <GuaranteeStrip items={ASSURANCES} />
-          </div>
-          <div className="mt-12 flex justify-center">
-            <Button to="/contact" size="lg" arrow>
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeading
+              id="assurance-heading"
+              index="02"
+              eyebrow="Delivery assurance"
+              title="Every engagement, protected"
+              lead="Three commitments that apply to every project on this page — from the first signature to production operations."
+            />
+            <Button to="/contact" size="md" arrow className="shrink-0">
               Start Your Project
             </Button>
+          </div>
+
+          <div className="mt-12">
+            <GuaranteeStrip items={ASSURANCES} />
           </div>
         </div>
       </section>

@@ -4,8 +4,8 @@ import Badge from "./ui/Badge";
 import { LinkStatusBadge } from "./Button";
 
 /**
- * Reusable project card — fintech product portfolio presentation with
- * status badges, tabular telemetry, problem/solution breakdown, and accessible actions.
+ * Reusable project card — a file record: title, status, mono domain,
+ * metric table, labelled problem/solution, and one clear action.
  *
  * @param {object}   props
  * @param {{ id: string, name: string, url: string, category: string,
@@ -42,7 +42,7 @@ export default function ProjectCard({ project, detailed = false }) {
       <div className="flex grow flex-col p-6 sm:p-7">
         {/* Header: project title + link status, one aligned row */}
         <div className="flex items-start justify-between gap-3">
-          <h3 className="min-w-0 font-display text-lg font-bold leading-snug tracking-tight text-text-primary">
+          <h3 className="min-w-0 type-card text-text-primary">
             {name}
           </h3>
           <LinkStatusBadge verified={verified} />
@@ -52,23 +52,25 @@ export default function ProjectCard({ project, detailed = false }) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-1 inline-flex min-h-[30px] items-center font-mono text-xs text-text-muted transition-colors hover:text-brand"
+          className="mt-1.5 inline-flex min-h-[30px] items-center font-mono text-[11px] tracking-[0.02em] text-text-muted transition-colors hover:text-brand"
         >
           {domain}
         </a>
 
         {/* Meta row: engagement timeline + client segment (detailed mode) */}
         {detailed && (timeline || client) && (
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs">
+          <div className="mt-2.5 flex items-center gap-x-3 gap-y-1.5 text-xs">
             {timeline && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border-subtle bg-brand-chip/80 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-brand-chip-text">
+              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-[3px] border border-border-subtle bg-brand-soft px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.08em] text-brand-soft-text">
                 <FiClock size={11} aria-hidden="true" />
                 {timeline}
               </span>
             )}
             {client && (
               <span className="inline-flex min-w-0 items-center gap-1.5 text-text-muted">
-                <span aria-hidden="true" className="text-border-strong select-none">/</span>
+                <span aria-hidden="true" className="select-none text-border-strong">
+                  /
+                </span>
                 <span className="truncate">
                   <span className="sr-only">Client: </span>
                   {client}
@@ -78,21 +80,21 @@ export default function ProjectCard({ project, detailed = false }) {
           </div>
         )}
 
-        <p className="mt-3.5 text-sm leading-relaxed text-text-secondary line-clamp-2">
+        <p className="mt-4 text-sm leading-relaxed text-text-secondary line-clamp-2">
           {summary}
         </p>
 
         {/* Outcome metrics: three stat cells on a hairline grid (detailed mode) */}
         {detailed && highlights.length > 0 && (
-          <dl className="mt-5 grid grid-cols-3 divide-x divide-border-subtle overflow-hidden rounded-xl border border-border-subtle bg-surface-sunken/60 dark:border-slate-800 dark:bg-surface-sunken/40">
+          <dl className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-[3px] border border-border-subtle bg-border-subtle">
             {highlights.map((h) => (
-              <div key={h.label} className="min-w-0 px-2.5 py-3 text-center">
+              <div key={h.label} className="min-w-0 bg-surface-sunken/60 px-2.5 py-3 text-center">
                 <dt className="sr-only">{h.label}</dt>
                 <dd>
-                  <span className="block font-display text-base font-bold leading-tight tracking-tight text-text-primary [font-variant-numeric:tabular-nums]">
+                  <span className="block font-display text-lg leading-tight tracking-[-0.02em] text-text-primary [font-variant-numeric:tabular-nums]">
                     {h.value}
                   </span>
-                  <span className="mt-1 block font-mono text-[10px] font-semibold uppercase tracking-wider text-text-muted line-clamp-2">
+                  <span className="mt-1 block font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-text-muted line-clamp-2">
                     {h.label}
                   </span>
                 </dd>
@@ -102,7 +104,7 @@ export default function ProjectCard({ project, detailed = false }) {
         )}
 
         {detailed && problem && (
-          <div className="mt-5 space-y-3 rounded-xl border border-border-subtle/80 bg-surface-sunken/30 p-4 text-sm leading-relaxed">
+          <div className="mt-5 space-y-3 rounded-[3px] border border-border-subtle bg-surface-sunken/40 p-4 text-sm leading-relaxed">
             <p className="text-text-secondary line-clamp-3">
               <span className="font-semibold text-text-primary">Problem — </span>
               {problem}
@@ -121,7 +123,7 @@ export default function ProjectCard({ project, detailed = false }) {
           >
             {techTags.map((t) => (
               <li key={t}>
-                <Badge tone="neutral" className="font-mono text-[10px]">
+                <Badge tone="neutral" className="text-[9px]">
                   {t}
                 </Badge>
               </li>
@@ -135,13 +137,13 @@ export default function ProjectCard({ project, detailed = false }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group/btn inline-flex min-h-[42px] w-full items-center justify-between gap-2 rounded-full font-btn border border-border-subtle bg-surface-card px-5 text-sm font-semibold text-text-primary shadow-xs transition-all duration-150 hover:border-brand/40 hover:bg-surface-sunken hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group/btn inline-flex min-h-[44px] w-full items-center justify-between gap-2 rounded-btn border border-border-subtle bg-transparent px-4 text-sm font-semibold text-text-primary transition-colors duration-150 hover:border-border-strong hover:bg-surface-sunken"
           >
             <span>{verified ? "Visit live site" : "Open provided link"}</span>
             <FiExternalLink
               size={15}
               aria-hidden="true"
-              className="text-text-muted transition-transform duration-150 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 group-hover/btn:text-brand"
+              className="text-text-muted transition-transform duration-150 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5 group-hover/btn:text-brand"
             />
             <span className="sr-only">
               {` — ${domain}${verified ? "" : "; this link was unreachable when last checked on " + (project.checkedOn || "")}`}

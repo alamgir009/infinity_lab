@@ -9,14 +9,14 @@ const ICONS = {
 };
 
 const DISCIPLINE_TAGS = {
-  web: "Discipline 01",
-  backend: "Discipline 02",
+  code: "Discipline 01",
+  server: "Discipline 02",
   mobile: "Discipline 03",
 };
 
 /**
- * Reusable service card — fintech architectural styling, equal-height body,
- * glowing icon chip, and smooth hover interaction.
+ * Reusable service card — a spec panel: index, square icon tile, display
+ * title, and a bottom action separated by a hairline.
  *
  * @param {{ id: string, name: string, icon: "code"|"server"|"mobile",
  *          tagline: string, description: string,
@@ -25,65 +25,63 @@ const DISCIPLINE_TAGS = {
  */
 export default function ServiceCard({ service, detailed = false }) {
   const Icon = ICONS[service.icon] || FiCode;
-  const tag = DISCIPLINE_TAGS[service.id] || "Engineering";
+  const tag = DISCIPLINE_TAGS[service.icon] || "Engineering";
 
   return (
     <Card interactive className="h-full">
-      {/* Top subtle brand highlight */}
-      <div
-        aria-hidden="true"
-        className="h-1 w-full bg-gradient-to-r from-transparent via-brand/40 to-transparent opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
-      />
-
       <div className="flex grow flex-col p-6 sm:p-8">
-        <div className="flex items-center justify-between gap-3">
-          <span className="inline-flex size-12 items-center justify-center rounded-xl border border-border-subtle bg-brand-chip text-brand-chip-text transition-all duration-300 group-hover/card:border-brand/40 group-hover/card:bg-brand group-hover/card:text-white dark:bg-surface-sunken dark:text-brand dark:group-hover/card:bg-brand dark:group-hover/card:text-surface">
-            <Icon size={22} aria-hidden="true" />
+        <div className="flex items-start justify-between gap-4">
+          <span className="inline-flex size-11 items-center justify-center rounded-[3px] border border-border-subtle bg-brand-soft text-brand-soft-text transition-colors duration-200 group-hover/card:bg-btn-bg group-hover/card:text-btn-text">
+            <Icon size={20} aria-hidden="true" />
           </span>
-          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">
+          <span className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-text-muted">
             {tag}
           </span>
         </div>
 
-        <h3 className="mt-6 font-display text-xl font-bold tracking-tight text-text-primary">
+        <h3 className="mt-6 type-card text-text-primary">
           {service.name}
         </h3>
-        <p className="mt-1 text-sm font-semibold text-brand">{service.tagline}</p>
-        <p className="mt-3.5 text-sm leading-relaxed text-text-secondary">
+        <p className="mt-1.5 text-sm font-medium text-brand">{service.tagline}</p>
+        <p
+          className={`mt-4 text-sm leading-relaxed text-text-secondary ${
+            detailed ? "flex-1" : ""
+          }`}
+        >
           {service.description}
         </p>
 
         {detailed && service.deliverables && (
           <div className="mt-7 border-t border-border-subtle pt-6">
-            <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.1em] text-text-muted">
+            <h4 className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-text-muted">
               What you get
             </h4>
-            <ul className="mt-3.5 space-y-2.5 text-sm text-text-secondary">
+            <ul className="mt-4 space-y-3 text-sm text-text-secondary">
               {service.deliverables.map((d) => (
                 <li key={d} className="flex items-start gap-2.5">
                   <span
                     aria-hidden="true"
-                    className="mt-1 flex size-3.5 shrink-0 items-center justify-center rounded-full bg-brand-chip text-brand"
+                    className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-[2px] bg-brand-soft text-brand-soft-text"
                   >
                     <FiCheck size={10} strokeWidth={3} />
                   </span>
-                  <span className="text-text-secondary leading-snug">{d}</span>
+                  <span className="leading-snug text-text-secondary">{d}</span>
                 </li>
               ))}
             </ul>
           </div>
         )}
 
-        <div className="mt-auto border-t border-border-subtle pt-6">
+        <div className="mt-auto border-t border-border-subtle pt-5">
           <Link
             to="/contact"
-            className="group/link inline-flex min-h-[42px] items-center gap-2 rounded-full font-btn px-4 text-sm font-semibold text-brand transition-colors duration-150 hover:bg-brand-chip hover:text-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group/link -mx-2 inline-flex min-h-[42px] items-center gap-2 rounded-[3px] px-2 text-sm font-semibold text-brand transition-colors duration-150 hover:text-brand-hover"
           >
             <span>Start your project</span>
             <FiArrowRight
               size={15}
               aria-hidden="true"
-              className="transition-transform duration-200 group-hover/link:translate-x-1"
+              className="transition-transform duration-200 group-hover/link:translate-x-0.5"
             />
           </Link>
         </div>

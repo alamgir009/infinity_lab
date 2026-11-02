@@ -2,30 +2,30 @@ import { Link } from "react-router-dom";
 import { FiExternalLink, FiLock, FiArrowRight } from "react-icons/fi";
 import Badge from "./ui/Badge";
 
-/* Standardized fintech CTA variants — tactile, token-driven, WCAG-AAA compliant */
+/* Standardised CTA variants — squared ledger geometry, ink primary, hairlines. */
 const base =
-  "group/cta relative inline-flex items-center justify-center gap-2 rounded-full font-btn font-semibold tracking-[-0.01em] transition-all duration-200 ease-out active:scale-[0.98] select-none";
+  "group/cta relative inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-btn font-btn font-semibold tracking-[0.01em] transition-[background-color,border-color,color,transform] duration-200 ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-50";
 
 const sizes = {
-  md: "min-h-[42px] px-5 py-2 text-sm",
-  lg: "min-h-[48px] px-7 py-3 text-[15px]",
+  md: "min-h-[42px] px-5 py-2.5 text-[13px]",
+  lg: "min-h-[50px] px-6 py-3 text-sm",
 };
 
 const variants = {
-  /** Primary fintech CTA: high-contrast titanium graphite with inner bevel highlight */
+  /** Ink plate: the single strongest action on any page. */
   primary:
-    "bg-btn-bg text-btn-text shadow-card hover:bg-btn-bg-hover hover:shadow-card-hover border border-transparent dark:border-white/10 dark:shadow-[0_0_20px_rgba(255,255,255,0.08)]",
-  /** High-contrast CTA on brand surfaces */
+    "border border-transparent bg-btn-bg text-btn-text hover:-translate-y-px hover:bg-btn-bg-hover",
+  /** Same plate, used on inverted surfaces (tokens flip automatically). */
   inverse:
-    "bg-btn-bg text-btn-text shadow-card hover:bg-btn-bg-hover hover:shadow-card-hover border border-transparent dark:border-white/10",
-  /** Secondary CTA: refined glass/card surface with subtle hairline border */
+    "border border-transparent bg-btn-bg text-btn-text hover:-translate-y-px hover:bg-btn-bg-hover",
+  /** Hairline outline: secondary actions, never a filled pill. */
   secondary:
-    "border border-border-subtle bg-surface-card text-text-primary shadow-xs hover:border-border-strong hover:bg-surface-sunken hover:text-text-primary dark:hover:border-slate-600",
-  /** Secondary on brand surfaces */
+    "border border-border-strong/70 bg-transparent text-text-primary hover:border-border-strong hover:bg-surface-sunken",
+  /** Secondary on an inverted surface. */
   "secondary-inverse":
-    "border border-border-subtle bg-surface-card/60 backdrop-blur-md text-text-on-brand shadow-xs hover:border-border-strong hover:bg-surface-card hover:text-text-on-brand dark:border-slate-800 dark:hover:border-slate-600",
-  /** Bare text link with smooth arrow affordance */
-  ghost: "text-brand hover:text-brand-hover p-0 font-medium",
+    "border border-border-strong/70 bg-transparent text-text-primary hover:border-border-strong hover:bg-surface-sunken",
+  /** Bare text action with a signal arrow. */
+  ghost: "p-0 font-medium text-brand hover:text-brand-hover",
 };
 
 /**
@@ -47,13 +47,27 @@ export default function Button({
   const externalBits = external
     ? { target: "_blank", rel: "noopener noreferrer" }
     : {};
-  const suffix = external ? (
-    <FiExternalLink aria-hidden="true" className="size-4 shrink-0 opacity-75 group-hover/cta:opacity-100" />
+
+  const glyph = external ? (
+    <FiExternalLink
+      aria-hidden="true"
+      className="size-[15px] shrink-0 opacity-80 transition-transform duration-200 ease-out group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5 group-hover/cta:opacity-100 motion-reduce:transition-none"
+    />
   ) : arrow ? (
     <FiArrowRight
       aria-hidden="true"
-      className="size-4 shrink-0 transition-transform duration-200 ease-out motion-reduce:transition-none group-hover/cta:translate-x-1"
+      className="size-[15px] shrink-0 transition-transform duration-200 ease-out group-hover/cta:translate-x-0.5 motion-reduce:transition-none"
     />
+  ) : null;
+
+  const suffix = glyph ? (
+    <span className="relative ml-1 flex items-center pl-3">
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-1/2 h-4 w-px -translate-y-1/2 bg-current opacity-20"
+      />
+      {glyph}
+    </span>
   ) : null;
 
   if (to) {

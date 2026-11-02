@@ -1,125 +1,178 @@
+/* ==========================================================================
+   Infinity Lab — "Spectral Ledger" design system
+   --------------------------------------------------------------------------
+   Warm paper + ink typography + a single spectral signal drawn from the
+   infinity mark. All values are RGB triplets so Tailwind utilities keep
+   alpha support (bg-surface/80). Light values live in :root, dark values
+   in `.dark`.
+
+   Type: four families, four jobs.
+     Manrope (variable 200-800) — display, section headings, subheadings.
+     Geist   (variable 100-900) — body copy, UI, numerals.
+     Inter 600                  — the brand wordmark and every button label.
+     IBM Plex Mono              — eyebrows, counters and metadata.
+   Hierarchy comes from size, weight and colour, not from extra families.
+   Weights in use: 400 body, 500 display, 600 labels/cards/buttons.
+   Scale: display / heading / subheading / card / lead / body / mono.
+
+   Motion: no infinite animations. Only the theme icon swap and a single
+   hero fade-up, both finite and reduced-motion safe.
+
+   Contrast note (WCAG 2.2 AAA):
+     light  #111216 on #faf9f6 = 17.8:1 · #3d4049 = 9.8:1 · #484b54 = 8.3:1
+     dark   #f4f4f7 on #14151b = 17.3:1 · #c8c9d3 = 11.1:1 · #a6a8b5 = 7.7:1
+   Body copy is always >=7:1; large text >=4.5:1; controls >=3:1.
+   The one exception is the footer wordmark: purely decorative (aria-hidden,
+   the name is announced above), so it sits at 3.2:1 — AA for large text.
+   ========================================================================== */
+
+/* Body and UI. */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/fonts/geist-var.woff2") format("woff2");
+}
+
+/* Display. Manrope's open counters and wide skeleton carry the headline. */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 200 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/fonts/manrope-var.woff2") format("woff2");
+}
+
+/* Brand voice. One weight only: the wordmark and every button label. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/inter-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-mono-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-mono-500.woff2") format("woff2");
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ==========================================================================
-   Design tokens — top-tier fintech visual architecture (Stripe / Resend / Linear).
-   Values are RGB triplets so Tailwind utilities keep alpha support, e.g.
-   bg-surface/80. Light values live in :root, dark values in `.dark`.
-   Every text/background pair meets WCAG 2.2 AAA (>=7.0:1 for normal text,
-   >=4.5:1 for large text, >=3.0:1 for UI graphics and essential borders).
-   ========================================================================== */
 @layer base {
   :root {
-    /* Surfaces — architectural platinum canvas with pure elevated card planes */
-    --surface: 250 250 252;          /* #fafafc */
-    --surface-sunken: 241 245 249;   /* #f1f5f9 (slate 100 well) */
-    --surface-card: 255 255 255;     /* #ffffff (pure crisp white) */
-    --surface-brand: 250 250 252;    /* brand surface = canvas */
-    --surface-inverse-raised: 15 23 42;
+    /* Canvas — warm paper, not clinical white */
+    --surface: 250 249 246;            /* #faf9f6 */
+    --surface-sunken: 242 240 234;     /* #f2f0ea */
+    --surface-card: 255 255 255;       /* #ffffff */
+    --surface-raised: 255 255 255;
 
-    /* Text — WCAG AAA verified
-       #0f172a on #ffffff = 18.7:1 ✓ AAA
-       #0f172a on #fafafc = 18.0:1 ✓ AAA
-       #334155 on #ffffff = 9.7:1  ✓ AAA
-       #334155 on #fafafc = 9.3:1  ✓ AAA
-       #475569 on #ffffff = 7.02:1 ✓ AAA
-       #475569 on #fafafc = 6.8:1  ✓ AAA (large text & normal text compliant) */
-    --text-primary: 15 23 42;        /* deep slate 900 (#0f172a) */
-    --text-secondary: 51 65 85;      /* slate 700 (#334155) */
-    --text-muted: 71 85 105;         /* slate 600 (#475569) */
-    --text-on-brand: 15 23 42;
-    --text-on-brand-muted: 51 65 85;
+    /* Ink — AAA on paper */
+    --text-primary: 17 18 22;          /* #111216 */
+    --text-secondary: 61 64 73;        /* #3d4049 */
+    --text-muted: 72 75 84;            /* #484b54 — 8.3:1 on paper */
+    --text-inverse: 244 244 247;
+    --text-inverse-muted: 185 187 199;
+    /* Footer wordmark — decorative, AA-large (3.2:1), never body text */
+    --wordmark: 138 141 150;
 
-    /* Borders — surgical hairline precision */
-    --border-subtle: 226 232 240;    /* crisp slate 200 (#e2e8f0) */
-    --border-strong: 148 163 184;    /* slate 400 (#94a3b8, 3.4:1 UI contrast) */
+    /* Hairlines */
+    --border-subtle: 227 223 214;      /* #e3dfd6 */
+    --border-strong: 142 137 125;      /* #8e897d — 3.3:1 UI contrast */
 
-    /* Brand — emerald verdigris (>=7.0:1 WCAG AAA on white/canvas) */
-    --brand: 15 118 110;             /* surgical teal 700 (#0f766e, 7.3:1 on white, AAA) */
-    --brand-hover: 17 94 89;         /* deeper teal (#115e59, 9.8:1 on white, AAA) */
-    --brand-chip: 240 253 250;       /* soft mint-teal chip bg (#f0fdfa) */
-    --brand-chip-text: 17 94 89;     /* #115e59 (9.1:1 on chip, AAA) */
-    --btn-bg: 15 23 42;              /* titanium graphite button (#0f172a) */
-    --btn-bg-hover: 30 41 59;        /* slightly lighter slate (#1e293b) */
-    --btn-text: 255 255 255;         /* white on graphite = 18.7:1 ✓ AAA */
-    --ring: 15 118 110;
+    /* Accent — indigo drawn from the mark, AAA for links */
+    --brand: 55 48 163;                /* #3730a3 — 9.4:1 on paper */
+    --brand-hover: 30 27 75;           /* #1e1b4b */
+    --brand-soft: 238 237 255;         /* #eeedff */
+    --brand-soft-text: 49 46 129;      /* #312e81 — 8.6:1 on soft */
 
-    /* Accent */
-    --accent-gold: 180 83 9;         /* amber 700 (#b45309, 5.5:1 on white) */
+    /* Primary action */
+    --btn-bg: 17 18 22;
+    --btn-bg-hover: 42 44 53;
+    --btn-text: 250 249 246;
+    --ring: 55 48 163;
 
-    /* Hero visual (theme-aware SVG telemetry) */
-    --hv-orbit-a: #0f766e;
-    --hv-orbit-b: #0284c7;
-    --hv-gold: #d97706;
-    --hv-glow: #0d9488;
-    --hv-node-hi: #14b8a6;
-    --hv-node-lo: #0f766e;
-    --hv-connector: rgb(15 118 110 / 0.40);
-    --hv-arrow: #0f766e;
-    --hv-pulse: #0f766e;
-    --hv-medallion: #ffffff;
-    --hv-medallion-ring: rgb(15 23 42 / 0.08);
-    --hv-medallion-shadow: rgb(15 118 110 / 0.16);
+    /* Signal states */
+    --positive: 6 78 59;               /* #064e3b — 9.3:1 on soft */
+    --positive-soft: 236 253 245;
+    --warning: 120 53 15;              /* #78350f — 8.7:1 on soft */
+    --warning-soft: 255 251 235;
+    --danger: 153 27 27;               /* #991b1b — 7.6:1 on soft */
+    --danger-soft: 254 242 242;
 
-    /* Elevation — smooth multi-layer ambient diffusion */
-    --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.04);
-    --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.05), 0 20px 25px -5px rgb(15 23 42 / 0.02);
-    --shadow-card-hover: 0 16px 36px -8px rgb(15 23 42 / 0.12), 0 4px 12px -2px rgb(15 23 42 / 0.06);
-    --shadow-pop: 0 24px 48px -12px rgb(15 23 42 / 0.18);
+    /* The one gradient: blue → violet → magenta */
+    --signal-a: #2f4bff;
+    --signal-b: #7c3aed;
+    --signal-c: #db2777;
+    --signal-line: rgb(55 48 163 / 0.24);
+
+    /* Elevation — one quiet plate, never a glow */
+    --shadow-xs: 0 1px 0 0 rgb(17 18 22 / 0.04);
+    --shadow-card: 0 1px 0 0 rgb(17 18 22 / 0.04),
+      0 24px 40px -32px rgb(17 18 22 / 0.28);
+    --shadow-pop: 0 24px 60px -24px rgb(17 18 22 / 0.35);
+    --shadow-rim: inset 0 1px 0 0 rgb(255 255 255 / 0.9);
   }
 
   .dark {
-    /* Surfaces — obsidian titanium slate canvas (#090d14) with elevated midnight cards */
-    --surface: 9 13 20;              /* #090d14 */
-    --surface-sunken: 14 20 30;      /* #0e141e */
-    --surface-card: 19 26 38;        /* #131a26 */
-    --surface-brand: 9 13 20;
-    --surface-inverse-raised: 28 38 54;
+    --surface: 9 10 14;                /* #090a0e */
+    --surface-sunken: 14 15 20;        /* #0e0f14 */
+    --surface-card: 20 21 27;          /* #14151b */
+    --surface-raised: 25 26 34;        /* #191a22 */
 
-    /* Text — WCAG AAA on dark surfaces
-       #f8fafc on #131a26 = 17.2:1 ✓ AAA
-       #cbd5e1 on #131a26 = 10.5:1 ✓ AAA
-       #94a3b8 on #131a26 = 7.05:1 ✓ AAA */
-    --text-primary: 248 250 252;     /* crisp platinum white (#f8fafc) */
-    --text-secondary: 203 213 225;   /* soft silver slate (#cbd5e1) */
-    --text-muted: 148 163 184;       /* medium steel (#94a3b8) */
-    --text-on-brand: 248 250 252;
-    --text-on-brand-muted: 203 213 225;
+    --text-primary: 244 244 247;
+    --text-secondary: 200 201 211;
+    --text-muted: 166 168 181;         /* 7.7:1 on card */
+    --text-inverse: 17 18 22;
+    --text-inverse-muted: 61 64 73;
+    --wordmark: 93 96 107;
 
-    /* Borders — dark titanium slate hairlines */
-    --border-subtle: 30 41 59;       /* #1e293b */
-    --border-strong: 100 116 139;    /* #64748b (3.4:1 UI contrast) */
+    --border-subtle: 38 39 49;         /* #262731 */
+    --border-strong: 102 104 121;      /* 3.3:1 UI contrast */
 
-    /* Brand & Accent */
-    --brand: 45 212 191;             /* luminescent verdigris (#2dd4bf, 9.4:1 on card, AAA) */
-    --brand-hover: 94 234 212;       /* brighter on hover (#5eead4, 12.2:1, AAA) */
-    --brand-chip: 19 42 45;          /* dark teal chip (#132a2d) */
-    --brand-chip-text: 94 234 212;   /* #5eead4 on #132a2d = 8.8:1 ✓ AAA */
-    --btn-bg: 248 250 252;           /* crisp platinum button on dark */
-    --btn-bg-hover: 226 232 240;     /* smooth silver hover */
-    --btn-text: 9 13 20;             /* dark titanium on white button = 17.5:1 ✓ AAA */
-    --ring: 45 212 191;
-    --accent-gold: 245 158 11;       /* amber gold (#f59e0b) */
+    --brand: 165 180 252;              /* #a5b4fc — 9.1:1 on card */
+    --brand-hover: 199 210 254;
+    --brand-soft: 30 28 58;            /* #1e1c3a */
+    --brand-soft-text: 199 210 254;    /* 11.0:1 on soft */
 
-    /* Hero visual */
-    --hv-orbit-a: #2dd4bf;
-    --hv-orbit-b: #38bdf8;
-    --hv-gold: #fbbf24;
-    --hv-glow: #14b8a6;
-    --hv-node-hi: #99f6e4;
-    --hv-node-lo: #2dd4bf;
-    --hv-connector: rgb(45 212 191 / 0.40);
-    --hv-arrow: #2dd4bf;
-    --hv-pulse: #2dd4bf;
-    --hv-medallion: #131a26;
-    --hv-medallion-ring: rgb(45 212 191 / 0.28);
-    --hv-medallion-shadow: rgb(0 0 0 / 0.85);
+    --btn-bg: 244 244 247;
+    --btn-bg-hover: 200 201 211;
+    --btn-text: 9 10 14;
+    --ring: 165 180 252;
 
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.45), 0 20px 25px -5px rgb(0 0 0 / 0.35);
-    --shadow-card-hover: 0 16px 36px -8px rgb(0 0 0 / 0.75), 0 4px 12px -2px rgb(0 0 0 / 0.5);
-    --shadow-pop: 0 24px 48px -12px rgb(0 0 0 / 0.9);
+    --positive: 110 231 183;           /* 9.7:1 on soft */
+    --positive-soft: 5 46 34;
+    --warning: 252 211 77;
+    --warning-soft: 42 30 5;
+    --danger: 252 165 165;
+    --danger-soft: 42 10 10;
+
+    --signal-a: #6d8bff;
+    --signal-b: #a78bfa;
+    --signal-c: #f472b6;
+    --signal-line: rgb(165 180 252 / 0.28);
+
+    --shadow-xs: 0 1px 0 0 rgb(0 0 0 / 0.5);
+    --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.03),
+      0 24px 48px -32px rgb(0 0 0 / 0.9);
+    --shadow-pop: 0 24px 60px -24px rgb(0 0 0 / 0.9);
+    --shadow-rim: inset 0 1px 0 0 rgb(255 255 255 / 0.06);
   }
 
   html {
@@ -127,6 +180,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-synthesis-weight: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -142,135 +196,293 @@
     }
   }
 
+  @supports (scrollbar-width: thin) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgb(var(--border-strong)) transparent;
+    }
+  }
+
   body {
-    @apply bg-surface text-text-primary antialiased selection:bg-brand/20 selection:text-brand;
-    font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1, "ss01" 1;
+    @apply bg-surface text-text-primary antialiased;
+    font-family: "Geist", "Inter", system-ui, -apple-system,
+      BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-feature-settings: "liga" 1, "kern" 1;
     overflow-x: hidden;
   }
 
-  h1 {
-    font-family: "Delius", cursive, sans-serif;
-    @apply text-text-primary;
+  ::selection {
+    background-color: rgb(var(--brand) / 0.16);
+    color: rgb(var(--text-primary));
   }
 
-  h2, h3, h4, h5, h6 {
-    font-family: "Exo", sans-serif;
-    letter-spacing: -0.02em;
-    @apply text-text-primary;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: rgb(var(--text-primary));
   }
 
-  button, [role="button"] {
-    font-family: "Google Sans Flex", "Google Sans", sans-serif;
+  /* Every button speaks in the brand voice, including any native control
+     that is not routed through <Button>. Inputs keep the body face. */
+  button {
+    font-family: "Inter", "Geist", system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    font-weight: 600;
   }
 
-  /* 2px high-visibility keyboard focus */
-  a:focus-visible,
-  button:focus-visible,
-  [role="button"]:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-surface;
+  input,
+  select,
+  textarea {
+    font-family: "Geist", "Inter", system-ui, -apple-system,
+      "Segoe UI", sans-serif;
+  }
+
+  /* One high-visibility focus treatment for every control, in both themes. */
+  :where(a, button, [role="button"], input, select, textarea, summary):focus-visible {
+    outline: 2px solid rgb(var(--ring));
+    outline-offset: 2px;
   }
 }
 
 @layer components {
-  /* Section shell: balanced rhythm & readable measure */
+  /* ── Layout ─────────────────────────────────────────────────────────── */
   .container-section {
-    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-12;
   }
 
   .container-text {
-    @apply max-w-3xl;
+    max-width: 62ch;
   }
 
-  /* Hairline divider used across sections, cards, navbar, footer */
+  .section {
+    padding-block: clamp(4.5rem, 9vw, 8rem);
+  }
+
+  .section-tight {
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+  }
+
+  /* ── Typography ─────────────────────────────────────────────────────── */
+  .type-display {
+    font-family: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    font-size: clamp(2.0625rem, 1.3rem + 4.6vw, 5.25rem);
+    line-height: 1;
+    letter-spacing: -0.038em;
+    font-weight: 500;
+  }
+
+  /* The hero headline. Manrope sets wider than Geist at the same size, and
+     it shares its row with the instrument — so it caps lower than a page
+     title while keeping the same optical weight and tracking. */
+  .type-hero {
+    font-family: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    font-size: clamp(2.0625rem, 1.25rem + 4.0625vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.038em;
+    font-weight: 500;
+  }
+
+  .type-heading {
+    font-family: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    font-size: clamp(1.875rem, 1.35rem + 1.9vw, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+
+  .type-subheading {
+    font-family: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    font-size: clamp(1.1875rem, 1.1rem + 0.45vw, 1.375rem);
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+
+  /* One size for every card title in the system. */
+  .type-card {
+    font-family: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI",
+      sans-serif;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+
+  .type-lead {
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+  }
+
+  .type-mono {
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
+      monospace;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.2em] text-brand;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    flex: none;
+    background-image: linear-gradient(
+      90deg,
+      var(--signal-a),
+      var(--signal-b),
+      var(--signal-c)
+    );
+  }
+
+  .eyebrow-plain::before {
+    display: none;
+  }
+
+  /* ── Signature details ──────────────────────────────────────────────── */
+  .signal-rule {
+    height: 1px;
+    background-image: linear-gradient(
+      90deg,
+      var(--signal-a),
+      var(--signal-b),
+      var(--signal-c),
+      transparent
+    );
+  }
+
+  .signal-tick {
+    display: inline-block;
+    width: 22px;
+    height: 2px;
+    flex: none;
+    background-image: linear-gradient(
+      90deg,
+      var(--signal-a),
+      var(--signal-b),
+      var(--signal-c)
+    );
+  }
+
+  .signal-bar {
+    height: 2px;
+    background-image: linear-gradient(
+      90deg,
+      var(--signal-a),
+      var(--signal-b),
+      var(--signal-c)
+    );
+  }
+
+  /* A hairline mark, never a dot. Reads as a tick from the ledger. */
+  .signal-mark {
+    display: inline-block;
+    width: 12px;
+    height: 1px;
+    flex: none;
+    background-color: rgb(var(--brand));
+  }
+
   .hairline {
     @apply border-border-subtle;
   }
 
-  /* Brand surface with subtle gradient glow */
-  .bg-brand-deep {
-    @apply bg-surface-brand text-text-on-brand relative;
-    background-image:
-      radial-gradient(1100px 520px at 50% -10%, rgb(15 118 110 / 0.07), transparent 70%);
+  /* ── Panels ─────────────────────────────────────────────────────────── */
+  .panel {
+    @apply relative overflow-hidden rounded-card border border-border-subtle bg-surface-card;
+    box-shadow: var(--shadow-card);
   }
 
-  .dark .bg-brand-deep {
-    background-image:
-      radial-gradient(1100px 520px at 50% -10%, rgb(45 212 191 / 0.08), transparent 70%);
+  .panel-interactive {
+    transition-property: transform, border-color;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
   }
 
-  /* Fine engineering hairline grid overlay */
-  .bg-grid-fine {
-    background-image:
-      linear-gradient(rgb(15 23 42 / 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(15 23 42 / 0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    mask-image: radial-gradient(ellipse 90% 70% at 50% 25%, black 40%, transparent 80%);
+  .panel-interactive:hover {
+    transform: translateY(-2px);
+    border-color: rgb(var(--border-strong));
   }
 
-  .dark .bg-grid-fine {
-    background-image:
-      linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  .panel-interactive:focus-within {
+    border-color: rgb(var(--border-strong));
   }
 
-  /* Top ambient beam */
-  .hero-radial-glow {
+  /* ── Navigation ─────────────────────────────────────────────────────── */
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: "";
     position: absolute;
-    top: -120px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 400px;
-    background: radial-gradient(50% 50% at 50% 50%, rgb(45 212 191 / 0.15), transparent 100%);
-    pointer-events: none;
-    filter: blur(60px);
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 1.5px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background-image: linear-gradient(
+      90deg,
+      var(--signal-a),
+      var(--signal-b),
+      var(--signal-c)
+    );
+    transition: transform 180ms cubic-bezier(0.2, 0.7, 0.3, 1);
   }
 
-  /* Fluid typography */
-  .type-display {
-    font-family: 'Delius', cursive, sans-serif;
-    font-size: clamp(2.35rem, 1.85rem + 2.7vw, 4.125rem);
-    line-height: 1.12;
-    letter-spacing: -0.01em;
-    font-weight: 700;
+  .nav-link:hover::after,
+  .nav-link[aria-current="page"]::after {
+    transform: scaleX(1);
   }
 
-  .type-heading {
-    font-family: 'Exo', sans-serif;
-    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
-    line-height: 1.18;
-    letter-spacing: -0.02em;
-    font-weight: 700;
+  /* ── Form fields ────────────────────────────────────────────────────── */
+  .field-input {
+    @apply block w-full min-h-[48px] rounded-input border border-border-subtle bg-surface px-4 py-3 text-sm text-text-primary transition-colors duration-150 placeholder:text-text-muted hover:border-border-strong focus:border-brand;
   }
 
-  /* Below-the-fold content visibility optimization */
+  .field-input[aria-invalid="true"] {
+    @apply border-danger bg-danger-soft/40;
+  }
+
+  /* ── Motion ─────────────────────────────────────────────────────────── */
   .cv-auto {
     content-visibility: auto;
-    contain-intrinsic-size: 1px 700px;
+    /* `auto` remembers the last rendered size, so the scrollbar never
+       jumps after a section has been seen once. */
+    contain-intrinsic-size: auto 860px;
   }
 
-  /* Hardware rim highlight in dark mode */
-  .dark .card-rim {
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-  }
-
-  /* Hero visual motion */
-  .hv-orbit-spin {
-    transform-origin: 50% 50%;
-    animation: hv-spin 90s linear infinite;
-  }
-
-  /* Fintech animated data stream */
-  .hv-data-flow {
-    animation: hv-flow 2.2s linear infinite;
-  }
-
-  /* Theme toggle glyph swap */
   .theme-icon-swap {
     animation: theme-swap 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .underline-quiet {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: rgb(var(--border-strong) / 0.7);
+    transition: color 150ms ease, text-decoration-color 150ms ease;
+  }
+
+  .underline-quiet:hover {
+    text-decoration-color: currentColor;
   }
 }
 
@@ -282,26 +494,5 @@
   to {
     transform: rotate(0deg) scale(1);
     opacity: 1;
-  }
-}
-
-@media (max-width: 639.98px) {
-  .hv-connectors {
-    display: none;
-  }
-}
-
-@keyframes hv-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes hv-flow {
-  0% {
-    stroke-dashoffset: 40;
-  }
-  100% {
-    stroke-dashoffset: 0;
   }
 }
