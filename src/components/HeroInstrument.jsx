@@ -7,20 +7,21 @@
  *
  * Performance Guarantees:
  * - Zero paint recalculations during continuous orbiting.
- * - Exactly 7 compositor layers with `will-change: transform` (≤ 8 layers).
+ * - Exactly 7 compositor layers with `will-change: transform` (<= 8 layers).
  * - Zero React state or re-renders during animation.
  * - Tab visibility and viewport IntersectionObserver pause rotation via DOM data attribute.
  * - Aspect ratio 1:1 with inline SVG for zero Cumulative Layout Shift (CLS 0).
  *
  * Geometry & No-Overlap Invariant:
- * - Ring B radius R = 32cqw, card width w = 33cqw (w/2 = 16.5cqw).
- * - Clearance to center: R(32) - w/2(16.5) = 15.5cqw ≥ logoRadius(10.5cqw) + 5cqw.
- * - Zero overlap between cards and logo disc at any angle or viewport scale.
+ * - Ring B radius R = 32.5cqw, card dimension = 31.5cqw x 10.5cqw (w/2 = 15.75, h/2 = 5.25).
+ * - Clearance to center: minimum corner distance 15.90cqw >= logoRadius(10.5cqw) + 5cqw (5.40cqw clearance).
+ * - Stage boundary clearance: 100cqw - 98.25cqw = 1.75cqw margin.
+ * - Inter-card clearance: > 23cqw at 120° offsets.
  *
  * Responsive Adaptability:
- * - ≥ 440px container width: Full capability cards with 14px radius and dual-line typography.
+ * - >= 440px container width: Full capability cards with 14px radius and dual-line typography.
  * - < 440px container width: 12cqw compact icon chips on the orbit + 3-item static legend below.
- * - Prefers-reduced-motion: All animations disabled; arms and cards fixed upright at -150°/-30°/90°.
+ * - Prefers-reduced-motion: All continuous and entrance animations disabled; cards fixed upright at -150°/-30°/90°.
  * ============================================================================
  */
 
@@ -54,8 +55,43 @@ const CAPABILITIES = [
 ];
 
 /**
+ * Consolidated SVG paths for Ring C bezel (Swiss watch instrument ticks):
+ * - Minor: 120 radial tick marks (every 3°) from r=227 to r=230 (outer radius 230 = 46cqw of 500)
+ * - Major: 12 radial tick marks (every 30°, tenth position) from r=223 to r=231
+ */
+const MINOR_TICKS_PATH = (() => {
+  const cx = 250;
+  const cy = 250;
+  let d = "";
+  for (let i = 0; i < 120; i++) {
+    const rad = (i * 3 * Math.PI) / 180;
+    const x1 = (cx + 227 * Math.cos(rad)).toFixed(1);
+    const y1 = (cy + 227 * Math.sin(rad)).toFixed(1);
+    const x2 = (cx + 230 * Math.cos(rad)).toFixed(1);
+    const y2 = (cy + 230 * Math.sin(rad)).toFixed(1);
+    d += `M${x1} ${y1}L${x2} ${y2}`;
+  }
+  return d;
+})();
+
+const MAJOR_TICKS_PATH = (() => {
+  const cx = 250;
+  const cy = 250;
+  let d = "";
+  for (let i = 0; i < 12; i++) {
+    const rad = (i * 30 * Math.PI) / 180;
+    const x1 = (cx + 223 * Math.cos(rad)).toFixed(1);
+    const y1 = (cy + 223 * Math.sin(rad)).toFixed(1);
+    const x2 = (cx + 231 * Math.cos(rad)).toFixed(1);
+    const y2 = (cy + 231 * Math.sin(rad)).toFixed(1);
+    d += `M${x1} ${y1}L${x2} ${y2}`;
+  }
+  return d;
+})();
+
+/**
  * Orbital Capability Card Item:
- * Responsive switch between full card (≥ 440px container) and compact icon chip (< 440px container).
+ * Responsive switch between full card (>= 440px container) and compact icon chip (< 440px container).
  */
 function OrbitalCardItem({ card }) {
   const Icon = card.icon;
@@ -66,14 +102,14 @@ function OrbitalCardItem({ card }) {
       aria-label={`${card.title}: ${card.support}`}
       className="orbital-card-item group relative select-none rounded-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F46E5] dark:focus-visible:ring-[#818CF8] focus-visible:ring-offset-2"
     >
-      {/* ── Desktop & Tablet Full Card (container width ≥ 440px) ───── */}
+      {/* ── Desktop & Tablet Full Card (container width >= 440px) ───── */}
       <div
         className="orbital-card-full hidden items-center gap-2.5 rounded-[14px] border px-3 py-2 sm:py-2.5"
         style={{
-          width: "33cqw",
-          minWidth: "160px",
+          width: "31.5cqw",
+          minWidth: "156px",
           maxWidth: "188px",
-          minHeight: "11cqw",
+          minHeight: "10.5cqw",
           borderColor: "var(--orbital-card-border)",
           backgroundColor: "var(--orbital-card-surface)",
           boxShadow: "var(--orbital-card-shadow)",
@@ -107,6 +143,7 @@ function OrbitalCardItem({ card }) {
       {/* ── Mobile Compact Chip (container width < 440px) ─────────── */}
       <div
         className="orbital-card-chip hidden items-center justify-center rounded-full border"
+        aria-label={card.title}
         style={{
           width: "12cqw",
           height: "12cqw",
@@ -200,10 +237,11 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
           container-type: inline-size;
           contain: layout paint style;
           isolation: isolate;
+          position: relative;
           transform-origin: 50% 50%;
         }
 
-        /* ── All Compositor Keyframes (Pure Transforms) ── */
+        /* ── Compositor Keyframes (Pure 2D Transforms) ── */
         @keyframes orbital-spin-cw {
           from {
             transform: rotate(0deg);
@@ -272,7 +310,7 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
           -webkit-backface-visibility: hidden;
         }
 
-        /* Hover & paused state: seamless pause */
+        /* Hover, focus-within & paused state: seamless pause */
         .orbital-container:hover .orbital-rotator,
         .orbital-container:hover .orbital-arm,
         .orbital-container:hover .orbital-card-counter,
@@ -285,12 +323,11 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
           animation-play-state: paused !important;
         }
 
-        /* Comet-tail arcs on Ring B: 45deg trailing arc behind each card */
+        /* Comet-tail arcs on Ring B: ~45deg trailing arc behind each card */
         .orbital-tails-ring {
           border: 1.5px solid var(--orbital-accent);
-          opacity: 0.60;
-          mask: repeating-conic-gradient(from 45deg, transparent 0deg, #000 45deg, transparent 45.1deg 120deg);
-          -webkit-mask: repeating-conic-gradient(from 45deg, transparent 0deg, #000 45deg, transparent 45.1deg 120deg);
+          mask: repeating-conic-gradient(from 45deg, transparent 0deg, rgba(0, 0, 0, 0.6) 45deg, transparent 45.1deg 120deg);
+          -webkit-mask: repeating-conic-gradient(from 45deg, transparent 0deg, rgba(0, 0, 0, 0.6) 45deg, transparent 45.1deg 120deg);
         }
 
         /* Container Queries: Responsive Card to Chip + Legend */
@@ -393,7 +430,7 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
 
         {/* ── Rings Entrance Wrapper (700ms ease-out) ────────────────── */}
         <div className="orbital-entrance-rings pointer-events-none absolute inset-0">
-          {/* Static Concentric Rings: Hairline outer at r=13, Ring A at r=21, Ring B at r=32 */}
+          {/* Static Concentric Rings: Hairline outer at r=13, Ring A at r=21, Ring B at r=32.5 */}
           <svg
             viewBox="0 0 500 500"
             className="pointer-events-none absolute inset-0 h-full w-full select-none"
@@ -423,11 +460,11 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
               vectorEffect="non-scaling-stroke"
             />
 
-            {/* Ring B (card track): r=32cqw (r=160 in 500x500) solid hairline */}
+            {/* Ring B (card track): r=32.5cqw (r=162.5 in 500x500) solid hairline */}
             <circle
               cx="250"
               cy="250"
-              r="160"
+              r="162.5"
               stroke="currentColor"
               strokeWidth="1"
               className="text-slate-900/[0.14] dark:text-white/[0.12]"
@@ -444,25 +481,19 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
             }}
           >
             <svg viewBox="0 0 500 500" className="h-full w-full" fill="none">
-              {/* Minor ticks: 120 ticks */}
-              <circle
-                cx="250"
-                cy="250"
-                r="230"
+              {/* Minor ticks: 120 consolidated radial lines */}
+              <path
+                d={MINOR_TICKS_PATH}
                 stroke="currentColor"
                 strokeWidth="1"
-                strokeDasharray="1.2 10.8428"
                 className="text-slate-900/[0.12] dark:text-white/[0.10]"
                 vectorEffect="non-scaling-stroke"
               />
-              {/* Major ticks: 12 ticks (every 10th) */}
-              <circle
-                cx="250"
-                cy="250"
-                r="230"
+              {/* Major ticks: 12 consolidated radial lines (every 10th position) */}
+              <path
+                d={MAJOR_TICKS_PATH}
                 stroke="currentColor"
                 strokeWidth="1.75"
-                strokeDasharray="2.5 117.9277"
                 className="text-slate-900/[0.28] dark:text-white/[0.30]"
                 vectorEffect="non-scaling-stroke"
               />
@@ -477,7 +508,7 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
               animation: "orbital-spin-ccw 64s linear infinite",
             }}
           >
-            {/* Sat 1: 4px dot, accent color, Ring A (45deg) */}
+            {/* Sat 1: 4px dot, accent fill, Ring A (45deg) */}
             <span
               className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4F46E5] ring-1 ring-[#4F46E5]/40 dark:bg-[#818CF8] dark:ring-[#818CF8]/40"
               style={{
@@ -485,7 +516,7 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
                 top: "calc(50% + 14.85cqw)",
               }}
             />
-            {/* Sat 2: 4px dot, neutral, Ring A (225deg) */}
+            {/* Sat 2: 4px dot, neutral fill, Ring A (225deg) */}
             <span
               className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-500 ring-1 ring-slate-900/20 dark:bg-slate-400 dark:ring-white/20"
               style={{
@@ -503,7 +534,7 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
               animation: "orbital-spin-ccw 150s linear infinite",
             }}
           >
-            {/* Sat 3: 4px dot, neutral, Ring C (110deg) */}
+            {/* Sat 3: 4px dot, neutral fill, Ring C (110deg) */}
             <span
               className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15"
               style={{
@@ -511,7 +542,7 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
                 top: "calc(50% + 43.23cqw)",
               }}
             />
-            {/* Sat 4: 4px dot, neutral, Ring C (290deg) */}
+            {/* Sat 4: 4px dot, neutral fill, Ring C (290deg) */}
             <span
               className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15"
               style={{
@@ -530,17 +561,17 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
             style={{
               left: "50%",
               top: "50%",
-              width: "64cqw",
-              height: "64cqw",
-              marginLeft: "-32cqw",
-              marginTop: "-32cqw",
+              width: "65cqw",
+              height: "65cqw",
+              marginLeft: "-32.5cqw",
+              marginTop: "-32.5cqw",
               borderRadius: "50%",
               animation: "orbital-spin-cw 96s linear infinite",
             }}
             aria-hidden="true"
           />
 
-          {/* 3 Arms: Spokes + Cards on Ring B (R=32cqw, 120° spacing) */}
+          {/* 3 Arms: Spokes + Cards on Ring B (R=32.5cqw, 120° spacing) */}
           {CAPABILITIES.map((card, idx) => (
             <div
               key={card.title}
@@ -550,21 +581,21 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
                 animationDelay: card.delay,
               }}
             >
-              {/* Spoke: 1px dashed hairline from r=13cqw to r=32cqw */}
+              {/* Spoke: 1px dashed hairline from r=13cqw to r=32.5cqw */}
               <div
                 className="pointer-events-none absolute top-1/2 h-px -translate-y-1/2 border-t border-dashed border-slate-900/[0.12] dark:border-white/[0.10]"
                 style={{
                   left: "calc(50% + 13cqw)",
-                  width: "19cqw",
+                  width: "19.5cqw",
                 }}
                 aria-hidden="true"
               />
 
-              {/* Card node anchor at Ring B (r=32cqw) */}
+              {/* Card node anchor at Ring B (r=32.5cqw) */}
               <div
                 className="pointer-events-auto absolute top-1/2"
                 style={{
-                  left: "calc(50% + 32cqw)",
+                  left: "calc(50% + 32.5cqw)",
                 }}
               >
                 {/* Counter-rotation to keep card 100% upright */}
@@ -603,14 +634,14 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
       </div>
 
       {/* ── Mobile Legend (<440px container) ────────────────────────── */}
-      <div
+      <ul
         className="orbital-mobile-legend mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3"
         aria-label="Capabilities"
       >
         {CAPABILITIES.map((cap) => {
           const Icon = cap.icon;
           return (
-            <div
+            <li
               key={cap.title}
               className="flex items-center gap-2.5 rounded-[12px] border border-slate-900/10 bg-white p-2.5 shadow-xs dark:border-white/[0.09] dark:bg-[#12131A]"
             >
@@ -628,13 +659,12 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
                   {cap.support}
                 </div>
               </div>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 });
 
 export default HeroInstrument;
-
