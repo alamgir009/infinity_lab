@@ -210,6 +210,7 @@ export const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
     };
   }, []);
 
+  // New comment for update
   return (
     <div className={`orbital-wrapper relative mx-auto w-full max-w-[560px] ${className}`}>
       <style>{`
