@@ -28,6 +28,7 @@
 import { memo, useRef, useEffect } from "react";
 import { FiCode, FiCloud, FiSmartphone } from "react-icons/fi";
 import markWebp from "../assets/brand/inf-lab-mark.webp";
+import "./HeroInstrument.css";
 
 /**
  * Three core disciplines rendered on Ring B at 120° offsets:
@@ -38,19 +39,16 @@ const CAPABILITIES = [
     icon: FiCode,
     title: "Web platforms",
     support: "Modern, scalable, secure",
-    delay: "0s",
   },
   {
     icon: FiCloud,
     title: "Cloud & backend",
     support: "Reliable & high performance",
-    delay: "-32s",
   },
   {
     icon: FiSmartphone,
     title: "Mobile apps",
     support: "iOS & Android",
-    delay: "-64s",
   },
 ];
 
@@ -103,18 +101,7 @@ function OrbitalCardItem({ card }) {
       className="orbital-card-item group relative select-none rounded-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F46E5] dark:focus-visible:ring-[#818CF8] focus-visible:ring-offset-2"
     >
       {/* ── Desktop & Tablet Full Card (container width >= 440px) ───── */}
-      <div
-        className="orbital-card-full hidden items-center gap-2.5 rounded-[14px] border px-3 py-2 sm:py-2.5"
-        style={{
-          width: "31.5cqw",
-          minWidth: "156px",
-          maxWidth: "188px",
-          minHeight: "10.5cqw",
-          borderColor: "var(--orbital-card-border)",
-          backgroundColor: "var(--orbital-card-surface)",
-          boxShadow: "var(--orbital-card-shadow)",
-        }}
-      >
+      <div className="orbital-card-full hidden items-center gap-2.5 rounded-[14px] border px-3 py-2 sm:py-2.5">
         {/* Icon tile (8cqw, min 32px, max 40px, radius 10px, 1px border) */}
         <span
           aria-hidden="true"
@@ -125,16 +112,10 @@ function OrbitalCardItem({ card }) {
 
         {/* Text lockup */}
         <div className="min-w-0 flex-1">
-          <div
-            className="truncate font-semibold leading-tight text-[#0B0B0F] dark:text-[#F5F6F8]"
-            style={{ fontSize: "clamp(12px, 2.6cqw, 14px)" }}
-          >
+          <div className="orbital-card-title truncate font-semibold leading-tight text-[#0B0B0F] dark:text-[#F5F6F8]">
             {card.title}
           </div>
-          <div
-            className="mt-0.5 truncate leading-tight text-[#5B606B] dark:text-[#9AA0AC]"
-            style={{ fontSize: "clamp(10px, 2.1cqw, 12px)" }}
-          >
+          <div className="orbital-card-support mt-0.5 truncate leading-tight text-[#5B606B] dark:text-[#9AA0AC]">
             {card.support}
           </div>
         </div>
@@ -144,17 +125,6 @@ function OrbitalCardItem({ card }) {
       <div
         className="orbital-card-chip hidden items-center justify-center rounded-full border"
         aria-label={card.title}
-        style={{
-          width: "12cqw",
-          height: "12cqw",
-          minWidth: "38px",
-          minHeight: "38px",
-          maxWidth: "48px",
-          maxHeight: "48px",
-          borderColor: "var(--orbital-card-border)",
-          backgroundColor: "var(--orbital-card-surface)",
-          boxShadow: "var(--orbital-card-shadow)",
-        }}
       >
         <span
           aria-hidden="true"
@@ -212,179 +182,6 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
 
   return (
     <div className={`orbital-wrapper relative mx-auto w-full max-w-[560px] ${className}`}>
-      <style>{`
-        .orbital-wrapper {
-          container-type: inline-size;
-        }
-
-        :root {
-          --orbital-accent: #4F46E5;
-          --orbital-card-surface: #FFFFFF;
-          --orbital-card-border: rgba(15, 23, 42, 0.10);
-          --orbital-card-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 12px 24px -14px rgba(15, 23, 42, 0.22);
-        }
-
-        .dark {
-          --orbital-accent: #818CF8;
-          --orbital-card-surface: #12131A;
-          --orbital-card-border: rgba(255, 255, 255, 0.09);
-          --orbital-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 14px 28px -16px #000000;
-        }
-
-        .orbital-container {
-          width: min(100%, 560px);
-          aspect-ratio: 1;
-          container-type: inline-size;
-          contain: layout paint style;
-          isolation: isolate;
-          position: relative;
-          transform-origin: 50% 50%;
-        }
-
-        /* ── Compositor Keyframes (Pure 2D Transforms) ── */
-        @keyframes orbital-spin-cw {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes orbital-spin-ccw {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(-360deg);
-          }
-        }
-
-        @keyframes orbital-arm-spin {
-          from {
-            transform: rotate(-150deg);
-          }
-          to {
-            transform: rotate(210deg);
-          }
-        }
-
-        @keyframes orbital-card-counter {
-          from {
-            transform: translate(-50%, -50%) rotate(150deg);
-          }
-          to {
-            transform: translate(-50%, -50%) rotate(-210deg);
-          }
-        }
-
-        @keyframes orbital-entrance-fade {
-          from {
-            opacity: 0;
-            transform: translateY(6px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Entrance: once, 700ms ease-out, 90ms stagger */
-        .orbital-entrance-rings {
-          animation: orbital-entrance-fade 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        .orbital-entrance-cards {
-          animation: orbital-entrance-fade 700ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
-        }
-
-        /* Rotators & Arm transform-origin */
-        .orbital-rotator,
-        .orbital-arm {
-          transform-origin: 50% 50%;
-        }
-
-        .orbital-card-counter {
-          transform-origin: 50% 50%;
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-        }
-
-        /* Hover, focus-within & paused state: seamless pause */
-        .orbital-container:hover .orbital-rotator,
-        .orbital-container:hover .orbital-arm,
-        .orbital-container:hover .orbital-card-counter,
-        .orbital-container:focus-within .orbital-rotator,
-        .orbital-container:focus-within .orbital-arm,
-        .orbital-container:focus-within .orbital-card-counter,
-        .orbital-container[data-paused="true"] .orbital-rotator,
-        .orbital-container[data-paused="true"] .orbital-arm,
-        .orbital-container[data-paused="true"] .orbital-card-counter {
-          animation-play-state: paused !important;
-        }
-
-        /* Comet-tail arcs on Ring B: ~45deg trailing arc behind each card */
-        .orbital-tails-ring {
-          border: 1.5px solid var(--orbital-accent);
-          mask: repeating-conic-gradient(from 45deg, transparent 0deg, rgba(0, 0, 0, 0.6) 45deg, transparent 45.1deg 120deg);
-          -webkit-mask: repeating-conic-gradient(from 45deg, transparent 0deg, rgba(0, 0, 0, 0.6) 45deg, transparent 45.1deg 120deg);
-        }
-
-        /* Container Queries: Responsive Card to Chip + Legend */
-        @container (min-width: 440px) {
-          .orbital-card-full {
-            display: flex !important;
-          }
-          .orbital-card-chip {
-            display: none !important;
-          }
-          .orbital-mobile-legend {
-            display: none !important;
-          }
-        }
-
-        @container (max-width: 439px) {
-          .orbital-card-full {
-            display: none !important;
-          }
-          .orbital-card-chip {
-            display: flex !important;
-          }
-          .orbital-mobile-legend {
-            display: grid !important;
-          }
-        }
-
-        /* Accessibility: prefers-reduced-motion stops all motion */
-        @media (prefers-reduced-motion: reduce) {
-          .orbital-entrance-rings,
-          .orbital-entrance-cards,
-          .orbital-rotator,
-          .orbital-arm,
-          .orbital-card-counter {
-            animation: none !important;
-          }
-          .orbital-arm-0 {
-            transform: rotate(-150deg) !important;
-          }
-          .orbital-arm-0 .orbital-card-counter {
-            transform: translate(-50%, -50%) rotate(150deg) !important;
-          }
-          .orbital-arm-1 {
-            transform: rotate(-30deg) !important;
-          }
-          .orbital-arm-1 .orbital-card-counter {
-            transform: translate(-50%, -50%) rotate(30deg) !important;
-          }
-          .orbital-arm-2 {
-            transform: rotate(90deg) !important;
-          }
-          .orbital-arm-2 .orbital-card-counter {
-            transform: translate(-50%, -50%) rotate(-90deg) !important;
-          }
-        }
-      `}</style>
-
       {/* Main Square Orbital Container */}
       <div
         ref={containerRef}
@@ -476,9 +273,6 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
           <div
             className="orbital-rotator orbital-tick-bezel pointer-events-none absolute inset-0 select-none will-change-transform"
             aria-hidden="true"
-            style={{
-              animation: "orbital-spin-cw 240s linear infinite",
-            }}
           >
             <svg viewBox="0 0 500 500" className="h-full w-full" fill="none">
               {/* Minor ticks: 120 consolidated radial lines */}
@@ -504,52 +298,22 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
           <div
             className="orbital-rotator orbital-inner-sats pointer-events-none absolute inset-0 select-none will-change-transform"
             aria-hidden="true"
-            style={{
-              animation: "orbital-spin-ccw 64s linear infinite",
-            }}
           >
             {/* Sat 1: 4px dot, accent fill, Ring A (45deg) */}
-            <span
-              className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4F46E5] ring-1 ring-[#4F46E5]/40 dark:bg-[#818CF8] dark:ring-[#818CF8]/40"
-              style={{
-                left: "calc(50% + 14.85cqw)",
-                top: "calc(50% + 14.85cqw)",
-              }}
-            />
+            <span className="orbital-sat--inner-a absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4F46E5] ring-1 ring-[#4F46E5]/40 dark:bg-[#818CF8] dark:ring-[#818CF8]/40" />
             {/* Sat 2: 4px dot, neutral fill, Ring A (225deg) */}
-            <span
-              className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-500 ring-1 ring-slate-900/20 dark:bg-slate-400 dark:ring-white/20"
-              style={{
-                left: "calc(50% - 14.85cqw)",
-                top: "calc(50% - 14.85cqw)",
-              }}
-            />
+            <span className="orbital-sat--inner-b absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-500 ring-1 ring-slate-900/20 dark:bg-slate-400 dark:ring-white/20" />
           </div>
 
           {/* Rotator 3: Outer Satellites (Ring C r=46cqw, CCW 150s) */}
           <div
             className="orbital-rotator orbital-outer-sats pointer-events-none absolute inset-0 select-none will-change-transform"
             aria-hidden="true"
-            style={{
-              animation: "orbital-spin-ccw 150s linear infinite",
-            }}
           >
             {/* Sat 3: 4px dot, neutral fill, Ring C (110deg) */}
-            <span
-              className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15"
-              style={{
-                left: "calc(50% - 15.73cqw)",
-                top: "calc(50% + 43.23cqw)",
-              }}
-            />
+            <span className="orbital-sat--outer-a absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15" />
             {/* Sat 4: 4px dot, neutral fill, Ring C (290deg) */}
-            <span
-              className="absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15"
-              style={{
-                left: "calc(50% + 15.73cqw)",
-                top: "calc(50% - 43.23cqw)",
-              }}
-            />
+            <span className="orbital-sat--outer-b absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15" />
           </div>
         </div>
 
@@ -558,16 +322,6 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
           {/* Rotator 4: Comet-tail arcs ring on Ring B (CW 96s) */}
           <div
             className="orbital-rotator orbital-tails-ring pointer-events-none absolute will-change-transform"
-            style={{
-              left: "50%",
-              top: "50%",
-              width: "65cqw",
-              height: "65cqw",
-              marginLeft: "-32.5cqw",
-              marginTop: "-32.5cqw",
-              borderRadius: "50%",
-              animation: "orbital-spin-cw 96s linear infinite",
-            }}
             aria-hidden="true"
           />
 
@@ -576,36 +330,17 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
             <div
               key={card.title}
               className={`orbital-arm orbital-arm-${idx} pointer-events-none absolute inset-0`}
-              style={{
-                animation: "orbital-arm-spin 96s linear infinite",
-                animationDelay: card.delay,
-              }}
             >
               {/* Spoke: 1px dashed hairline from r=13cqw to r=32.5cqw */}
               <div
-                className="pointer-events-none absolute top-1/2 h-px -translate-y-1/2 border-t border-dashed border-slate-900/[0.12] dark:border-white/[0.10]"
-                style={{
-                  left: "calc(50% + 13cqw)",
-                  width: "19.5cqw",
-                }}
+                className="orbital-spoke pointer-events-none absolute top-1/2 h-px -translate-y-1/2 border-t border-dashed border-slate-900/[0.12] dark:border-white/[0.10]"
                 aria-hidden="true"
               />
 
               {/* Card node anchor at Ring B (r=32.5cqw) */}
-              <div
-                className="pointer-events-auto absolute top-1/2"
-                style={{
-                  left: "calc(50% + 32.5cqw)",
-                }}
-              >
+              <div className="orbital-card-anchor pointer-events-auto absolute top-1/2">
                 {/* Counter-rotation to keep card 100% upright */}
-                <div
-                  className="orbital-card-counter will-change-transform"
-                  style={{
-                    animation: "orbital-card-counter 96s linear infinite",
-                    animationDelay: card.delay,
-                  }}
-                >
+                <div className="orbital-card-counter will-change-transform">
                   <OrbitalCardItem card={card} />
                 </div>
               </div>

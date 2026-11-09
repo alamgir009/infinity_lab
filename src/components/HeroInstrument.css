@@ -1,0 +1,323 @@
+/* Orbital instrument — component-scoped tokens, geometry and motion. */
+
+.orbital-wrapper {
+  container-type: inline-size;
+
+  --orbital-accent: #4f46e5;
+  --orbital-card-surface: #ffffff;
+  --orbital-card-border: rgba(15, 23, 42, 0.1);
+  --orbital-card-shadow: 0 1px 2px rgba(15, 23, 42, 0.06),
+    0 12px 24px -14px rgba(15, 23, 42, 0.22);
+
+  --orbital-period: 96s;
+  --orbital-bezel-duration: 240s;
+  --orbital-inner-duration: 64s;
+  --orbital-outer-duration: 150s;
+
+  --orbital-ring-b: 32.5cqw;
+  --orbital-card-width: 31.5cqw;
+  --orbital-card-height: 10.5cqw;
+  --orbital-card-min-width: 156px;
+  --orbital-card-max-width: 188px;
+  --orbital-chip-size: 12cqw;
+  --orbital-chip-min-size: 38px;
+  --orbital-chip-max-size: 48px;
+
+  --orbital-sat-inner-offset: 14.85cqw;
+  --orbital-sat-outer-x: 15.73cqw;
+  --orbital-sat-outer-y: 43.23cqw;
+  --orbital-spoke-start: 13cqw;
+  --orbital-spoke-length: 19.5cqw;
+
+  --orbital-title-size: clamp(12px, 2.6cqw, 14px);
+  --orbital-support-size: clamp(10px, 2.1cqw, 12px);
+}
+
+.dark .orbital-wrapper {
+  --orbital-accent: #818cf8;
+  --orbital-card-surface: #12131a;
+  --orbital-card-border: rgba(255, 255, 255, 0.09);
+  --orbital-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 14px 28px -16px #000000;
+}
+
+.orbital-container {
+  width: min(100%, 560px);
+  aspect-ratio: 1;
+  container-type: inline-size;
+  contain: layout paint style;
+  isolation: isolate;
+  position: relative;
+  transform-origin: 50% 50%;
+}
+
+.orbital-card-full {
+  width: var(--orbital-card-width);
+  min-width: var(--orbital-card-min-width);
+  max-width: var(--orbital-card-max-width);
+  min-height: var(--orbital-card-height);
+  border-color: var(--orbital-card-border);
+  background-color: var(--orbital-card-surface);
+  box-shadow: var(--orbital-card-shadow);
+}
+
+.orbital-card-chip {
+  width: var(--orbital-chip-size);
+  height: var(--orbital-chip-size);
+  min-width: var(--orbital-chip-min-size);
+  min-height: var(--orbital-chip-min-size);
+  max-width: var(--orbital-chip-max-size);
+  max-height: var(--orbital-chip-max-size);
+  border-color: var(--orbital-card-border);
+  background-color: var(--orbital-card-surface);
+  box-shadow: var(--orbital-card-shadow);
+}
+
+.orbital-card-title {
+  font-size: var(--orbital-title-size);
+}
+
+.orbital-card-support {
+  font-size: var(--orbital-support-size);
+}
+
+/* ── Compositor keyframes (pure 2D transforms) ── */
+@keyframes orbital-spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbital-spin-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes orbital-arm-spin {
+  from {
+    transform: rotate(-150deg);
+  }
+  to {
+    transform: rotate(210deg);
+  }
+}
+
+@keyframes orbital-card-counter {
+  from {
+    transform: translate(-50%, -50%) rotate(150deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-210deg);
+  }
+}
+
+@keyframes orbital-entrance-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Entrance: once, 700ms ease-out, 90ms stagger. */
+.orbital-entrance-rings {
+  animation: orbital-entrance-fade 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.orbital-entrance-cards {
+  animation: orbital-entrance-fade 700ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
+}
+
+/* Rotators and arm transform origins. */
+.orbital-rotator,
+.orbital-arm {
+  transform-origin: 50% 50%;
+}
+
+.orbital-card-counter {
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  animation: orbital-card-counter var(--orbital-period) linear infinite;
+}
+
+/* Hover, focus-within and paused state: seamless pause. */
+.orbital-container:hover .orbital-rotator,
+.orbital-container:hover .orbital-arm,
+.orbital-container:hover .orbital-card-counter,
+.orbital-container:focus-within .orbital-rotator,
+.orbital-container:focus-within .orbital-arm,
+.orbital-container:focus-within .orbital-card-counter,
+.orbital-container[data-paused="true"] .orbital-rotator,
+.orbital-container[data-paused="true"] .orbital-arm,
+.orbital-container[data-paused="true"] .orbital-card-counter {
+  animation-play-state: paused !important;
+}
+
+.orbital-tick-bezel {
+  animation: orbital-spin-cw var(--orbital-bezel-duration) linear infinite;
+}
+
+.orbital-inner-sats {
+  animation: orbital-spin-ccw var(--orbital-inner-duration) linear infinite;
+}
+
+.orbital-outer-sats {
+  animation: orbital-spin-ccw var(--orbital-outer-duration) linear infinite;
+}
+
+.orbital-sat--inner-a {
+  left: calc(50% + var(--orbital-sat-inner-offset));
+  top: calc(50% + var(--orbital-sat-inner-offset));
+}
+
+.orbital-sat--inner-b {
+  left: calc(50% - var(--orbital-sat-inner-offset));
+  top: calc(50% - var(--orbital-sat-inner-offset));
+}
+
+.orbital-sat--outer-a {
+  left: calc(50% - var(--orbital-sat-outer-x));
+  top: calc(50% + var(--orbital-sat-outer-y));
+}
+
+.orbital-sat--outer-b {
+  left: calc(50% + var(--orbital-sat-outer-x));
+  top: calc(50% - var(--orbital-sat-outer-y));
+}
+
+/* Comet-tail arcs on Ring B: ~45deg trailing arc behind each card. */
+.orbital-tails-ring {
+  left: 50%;
+  top: 50%;
+  width: calc(var(--orbital-ring-b) * 2);
+  height: calc(var(--orbital-ring-b) * 2);
+  margin-left: calc(var(--orbital-ring-b) * -1);
+  margin-top: calc(var(--orbital-ring-b) * -1);
+  border-radius: 50%;
+  border: 1.5px solid var(--orbital-accent);
+  mask: repeating-conic-gradient(
+    from 45deg,
+    transparent 0deg,
+    rgba(0, 0, 0, 0.6) 45deg,
+    transparent 45.1deg 120deg
+  );
+  -webkit-mask: repeating-conic-gradient(
+    from 45deg,
+    transparent 0deg,
+    rgba(0, 0, 0, 0.6) 45deg,
+    transparent 45.1deg 120deg
+  );
+  animation: orbital-spin-cw var(--orbital-period) linear infinite;
+}
+
+.orbital-arm {
+  animation: orbital-arm-spin var(--orbital-period) linear infinite;
+}
+
+.orbital-arm-0 {
+  animation-delay: 0s;
+}
+
+.orbital-arm-1 {
+  animation-delay: -32s;
+}
+
+.orbital-arm-2 {
+  animation-delay: -64s;
+}
+
+.orbital-arm-0 .orbital-card-counter {
+  animation-delay: 0s;
+}
+
+.orbital-arm-1 .orbital-card-counter {
+  animation-delay: -32s;
+}
+
+.orbital-arm-2 .orbital-card-counter {
+  animation-delay: -64s;
+}
+
+.orbital-spoke {
+  left: calc(50% + var(--orbital-spoke-start));
+  width: var(--orbital-spoke-length);
+}
+
+.orbital-card-anchor {
+  left: calc(50% + var(--orbital-ring-b));
+}
+
+/* Container queries: responsive card to chip + legend. */
+@container (min-width: 440px) {
+  .orbital-card-full {
+    display: flex !important;
+  }
+
+  .orbital-card-chip {
+    display: none !important;
+  }
+
+  .orbital-mobile-legend {
+    display: none !important;
+  }
+}
+
+@container (max-width: 439px) {
+  .orbital-card-full {
+    display: none !important;
+  }
+
+  .orbital-card-chip {
+    display: flex !important;
+  }
+
+  .orbital-mobile-legend {
+    display: grid !important;
+  }
+}
+
+/* Accessibility: prefers-reduced-motion stops all motion. */
+@media (prefers-reduced-motion: reduce) {
+  .orbital-entrance-rings,
+  .orbital-entrance-cards,
+  .orbital-rotator,
+  .orbital-arm,
+  .orbital-card-counter {
+    animation: none !important;
+  }
+
+  .orbital-arm-0 {
+    transform: rotate(-150deg) !important;
+  }
+
+  .orbital-arm-0 .orbital-card-counter {
+    transform: translate(-50%, -50%) rotate(150deg) !important;
+  }
+
+  .orbital-arm-1 {
+    transform: rotate(-30deg) !important;
+  }
+
+  .orbital-arm-1 .orbital-card-counter {
+    transform: translate(-50%, -50%) rotate(30deg) !important;
+  }
+
+  .orbital-arm-2 {
+    transform: rotate(90deg) !important;
+  }
+
+  .orbital-arm-2 .orbital-card-counter {
+    transform: translate(-50%, -50%) rotate(-90deg) !important;
+  }
+}
