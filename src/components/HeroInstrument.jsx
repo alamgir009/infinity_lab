@@ -3,11 +3,11 @@
  * HeroInstrument — Precision Orbital Visual Component
  * ============================================================================
  * Design Language: "Precision Instrument" (Swiss watch / astronomical ledger).
- * Hairlines, tick scales, comet-tail arcs, pure compositor GPU transforms (60fps).
+ * Hairlines, a planetary involute gear train, pure compositor GPU transforms (60fps).
  *
  * Performance Guarantees:
  * - Zero paint recalculations during continuous orbiting.
- * - Exactly 7 compositor layers with `will-change: transform` (<= 8 layers).
+ * - Compositor-only layers with `will-change: transform` on the six gear layers.
  * - Zero React state or re-renders during animation.
  * - Tab visibility and viewport IntersectionObserver pause rotation via DOM data attribute.
  * - Aspect ratio 1:1 with inline SVG for zero Cumulative Layout Shift (CLS 0).
@@ -28,6 +28,17 @@
 import { memo, useRef, useEffect } from "react";
 import { FiCode, FiCloud, FiSmartphone } from "react-icons/fi";
 import markWebp from "../assets/brand/inf-lab-mark.webp";
+import {
+  GEAR,
+  PLANET_POSITIONS,
+  PLANET_BOX,
+  CENTER,
+  CARRIER_RADIUS,
+  CARRIER_ARM_WIDTH,
+  CARRIER_ARM_INNER,
+  CARRIER_BOSS,
+  CARRIER_PIN,
+} from "./heroGearGeometry";
 import "./HeroInstrument.css";
 
 /**
@@ -52,40 +63,294 @@ const CAPABILITIES = [
   },
 ];
 
-/**
- * Consolidated SVG paths for Ring C bezel (Swiss watch instrument ticks):
- * - Minor: 120 radial tick marks (every 3°) from r=227 to r=230 (outer radius 230 = 46cqw of 500)
- * - Major: 12 radial tick marks (every 30°, tenth position) from r=223 to r=231
- */
-const MINOR_TICKS_PATH = (() => {
-  const cx = 250;
-  const cy = 250;
-  let d = "";
-  for (let i = 0; i < 120; i++) {
-    const rad = (i * 3 * Math.PI) / 180;
-    const x1 = (cx + 227 * Math.cos(rad)).toFixed(1);
-    const y1 = (cy + 227 * Math.sin(rad)).toFixed(1);
-    const x2 = (cx + 230 * Math.cos(rad)).toFixed(1);
-    const y2 = (cy + 230 * Math.sin(rad)).toFixed(1);
-    d += `M${x1} ${y1}L${x2} ${y2}`;
-  }
-  return d;
-})();
+/* ─── Planetary train: one crisp stroke per path, three non-scaling weights ── */
+const STROKE = {
+  vectorEffect: "non-scaling-stroke",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+};
 
-const MAJOR_TICKS_PATH = (() => {
-  const cx = 250;
-  const cy = 250;
-  let d = "";
-  for (let i = 0; i < 12; i++) {
-    const rad = (i * 30 * Math.PI) / 180;
-    const x1 = (cx + 223 * Math.cos(rad)).toFixed(1);
-    const y1 = (cy + 223 * Math.sin(rad)).toFixed(1);
-    const x2 = (cx + 231 * Math.cos(rad)).toFixed(1);
-    const y2 = (cy + 231 * Math.sin(rad)).toFixed(1);
-    d += `M${x1} ${y1}L${x2} ${y2}`;
-  }
-  return d;
-})();
+/** Ring gear: internal involute teeth, thick rim, bolt circle and three leaders. */
+function RingGear() {
+  const g = GEAR.ring;
+  return (
+    <svg
+      className="orbital-part orbital-part--ring orbital-rot"
+      viewBox="0 0 500 500"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d={g.d}
+        fill="var(--orbital-gear-fill)"
+        fillRule="evenodd"
+        className="orbital-line-1"
+        {...STROKE}
+      />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.pitch}
+        className="orbital-line-2"
+        strokeDasharray="2 3"
+        {...STROKE}
+      />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.root}
+        className="orbital-line-2"
+        strokeDasharray="1 4"
+        {...STROKE}
+      />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.tip}
+        className="orbital-line-2"
+        strokeDasharray="1 4"
+        {...STROKE}
+      />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.boltCircle}
+        className="orbital-line-3"
+        strokeDasharray="1 4"
+        {...STROKE}
+      />
+      <path d={g.bolts} className="orbital-line-3" {...STROKE} />
+      <path
+        d={g.centerline}
+        className="orbital-line-3"
+        strokeDasharray="7 3 1 3"
+        {...STROKE}
+      />
+      <path d={g.leaders} className="orbital-line-3" {...STROKE} />
+    </svg>
+  );
+}
+
+/** Sun gear: behind the hub, which acts as its cap. */
+function SunGear() {
+  const g = GEAR.sun;
+  return (
+    <svg
+      className="orbital-part orbital-part--sun orbital-rot"
+      viewBox="0 0 500 500"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d={g.d}
+        fill="var(--orbital-gear-fill)"
+        className="orbital-line-1"
+        {...STROKE}
+      />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.pitch}
+        className="orbital-line-2"
+        strokeDasharray="2 3"
+        {...STROKE}
+      />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.root}
+        className="orbital-line-2"
+        strokeDasharray="1 4"
+        {...STROKE}
+      />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.tip}
+        className="orbital-line-2"
+        strokeDasharray="1 4"
+        {...STROKE}
+      />
+      <path d={g.holes} className="orbital-line-3" {...STROKE} />
+      <circle
+        cx={g.cx}
+        cy={g.cy}
+        r={g.bore}
+        className="orbital-line-3"
+        {...STROKE}
+      />
+      <path d={g.keyway} className="orbital-line-3" {...STROKE} />
+      <path
+        d={g.centerline}
+        className="orbital-line-3"
+        strokeDasharray="7 3 1 3"
+        {...STROKE}
+      />
+    </svg>
+  );
+}
+
+/** One planet: nested inside the carrier SVG, so it inherits carrier rotation. */
+function PlanetGear({ position }) {
+  const g = GEAR.planet;
+  return (
+    <svg
+      className="orbital-planet"
+      x={position.x}
+      y={position.y}
+      width={PLANET_BOX}
+      height={PLANET_BOX}
+      viewBox="-75 -75 150 150"
+      fill="none"
+      aria-hidden="true"
+    >
+      {/* Planet-local spin: rotates about the planet centre (0,0) only. */}
+      <g className="orbital-planet-spin">
+        <path
+          d={g.d}
+          fill="var(--orbital-gear-fill)"
+          className="orbital-line-1"
+          {...STROKE}
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r={g.pitch}
+          className="orbital-line-2"
+          strokeDasharray="2 3"
+          {...STROKE}
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r={g.root}
+          className="orbital-line-2"
+          strokeDasharray="1 4"
+          {...STROKE}
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r={g.tip}
+          className="orbital-line-2"
+          strokeDasharray="1 4"
+          {...STROKE}
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r={g.bearing}
+          className="orbital-line-2"
+          {...STROKE}
+        />
+        <circle
+          cx="0"
+          cy="0"
+          r={g.bearingInner}
+          className="orbital-line-3"
+          {...STROKE}
+        />
+        <path d={g.holes} className="orbital-line-3" {...STROKE} />
+        <path
+          d={g.centerline}
+          className="orbital-line-3"
+          strokeDasharray="7 3 1 3"
+          {...STROKE}
+        />
+      </g>
+    </svg>
+  );
+}
+
+/** Carrier: three arms, three bosses and the only accent detail (three pins). */
+function CarrierGear() {
+  return (
+    <svg
+      className="orbital-part orbital-part--carrier orbital-rot"
+      viewBox="0 0 500 500"
+      fill="none"
+      aria-hidden="true"
+    >
+      {PLANET_POSITIONS.map((position) => (
+        <PlanetGear key={position.angle} position={position} />
+      ))}
+
+      {PLANET_POSITIONS.map((position) => (
+        <rect
+          key={`arm-${position.angle}`}
+          x={CENTER - CARRIER_ARM_WIDTH / 2}
+          y={CENTER - CARRIER_RADIUS}
+          width={CARRIER_ARM_WIDTH}
+          height={CARRIER_RADIUS - CARRIER_ARM_INNER}
+          rx={CARRIER_ARM_WIDTH / 2}
+          transform={`rotate(${position.angle + 90} ${CENTER} ${CENTER})`}
+          fill="var(--orbital-gear-fill)"
+          className="orbital-line-1"
+          {...STROKE}
+        />
+      ))}
+
+      {PLANET_POSITIONS.map((position) => (
+        <circle
+          key={`boss-${position.angle}`}
+          cx={position.x + PLANET_BOX / 2}
+          cy={position.y + PLANET_BOX / 2}
+          r={CARRIER_BOSS}
+          fill="var(--orbital-gear-fill)"
+          className="orbital-line-1"
+          {...STROKE}
+        />
+      ))}
+
+      {PLANET_POSITIONS.map((position) => (
+        <circle
+          key={`pin-${position.angle}`}
+          cx={position.x + PLANET_BOX / 2}
+          cy={position.y + PLANET_BOX / 2}
+          r={CARRIER_PIN}
+          className="orbital-pin"
+          {...STROKE}
+        />
+      ))}
+    </svg>
+  );
+}
+
+/**
+ * The only non-animated gear SVG: card track plus the r=65 hairline that is
+ * fully occluded by the opaque sun surface. Everything else is a rotating layer.
+ */
+function GearStage() {
+  return (
+    <div className="orbital-gear-stage" aria-hidden="true">
+      <svg
+        className="orbital-static"
+        viewBox="0 0 500 500"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle
+          cx="250"
+          cy="250"
+          r="65"
+          className="orbital-line-3"
+          {...STROKE}
+        />
+        <circle
+          cx="250"
+          cy="250"
+          r={CARRIER_RADIUS}
+          className="orbital-line-2"
+          {...STROKE}
+        />
+      </svg>
+
+      <RingGear />
+      <SunGear />
+      <CarrierGear />
+    </div>
+  );
+}
 
 /**
  * Orbital Capability Card Item:
@@ -227,116 +492,17 @@ const HeroInstrument = memo(function HeroInstrument({ className = "" }) {
 
         {/* ── Rings Entrance Wrapper (700ms ease-out) ────────────────── */}
         <div className="orbital-entrance-rings pointer-events-none absolute inset-0">
-          {/* Static Concentric Rings: Hairline outer at r=13, Ring A at r=21, Ring B at r=32.5 */}
-          <svg
-            viewBox="0 0 500 500"
-            className="pointer-events-none absolute inset-0 h-full w-full select-none"
-            fill="none"
-            aria-hidden="true"
-          >
-            {/* Faint outer hairline ring at r=13cqw (r=65 in 500x500) */}
-            <circle
-              cx="250"
-              cy="250"
-              r="65"
-              stroke="currentColor"
-              strokeWidth="1"
-              className="text-slate-900/[0.08] dark:text-white/[0.06]"
-              vectorEffect="non-scaling-stroke"
-            />
-
-            {/* Ring A (inner): r=21cqw (r=105 in 500x500) dotted hairline */}
-            <circle
-              cx="250"
-              cy="250"
-              r="105"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeDasharray="2 6"
-              className="text-slate-900/[0.14] dark:text-white/[0.12]"
-              vectorEffect="non-scaling-stroke"
-            />
-
-            {/* Ring B (card track): r=32.5cqw (r=162.5 in 500x500) solid hairline */}
-            <circle
-              cx="250"
-              cy="250"
-              r="162.5"
-              stroke="currentColor"
-              strokeWidth="1"
-              className="text-slate-900/[0.14] dark:text-white/[0.12]"
-              vectorEffect="non-scaling-stroke"
-            />
-          </svg>
-
-          {/* Rotator 1: Tick Bezel (Ring C r=46cqw, CW 240s) */}
-          <div
-            className="orbital-rotator orbital-tick-bezel pointer-events-none absolute inset-0 select-none will-change-transform"
-            aria-hidden="true"
-          >
-            <svg viewBox="0 0 500 500" className="h-full w-full" fill="none">
-              {/* Minor ticks: 120 consolidated radial lines */}
-              <path
-                d={MINOR_TICKS_PATH}
-                stroke="currentColor"
-                strokeWidth="1"
-                className="text-slate-900/[0.12] dark:text-white/[0.10]"
-                vectorEffect="non-scaling-stroke"
-              />
-              {/* Major ticks: 12 consolidated radial lines (every 10th position) */}
-              <path
-                d={MAJOR_TICKS_PATH}
-                stroke="currentColor"
-                strokeWidth="1.75"
-                className="text-slate-900/[0.28] dark:text-white/[0.30]"
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
-          </div>
-
-          {/* Rotator 2: Inner Satellites (Ring A r=21cqw, CCW 64s) */}
-          <div
-            className="orbital-rotator orbital-inner-sats pointer-events-none absolute inset-0 select-none will-change-transform"
-            aria-hidden="true"
-          >
-            {/* Sat 1: 4px dot, accent fill, Ring A (45deg) */}
-            <span className="orbital-sat--inner-a absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4F46E5] ring-1 ring-[#4F46E5]/40 dark:bg-[#818CF8] dark:ring-[#818CF8]/40" />
-            {/* Sat 2: 4px dot, neutral fill, Ring A (225deg) */}
-            <span className="orbital-sat--inner-b absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-500 ring-1 ring-slate-900/20 dark:bg-slate-400 dark:ring-white/20" />
-          </div>
-
-          {/* Rotator 3: Outer Satellites (Ring C r=46cqw, CCW 150s) */}
-          <div
-            className="orbital-rotator orbital-outer-sats pointer-events-none absolute inset-0 select-none will-change-transform"
-            aria-hidden="true"
-          >
-            {/* Sat 3: 4px dot, neutral fill, Ring C (110deg) */}
-            <span className="orbital-sat--outer-a absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15" />
-            {/* Sat 4: 4px dot, neutral fill, Ring C (290deg) */}
-            <span className="orbital-sat--outer-b absolute size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-400 ring-1 ring-slate-900/15 dark:bg-slate-500 dark:ring-white/15" />
-          </div>
+          <GearStage />
         </div>
 
         {/* ── Cards Entrance Wrapper (700ms ease-out, 90ms stagger) ─── */}
         <div className="orbital-entrance-cards pointer-events-none absolute inset-0">
-          {/* Rotator 4: Comet-tail arcs ring on Ring B (CW 96s) */}
-          <div
-            className="orbital-rotator orbital-tails-ring pointer-events-none absolute will-change-transform"
-            aria-hidden="true"
-          />
-
-          {/* 3 Arms: Spokes + Cards on Ring B (R=32.5cqw, 120° spacing) */}
+          {/* 3 Arms: Cards on Ring B (R=32.5cqw, 120° spacing) */}
           {CAPABILITIES.map((card, idx) => (
             <div
               key={card.title}
               className={`orbital-arm orbital-arm-${idx} pointer-events-none absolute inset-0`}
             >
-              {/* Spoke: 1px dashed hairline from r=13cqw to r=32.5cqw */}
-              <div
-                className="orbital-spoke pointer-events-none absolute top-1/2 h-px -translate-y-1/2 border-t border-dashed border-slate-900/[0.12] dark:border-white/[0.10]"
-                aria-hidden="true"
-              />
-
               {/* Card node anchor at Ring B (r=32.5cqw) */}
               <div className="orbital-card-anchor pointer-events-auto absolute top-1/2">
                 {/* Counter-rotation to keep card 100% upright */}

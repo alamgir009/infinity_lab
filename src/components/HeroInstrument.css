@@ -10,9 +10,12 @@
     0 12px 24px -14px rgba(15, 23, 42, 0.22);
 
   --orbital-period: 96s;
-  --orbital-bezel-duration: 240s;
-  --orbital-inner-duration: 64s;
-  --orbital-outer-duration: 150s;
+
+  /* Planetary train: ink/fill tokens use the same slate/white values as the cards. */
+  --orbital-gear-fill: #faf9f6; /* page surface, light */
+  --orbital-ink-1: rgba(15, 23, 42, 0.22); /* outline */
+  --orbital-ink-2: rgba(15, 23, 42, 0.14); /* construction */
+  --orbital-ink-3: rgba(15, 23, 42, 0.1); /* detail */
 
   --orbital-ring-b: 32.5cqw;
   --orbital-card-width: 31.5cqw;
@@ -22,12 +25,6 @@
   --orbital-chip-size: 12cqw;
   --orbital-chip-min-size: 38px;
   --orbital-chip-max-size: 48px;
-
-  --orbital-sat-inner-offset: 14.85cqw;
-  --orbital-sat-outer-x: 15.73cqw;
-  --orbital-sat-outer-y: 43.23cqw;
-  --orbital-spoke-start: 13cqw;
-  --orbital-spoke-length: 19.5cqw;
 
   --orbital-title-size: clamp(12px, 2.6cqw, 14px);
   --orbital-support-size: clamp(10px, 2.1cqw, 12px);
@@ -39,6 +36,11 @@
   --orbital-card-border: rgba(255, 255, 255, 0.09);
   --orbital-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 14px 28px -16px #000000;
+
+  --orbital-gear-fill: #090a0e; /* page surface, dark */
+  --orbital-ink-1: rgba(255, 255, 255, 0.18);
+  --orbital-ink-2: rgba(255, 255, 255, 0.12);
+  --orbital-ink-3: rgba(255, 255, 255, 0.09);
 }
 
 .orbital-container {
@@ -138,10 +140,10 @@
   animation: orbital-entrance-fade 700ms cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
 }
 
-/* Rotators and arm transform origins. */
-.orbital-rotator,
+/* Arm transform origin + the 96s card orbit (same period as the carrier). */
 .orbital-arm {
   transform-origin: 50% 50%;
+  animation: orbital-arm-spin var(--orbital-period) linear infinite;
 }
 
 .orbital-card-counter {
@@ -152,77 +154,88 @@
 }
 
 /* Hover, focus-within and paused state: seamless pause. */
-.orbital-container:hover .orbital-rotator,
 .orbital-container:hover .orbital-arm,
 .orbital-container:hover .orbital-card-counter,
-.orbital-container:focus-within .orbital-rotator,
+.orbital-container:hover .orbital-rot,
+.orbital-container:hover .orbital-planet-spin,
 .orbital-container:focus-within .orbital-arm,
 .orbital-container:focus-within .orbital-card-counter,
-.orbital-container[data-paused="true"] .orbital-rotator,
+.orbital-container:focus-within .orbital-rot,
+.orbital-container:focus-within .orbital-planet-spin,
 .orbital-container[data-paused="true"] .orbital-arm,
-.orbital-container[data-paused="true"] .orbital-card-counter {
+.orbital-container[data-paused="true"] .orbital-card-counter,
+.orbital-container[data-paused="true"] .orbital-rot,
+.orbital-container[data-paused="true"] .orbital-planet-spin {
   animation-play-state: paused !important;
 }
 
-.orbital-tick-bezel {
-  animation: orbital-spin-cw var(--orbital-bezel-duration) linear infinite;
+/* ── Planetary train: six compositor-only rotating layers ── */
+.orbital-gear-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.orbital-inner-sats {
-  animation: orbital-spin-ccw var(--orbital-inner-duration) linear infinite;
+.orbital-static {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.orbital-outer-sats {
-  animation: orbital-spin-ccw var(--orbital-outer-duration) linear infinite;
+.orbital-part {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.orbital-sat--inner-a {
-  left: calc(50% + var(--orbital-sat-inner-offset));
-  top: calc(50% + var(--orbital-sat-inner-offset));
+.orbital-rot {
+  will-change: transform;
+  transform-origin: 50% 50%;
 }
 
-.orbital-sat--inner-b {
-  left: calc(50% - var(--orbital-sat-inner-offset));
-  top: calc(50% - var(--orbital-sat-inner-offset));
+.orbital-part--ring {
+  z-index: 1;
+  animation: orbital-spin-ccw 240s linear infinite;
 }
 
-.orbital-sat--outer-a {
-  left: calc(50% - var(--orbital-sat-outer-x));
-  top: calc(50% + var(--orbital-sat-outer-y));
+.orbital-part--sun {
+  z-index: 2;
+  animation: orbital-spin-cw 25.2631578947s linear infinite;
 }
 
-.orbital-sat--outer-b {
-  left: calc(50% + var(--orbital-sat-outer-x));
-  top: calc(50% - var(--orbital-sat-outer-y));
+.orbital-part--carrier {
+  z-index: 3;
+  animation: orbital-spin-cw 96s linear infinite;
 }
 
-/* Comet-tail arcs on Ring B: ~45deg trailing arc behind each card. */
-.orbital-tails-ring {
-  left: 50%;
-  top: 50%;
-  width: calc(var(--orbital-ring-b) * 2);
-  height: calc(var(--orbital-ring-b) * 2);
-  margin-left: calc(var(--orbital-ring-b) * -1);
-  margin-top: calc(var(--orbital-ring-b) * -1);
-  border-radius: 50%;
-  border: 1.5px solid var(--orbital-accent);
-  mask: repeating-conic-gradient(
-    from 45deg,
-    transparent 0deg,
-    rgba(0, 0, 0, 0.6) 45deg,
-    transparent 45.1deg 120deg
-  );
-  -webkit-mask: repeating-conic-gradient(
-    from 45deg,
-    transparent 0deg,
-    rgba(0, 0, 0, 0.6) 45deg,
-    transparent 45.1deg 120deg
-  );
-  animation: orbital-spin-cw var(--orbital-period) linear infinite;
+.orbital-planet-spin {
+  /* fill-box is the symmetric gear bbox (-70..70), so 50% is the planet centre. */
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation: orbital-spin-ccw 17.1428571429s linear infinite;
 }
 
-.orbital-arm {
-  animation: orbital-arm-spin var(--orbital-period) linear infinite;
+.orbital-line-1 {
+  stroke: var(--orbital-ink-1);
+  stroke-width: 1.25;
+}
+
+.orbital-line-2 {
+  stroke: var(--orbital-ink-2);
+  stroke-width: 0.75;
+}
+
+.orbital-line-3 {
+  stroke: var(--orbital-ink-3);
+  stroke-width: 0.5;
+}
+
+.orbital-pin {
+  stroke: var(--orbital-accent);
+  stroke-width: 1;
 }
 
 .orbital-arm-0 {
@@ -247,11 +260,6 @@
 
 .orbital-arm-2 .orbital-card-counter {
   animation-delay: -64s;
-}
-
-.orbital-spoke {
-  left: calc(50% + var(--orbital-spoke-start));
-  width: var(--orbital-spoke-length);
 }
 
 .orbital-card-anchor {
@@ -291,9 +299,10 @@
 @media (prefers-reduced-motion: reduce) {
   .orbital-entrance-rings,
   .orbital-entrance-cards,
-  .orbital-rotator,
   .orbital-arm,
-  .orbital-card-counter {
+  .orbital-card-counter,
+  .orbital-rot,
+  .orbital-planet-spin {
     animation: none !important;
   }
 
