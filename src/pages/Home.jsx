@@ -50,7 +50,7 @@ function HeroTechCard() {
 
       {/* 2. Main Studio Console Card (pure white on light, obsidian #11131a on dark) */}
       <div className="relative z-10 overflow-hidden rounded-[24px] sm:rounded-[28px] border border-black/[0.08] bg-white p-3.5 sm:p-5 lg:p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_1px_2px_0_rgba(0,0,0,0.04),0_24px_48px_-12px_rgba(0,0,0,0.09)] dark:border-white/[0.08] dark:bg-[#11131a] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_1px_2px_0_rgba(0,0,0,0.3),0_28px_60px_-14px_rgba(0,0,0,0.7)] animate-[workIndexRise_600ms_cubic-bezier(0.22,1,0.36,1)_both] [animation-delay:60ms] motion-reduce:animate-none">
-        
+
         {/* Console Header Bar (Zero brand name: authentic macOS window controls & telemetry status) */}
         <div className="mb-3.5 flex items-center justify-between border-b border-black/[0.06] pb-3 dark:border-white/[0.06]">
           <div className="flex items-center gap-2.5">
@@ -78,7 +78,7 @@ function HeroTechCard() {
 
         {/* 3. The Visual Stage (Bigger size, unobstructed, perfectly matched light & dark background) */}
         <div className="relative overflow-hidden rounded-[18px] sm:rounded-[22px] border border-black/[0.06] bg-white dark:border-white/[0.06] dark:bg-[#11131a]">
-          
+
           <div className="relative aspect-[16/9.5] w-full overflow-hidden">
             {/* Light Mode Fintech Device Mockup (Seamless white background) */}
             <img

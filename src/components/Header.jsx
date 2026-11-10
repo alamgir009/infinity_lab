@@ -12,6 +12,20 @@ const NAV_ITEMS = [
   { to: "/contact", label: "Contact" },
 ];
 
+const desktopLink = ({ isActive }) =>
+  `nav-link inline-flex items-center py-2 text-[14px] font-medium tracking-[0.01em] transition-colors duration-150 ${
+    isActive
+      ? "text-text-primary"
+      : "text-text-secondary hover:text-text-primary"
+  }`;
+
+const mobileLink = ({ isActive }) =>
+  `flex min-h-[64px] items-center justify-between gap-4 font-display text-[1.75rem] leading-none tracking-[-0.02em] transition-colors duration-150 ${
+    isActive
+      ? "text-brand"
+      : "text-text-primary hover:text-brand"
+  }`;
+
 /**
  * Site chrome: a flat 68px ledger bar. The active route is marked by a
  * 1.5px spectral underline rather than a filled pill. Scroll depth is read
@@ -62,20 +76,6 @@ export default function Header() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
-
-  const desktopLink = ({ isActive }) =>
-    `nav-link inline-flex items-center py-2 text-[14px] font-medium tracking-[0.01em] transition-colors duration-150 ${
-      isActive
-        ? "text-text-primary"
-        : "text-text-secondary hover:text-text-primary"
-    }`;
-
-  const mobileLink = ({ isActive }) =>
-    `flex min-h-[64px] items-center justify-between gap-4 font-display text-[1.75rem] leading-none tracking-[-0.02em] transition-colors duration-150 ${
-      isActive
-        ? "text-brand"
-        : "text-text-primary hover:text-brand"
-    }`;
 
   return (
     <>

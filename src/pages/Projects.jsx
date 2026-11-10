@@ -36,6 +36,12 @@ export function filterProjects(projects, categoryId) {
   return projects.filter((p) => p.category === categoryId);
 }
 
+const TOTAL_COUNTS = { all: PROJECTS.length };
+for (const p of PROJECTS) TOTAL_COUNTS[p.category] = (TOTAL_COUNTS[p.category] || 0) + 1;
+
+const getCategoryLabel = (id) =>
+  (PROJECT_CATEGORIES.find((c) => c.id === id) || PROJECT_CATEGORIES[0]).label;
+
 export default function Projects() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeParam = searchParams.get("category") || DEFAULT_FILTER;
@@ -47,26 +53,17 @@ export default function Projects() {
 
   const visible = useMemo(() => filterProjects(PROJECTS, active), [active]);
 
-  const totalCounts = useMemo(() => {
-    const counts = { all: PROJECTS.length };
-    for (const p of PROJECTS) counts[p.category] = (counts[p.category] || 0) + 1;
-    return counts;
-  }, []);
-
-  const visibleLabel = (id) =>
-    (PROJECT_CATEGORIES.find((c) => c.id === id) || PROJECT_CATEGORIES[0]).label;
-
   const setFilter = (id) => {
     setSearchParams(id === DEFAULT_FILTER ? {} : { category: id }, {
       replace: true,
     });
-    const n = filterProjects(PROJECTS, id).length;
+    const n = TOTAL_COUNTS[id] || 0;
     setAnnounced(
-      `Showing ${visibleLabel(id)}: ${n} project${n === 1 ? "" : "s"}`
+      `Showing ${getCategoryLabel(id)}: ${n} project${n === 1 ? "" : "s"}`
     );
   };
 
-  const activeLabel = visibleLabel(active);
+  const activeLabel = getCategoryLabel(active);
 
   return (
     <>
@@ -116,7 +113,7 @@ export default function Projects() {
           >
             {PROJECT_CATEGORIES.map((c) => {
               const selected = active === c.id;
-              const count = totalCounts[c.id] || 0;
+              const count = TOTAL_COUNTS[c.id] || 0;
               return (
                 <button
                   key={c.id}

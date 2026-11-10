@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { FiExternalLink, FiClock } from "react-icons/fi";
 import Card from "./ui/Card";
 import Badge from "./ui/Badge";
@@ -15,7 +16,7 @@ import { LinkStatusBadge } from "./Button";
  *          highlights?: Array<{ value: string, label: string }> }} props.project
  * @param {boolean} [props.detailed]
  */
-export default function ProjectCard({ project, detailed = false }) {
+const ProjectCard = memo(function ProjectCard({ project, detailed = false }) {
   const {
     name,
     url,
@@ -153,4 +154,6 @@ export default function ProjectCard({ project, detailed = false }) {
       </div>
     </Card>
   );
-}
+});
+
+export default ProjectCard;

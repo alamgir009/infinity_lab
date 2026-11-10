@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { FiCode, FiServer, FiSmartphone, FiArrowRight, FiCheck } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Card from "./ui/Card";
@@ -23,7 +24,7 @@ const DISCIPLINE_TAGS = {
  *          deliverables?: string[] }} service
  * @param {boolean} [props.detailed] Render the deliverables list.
  */
-export default function ServiceCard({ service, detailed = false }) {
+const ServiceCard = memo(function ServiceCard({ service, detailed = false }) {
   const Icon = ICONS[service.icon] || FiCode;
   const tag = DISCIPLINE_TAGS[service.icon] || "Engineering";
 
@@ -88,4 +89,6 @@ export default function ServiceCard({ service, detailed = false }) {
       </div>
     </Card>
   );
-}
+});
+
+export default ServiceCard;

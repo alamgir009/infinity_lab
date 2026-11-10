@@ -32,9 +32,12 @@ const ENGAGEMENT_PERKS = {
   partner: ["Hosting & monitoring included", "Continuous roadmap & iteration", "Long-term operational reliability"],
 };
 
-export default function Services() {
-  const groups = [...new Set(TECHNOLOGIES.map((t) => t.group))];
+const TECH_GROUPS = Array.from(new Set(TECHNOLOGIES.map((t) => t.group))).map((g) => ({
+  group: g,
+  items: TECHNOLOGIES.filter((t) => t.group === g),
+}));
 
+export default function Services() {
   return (
     <>
       <Seo
@@ -109,10 +112,9 @@ export default function Services() {
 
           {/* 6-up category ledger */}
           <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {groups.map((g) => {
+            {TECH_GROUPS.map(({ group: g, items }) => {
               const meta = GROUP_META[g] ?? { Icon: FiZap };
               const { Icon } = meta;
-              const items = TECHNOLOGIES.filter((t) => t.group === g);
 
               return (
                 <Card key={g}>

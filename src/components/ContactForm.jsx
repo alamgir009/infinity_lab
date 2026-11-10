@@ -244,7 +244,7 @@ export default function ContactForm() {
               name="service"
               value={values.service}
               onChange={handleChange}
-              className={`field-input cursor-pointer appearance-none pl-10 pr-10 dark:[&>option]:bg-[#14151b] dark:[&>option]:text-text-primary ${
+              className={`field-input cursor-pointer appearance-none pl-10 pr-10 dark:[&>option]:bg-surface-card dark:[&>option]:text-text-primary ${
                 values.service ? "text-text-primary" : "text-text-muted"
               }`}
             >

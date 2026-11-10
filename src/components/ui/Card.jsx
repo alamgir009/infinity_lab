@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 /**
  * Shared card primitive: a flat ledger panel with a single hairline border,
  * one quiet plate shadow, and a restrained hover lift. No glass, no glow.
@@ -7,7 +9,7 @@
  * @param {string} [props.className]     Extra classes; include h-full or flex utilities as needed.
  * @param {import("react").ReactNode} props.children
  */
-export default function Card({
+const Card = memo(function Card({
   interactive = false,
   className = "",
   children,
@@ -23,4 +25,6 @@ export default function Card({
       {children}
     </div>
   );
-}
+});
+
+export default Card;
