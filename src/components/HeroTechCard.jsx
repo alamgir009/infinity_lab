@@ -57,7 +57,7 @@ const HeroTechCard = memo(function HeroTechCard() {
 
         {/* 3. The Visual Stage (Bigger size, unobstructed, perfectly matched light & dark background) */}
         <div className="console-stage">
-          <div className="relative aspect-[16/9.5] w-full overflow-hidden">
+          <div className="relative aspect-[1376/768] w-full overflow-hidden">
             {isDark ? (
               /* Dark Mode Fintech Device Mockup (Seamless obsidian dark slate background) */
               <img
@@ -67,7 +67,7 @@ const HeroTechCard = memo(function HeroTechCard() {
                 height="768"
                 fetchpriority="high"
                 decoding="async"
-                className="block h-full w-full object-contain object-center transition-transform duration-700 ease-out [@media(hover:hover)_and_(pointer:fine)]:hover:scale-[1.015] motion-reduce:hover:scale-100"
+                className="block h-full w-full object-cover object-center transition-transform duration-700 ease-out [@media(hover:hover)_and_(pointer:fine)]:hover:scale-[1.015] motion-reduce:hover:scale-100"
               />
             ) : (
               /* Light Mode Fintech Device Mockup (Seamless white background) */
@@ -78,7 +78,7 @@ const HeroTechCard = memo(function HeroTechCard() {
                 height="768"
                 fetchpriority="high"
                 decoding="async"
-                className="block h-full w-full object-contain object-center transition-transform duration-700 ease-out [@media(hover:hover)_and_(pointer:fine)]:hover:scale-[1.015] motion-reduce:hover:scale-100"
+                className="block h-full w-full object-cover object-center transition-transform duration-700 ease-out [@media(hover:hover)_and_(pointer:fine)]:hover:scale-[1.015] motion-reduce:hover:scale-100"
               />
             )}
 
